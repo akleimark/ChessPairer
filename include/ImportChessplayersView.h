@@ -8,6 +8,7 @@
 #include "Table.h"
 #include <wx/button.h>
 #include <wx/radiobut.h>
+#include <wx/textctrl.h>
 
 class ImportChessplayersView: public View
 {
@@ -29,6 +30,9 @@ class ImportChessplayersView: public View
         wxButton *importButton;
         wxRadioButton *xmlButton;
         wxRadioButton *textFileButton;
+        wxBoxSizer *selectFileBox;
+        wxStaticText *selectFileLabel;
+        wxTextCtrl *selectFileField;
 
 };
 

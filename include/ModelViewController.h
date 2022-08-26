@@ -40,6 +40,7 @@ class View : public wxBoxSizer
         /// Den här variabeln används för att välja ett vissa typsnitt, som i det här fallet används i rubriken.
         wxFont *font;
         const static unsigned int MARGIN;
+        const static wxFont LABEL_FONT;
 
     private:
 

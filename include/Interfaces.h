@@ -49,7 +49,7 @@ class Reset
 class Strategy
 {
     public:
-        virtual void doStrategy() = 0;
+        virtual void execute() = 0;
 
 };
 

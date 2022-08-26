@@ -12,6 +12,8 @@
 #include "Database.h"
 #include "ListChessplayersController.h"
 #include "ImportChessplayersView.h"
+#include "ImportChessplayersController.h"
+#include "ImportChessplayersModel.h"
 
 class ChessPairerFrame;
 
@@ -56,9 +58,11 @@ class ChessPairerFrame : public wxFrame
         // Models
         /// Den här pekarvariabeln håller en instans av 'ChessplayerList', som är en modell, som hanterar data om schackspelarna.
         ChessplayerListModel *chessplayerListModel;
+        ImportChessplayersModel *importChessplayersModel;
 
         // Controllers
         ListChessplayersController *listChessplayersController;
+        ImportChessplayersController *importChessplayersController;
 
         // MVC
 

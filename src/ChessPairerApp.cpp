@@ -134,6 +134,7 @@ void ChessPairerFrame::showView(const wxString &name)
 void ChessPairerFrame::createModels()
 {
     chessplayerListModel = new ChessplayerListModel;
+    importChessplayersModel = new ImportChessplayersModel;
 }
 
 /**
@@ -148,6 +149,7 @@ void ChessPairerFrame::createViews()
 void ChessPairerFrame::createControllers()
 {
     listChessplayersController = new ListChessplayersController(chessplayerListModel, views["LIST_CHESSPLAYERS"]);
+    importChessplayersController = new ImportChessplayersController(importChessplayersModel, views["IMPORT_CHESSPLAYERS"]);
 }
 
 
@@ -159,6 +161,8 @@ void ChessPairerFrame::initMVC()
     createControllers();
     chessplayerListModel->addView(views["LIST_CHESSPLAYERS"]);
     views["LIST_CHESSPLAYERS"]->setController(listChessplayersController);
+    importChessplayersModel->addView(views["IMPORT_CHESSPLAYERS"]);
+    views["IMPORT_CHESSPLAYERS"]->setController(importChessplayersController);
     hideAllViews();
 }
 

@@ -8,6 +8,10 @@ const unsigned int ID_LIST_CHESSPLAYERS = 1;
 const unsigned int ID_RESET_DATABASE = 2;
 const unsigned int ID_IMPORT_CHESSPLAYERS = 3;
 
+//Knappar
+const unsigned int XML_BUTTON_ID = 0;
+const unsigned int TEXTFILE_BUTTON_ID = 1;
+
 const wxString APPLICATION_NAME = "ChessPairer";
 const unsigned int MINIMUM_LENGTH = 2;
 const unsigned int MINIMUM_YEAR = 1900;

@@ -4,13 +4,13 @@
 #include "ModelViewController.h"
 #include "Interfaces.h"
 
-class ImportChessplayersModel : public Model, public Strategy
+class ImportChessplayersModel : public Model
 {
     public:
         ImportChessplayersModel(): file("") {}
         virtual ~ImportChessplayersModel() {}
         void setFile(const std::string &newFile);
-        virtual void doStrategy() = 0;
+        std::string getFile() const {return file; }
 
     protected:
         std::string file;
@@ -19,18 +19,6 @@ class ImportChessplayersModel : public Model, public Strategy
 
 };
 
-class ImportChessplayersXML : public ImportChessplayersModel
-{
-    public:
-        ImportChessplayersXML() {}
-        virtual ~ImportChessplayersXML() {}
-        virtual void doStrategy();
-
-    protected:
-
-
-    private:
-};
 
 
 

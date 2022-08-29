@@ -10,11 +10,6 @@
 
 void ImportChessplayersModel::setFile(const std::string &newFile)
 {
-    if(misc::fileExists(newFile) == false)
-    {
-        throw IOErrorException("The file does not exist.");
-    }
-
     file = newFile;
 }
 

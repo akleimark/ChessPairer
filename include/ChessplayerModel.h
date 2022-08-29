@@ -52,6 +52,7 @@ class ChessplayerModel : public Model, public Validate, public Print, public Dat
         unsigned int getBirthYear() const;
 
         bool operator==(const ChessplayerModel &chessplayer);
+        bool operator<(const ChessplayerModel &chessplayer) const;
         virtual void addToDatabase() const;
         virtual void removeFromDatabase() const;
         virtual void save() const;

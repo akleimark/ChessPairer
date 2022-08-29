@@ -75,7 +75,7 @@ bool ChessplayerModel::validate() const
         return false;
     }
 
-    if(wxAtoi(vector_split[1]) < 1 && wxAtoi(vector_split[1]) > 12)
+    if(wxAtoi(vector_split[1]) < 1 || wxAtoi(vector_split[1]) > 12)
     {
         return false;
     }
@@ -100,15 +100,10 @@ bool ChessplayerModel::validate() const
             maxDay = 28;
         }
     }
-    else
-    {
-        return false;
-    }
 
-
-    if((unsigned int) wxAtoi(vector_split[2]) < 1 && (unsigned int) wxAtoi(vector_split[1]) > maxDay)
+    if((wxAtoi(vector_split[2]) > maxDay) || (wxAtoi(vector_split[1]) > 1))
     {
-        return false;
+       return false;
     }
 
     return true;
@@ -150,6 +145,28 @@ bool ChessplayerModel::operator==(const ChessplayerModel &chessplayer)
 
     return false;
 
+}
+
+bool ChessplayerModel::operator<(const ChessplayerModel &chessplayer) const
+{
+    if(id < chessplayer.id)
+    {
+        return true;
+    }
+    if(firstname < chessplayer.firstname)
+    {
+        return true;
+    }
+    if(lastname < chessplayer.lastname)
+    {
+        return true;
+    }
+    if(birthDate < chessplayer.birthDate)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 /**

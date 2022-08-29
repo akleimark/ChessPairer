@@ -4,6 +4,7 @@
 #include "ModelViewController.h"
 #include "Interfaces.h"
 #include "ImportChessplayersModel.h"
+#include "ChessplayerModel.h"
 
 class ReadFileStrategy;
 class ImportChessplayersController : public Controller
@@ -31,6 +32,7 @@ class ReadFileStrategy : public Strategy
 
     protected:
         ImportChessplayersModel *model;
+        void abortProcess();
 
 };
 

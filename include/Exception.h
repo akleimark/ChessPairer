@@ -89,6 +89,18 @@ class ModelErrorException : public Exception
     private:
 };
 
+class NullpointerException : public Exception
+{
+    public:
+        NullpointerException(const wxString &whatArg):
+            Exception(whatArg) {}
+        virtual ~NullpointerException() {}
+        virtual wxString what() const noexcept;
+
+    protected:
+
+    private:
+};
 
 
 

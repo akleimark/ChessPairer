@@ -35,4 +35,11 @@ wxString ModelErrorException::what() const noexcept
     return errorString;
 }
 
+wxString NullpointerException::what() const noexcept
+{
+    wxString errorString;
+    errorString << "Nullpointer: " << errorMessage;
+    return errorString;
+}
+
 

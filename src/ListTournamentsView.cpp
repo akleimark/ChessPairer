@@ -41,7 +41,7 @@ ListTournamentsView::~ListTournamentsView()
 void ListTournamentsView::update(Model *model)
 {
 
-
+    table->Fit();
 }
 
 void ListTournamentsView::setController(Controller *_controller)

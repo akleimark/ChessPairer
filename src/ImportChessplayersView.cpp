@@ -2,6 +2,9 @@
 #include "Defs.h"
 #include "ImportChessplayersController.h"
 
+/**
+    I den här konstruktorn läggs alla objekt in, för att visa vyn på ett korrekt vis.
+*/
 ImportChessplayersView::ImportChessplayersView(wxWindow *parent):
     View(parent, "Import chessplayers")
 {
@@ -34,15 +37,6 @@ ImportChessplayersView::ImportChessplayersView(wxWindow *parent):
 
 }
 
-ImportChessplayersView::~ImportChessplayersView()
-{
-
-}
-
-void ImportChessplayersView::update(Model *model)
-{
-
-}
 
 void ImportChessplayersView::setController(Controller *_controller)
 {
@@ -53,5 +47,3 @@ void ImportChessplayersView::setController(Controller *_controller)
     selectFileField->Bind(wxEVT_TEXT, &ImportChessplayersController::setFile, controller);
     importButton->Bind(wxEVT_BUTTON, &ImportChessplayersController::startImport, controller);
 }
-
-

@@ -3,6 +3,7 @@
 #include "ListChessplayersView.h"
 #include <wx/msgdlg.h>
 #include "Exception.h"
+#include "ListModel.h"
 
 ListChessplayersController::ListChessplayersController(Model *_model, View *_view):
     Controller(_model, _view)
@@ -34,7 +35,7 @@ void ListChessplayersController::addChessplayer(wxCommandEvent &event)
 
 void ListChessplayersController::removeChessplayer(wxCommandEvent &event)
 {
-    ChessplayerListModel *listModel = (ChessplayerListModel*) model;
+    ListModel<ChessplayerModel> *listModel = (ListModel<ChessplayerModel>*) model;
     ListChessplayersView *lView = (ListChessplayersView*) view;
     wxArrayInt rowNumbers = lView->getTable()->GetSelectedRows();
     for(unsigned int index = 0; index < rowNumbers.size(); index++)

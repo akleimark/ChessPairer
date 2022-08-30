@@ -6,13 +6,14 @@
 #include "Dialog.h"
 #include "Exception.h"
 #include "ListChessplayersController.h"
+#include "ListModel.h"
 
 /**
     Med hjälp av den här konstruktorn skapas en instans av klassen. När den visas ser användaren en rubrik, en tabell med schackspelare, samt en
     panel med knappar, där denne exempelvis kan välja att lägga till en ny schackspelare eller radera en befintlig.
 **/
 ListChessplayersView::ListChessplayersView(wxWindow *p_parent):
-    View(p_parent, "List chessplayers"), rowNumber(-1)
+    View(p_parent, "List chessplayers")
 {
     std::vector<wxString> columns = {"Id", "Name", "Birthdate", "Club"};
     table = new Table(parent, columns);
@@ -22,10 +23,9 @@ ListChessplayersView::ListChessplayersView(wxWindow *p_parent):
     addButton = new wxButton(parent, -1, "Add");
     removeButton = new wxButton(parent, -1, "Remove");
 
-    buttonBox->Add(addButton, -1, wxALL, 10);
-    buttonBox->Add(removeButton, -1, wxALL, 10);
+    buttonBox->Add(addButton, 0, wxALL, 10);
+    buttonBox->Add(removeButton, 0, wxALL, 10);
     this->Add(buttonBox, View::MARGIN, wxALL, 0);
-
 }
 
 ListChessplayersView::~ListChessplayersView()
@@ -40,12 +40,13 @@ ListChessplayersView::~ListChessplayersView()
 **/
 void ListChessplayersView::update(Model *model)
 {
-    ChessplayerListModel *m = (ChessplayerListModel*) model;
+    ListModel<ChessplayerModel> *m = (ListModel<ChessplayerModel>*) model;
     table->ClearGrid();
 
     try
     {
         table->setRowCount(m->getSize());
+
     }
     catch(RangeErrorException &exception)
     {

@@ -32,7 +32,6 @@ class ListChessplayersView : public View
         wxButton *addButton;
         /// Den här variabeln används för att visa en knapp, som ger användaren möjlighet att ta bort en schackspelare.
         wxButton *removeButton;
-        int rowNumber;
 
 
 

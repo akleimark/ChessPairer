@@ -51,8 +51,11 @@ class ChessplayerModel : public Model, public Validate, public Print, public Dat
 
         unsigned int getBirthYear() const;
 
+        // Operatoröverlagringar
         bool operator==(const ChessplayerModel &chessplayer);
         bool operator<(const ChessplayerModel &chessplayer) const;
+
+        // Funktioner som implementeras via gränssnitten.
         virtual void addToDatabase() const;
         virtual void removeFromDatabase() const;
         virtual void save() const;

@@ -147,6 +147,11 @@ bool ChessplayerModel::operator==(const ChessplayerModel &chessplayer)
 
 }
 
+/**
+    Den här operatoröverlagringen kontrollerar hurvida en schackspelare är mindre än en annan schackspelare.
+    Funktionen behövs för att kunna stoppa in schackspelare i en std::set, eftersom alla schackspelare i en sådan
+    container är unika, vilket innebär att två schackspelare alltid är olika i en sådan container.
+*/
 bool ChessplayerModel::operator<(const ChessplayerModel &chessplayer) const
 {
     if(id < chessplayer.id)
@@ -285,6 +290,9 @@ void ChessplayerListModel::getAll()
     }
 }
 
+/**
+    Den här funktionen återställer alla schackspelarens datamedlemmar till de värden som gällde från början.
+*/
 void ChessplayerModel::reset()
 {
     id = 0;

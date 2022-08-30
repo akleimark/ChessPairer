@@ -15,8 +15,8 @@ const unsigned int TEXTFILE_BUTTON_ID = 1;
 const wxString APPLICATION_NAME = "ChessPairer";
 const unsigned int MINIMUM_LENGTH = 2;
 const unsigned int MINIMUM_YEAR = 1900;
-const unsigned int DEFAULT_FRAME_WIDTH = 500;
-const unsigned int DEFAULT_FRAME_HEIGHT = 500;
+const unsigned int DEFAULT_FRAME_WIDTH = 700;
+const unsigned int DEFAULT_FRAME_HEIGHT = 700;
 
 
 #endif // DEFS_H_INCLUDED

@@ -239,56 +239,6 @@ void ChessplayerModel::save() const
 
 }
 
-/**
-    I den här konstruktorn nollställs vektorn med schackspelarna. Storleken sätts till noll.
-*/
-ChessplayerListModel::ChessplayerListModel()
-{
-    chessplayers.resize(0);
-}
-
-/**
-    I destruktorn rensas listan med schackspelare. Listans storlek sätts till noll elememnt.
-*/
-ChessplayerListModel::~ChessplayerListModel()
-{
-    chessplayers.clear();
-    chessplayers.resize(0);
-}
-
-
-/**
-    Den här funktionen används för att få fram alla schackspelare som finns sparade i databasen.
-*/
-void ChessplayerListModel::getAll()
-{
-    chessplayers.clear();
-    Database *database = Database::getInstance();
-    const wxString sql = "select * from chessplayers order by id";
-
-    try
-    {
-        database->executeSql(sql);
-    }
-    catch(DatabaseErrorException &)
-    {
-        throw;
-    }
-
-    for(unsigned int index = 0; index < database->getSize(); index++)
-    {
-        ChessplayerModel chessplayer;
-        chessplayer.setID(wxAtoi(database->atIndex(index, 0)));
-        chessplayer.setFirstname(database->atIndex(index, 1));
-        chessplayer.setLastname(database->atIndex(index, 2));
-        chessplayer.setBiologicalSex(database->atIndex(index, 3));
-        chessplayer.setBirthDate(database->atIndex(index, 4));
-        chessplayer.setFederation(database->atIndex(index, 5));
-        chessplayer.setChessclub(database->atIndex(index, 6));
-
-        chessplayers.push_back(chessplayer);
-    }
-}
 
 /**
     Den här funktionen återställer alla schackspelarens datamedlemmar till de värden som gällde från början.

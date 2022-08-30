@@ -82,26 +82,6 @@ class ChessplayerModel : public Model, public Validate, public Print, public Dat
         wxString chessclub;
 };
 
-/**
-    Den här klassen används för att hantera listor med schackspelare.
-*/
-class ChessplayerListModel : public Model
-{
-    public:
-
-        ChessplayerListModel();
-        virtual ~ChessplayerListModel();
-        void getAll();
-        ChessplayerModel get(const unsigned int &index) { return chessplayers[index]; }
-        /// Den här funktionen används för att få reda på antalet schackspelare.
-        unsigned int getSize() const { return chessplayers.size(); }
-
-    private:
-
-        /// I den här vektorn lagras de schackspelare som ingår i listan.
-        std::vector<ChessplayerModel> chessplayers;
-
-};
 
 
 #endif // CHESSPLAYER_H

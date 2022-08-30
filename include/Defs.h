@@ -7,6 +7,7 @@ const wxWindowID MAIN_FRAME_ID = -1;
 const unsigned int ID_LIST_CHESSPLAYERS = 1;
 const unsigned int ID_RESET_DATABASE = 2;
 const unsigned int ID_IMPORT_CHESSPLAYERS = 3;
+const unsigned int ID_LIST_TOURNAMENTS = 4;
 
 //Knappar
 const unsigned int XML_BUTTON_ID = 0;

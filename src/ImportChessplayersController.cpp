@@ -9,8 +9,8 @@
 #include <iostream>
 #include <set>
 #include <wx/msgdlg.h>
-
-
+#include <vector>
+#include <wx/string.h>
 
 ImportChessplayersController::ImportChessplayersController(Model *_model, View *_view):
     Controller(_model, _view)
@@ -24,7 +24,6 @@ ImportChessplayersController::~ImportChessplayersController()
 
 }
 
-
 void ImportChessplayersController::setFileType(wxCommandEvent &event)
 {
     ImportChessplayersModel *iModel = (ImportChessplayersModel*) model;
@@ -34,7 +33,6 @@ void ImportChessplayersController::setFileType(wxCommandEvent &event)
         delete strategy;
         strategy = nullptr;
     }
-
     // XML
     if(event.GetId() == 0)
     {
@@ -43,7 +41,7 @@ void ImportChessplayersController::setFileType(wxCommandEvent &event)
     // Textfil
     else if(event.GetId() == 1)
     {
-
+        strategy = new ReadTextFile(iModel);
     }
 }
 
@@ -67,19 +65,36 @@ void ImportChessplayersController::startImport(wxCommandEvent &event)
         wxMessageBox(exception.what(),
                  "Error", wxOK | wxICON_INFORMATION);
     }
-
 }
 
-void ReadFileStrategy::abortProcess()
+void ReadFileStrategy::abortProcess(ChessplayerModel *chessplayerModel)
 {
-    delete model;
-    model = nullptr;
+    if(chessplayerModel != nullptr)
+    {
+        delete chessplayerModel;
+        chessplayerModel = nullptr;
+    }
     throw IOErrorException("The file is corrupt. We abort the import process.");
 }
 
+void ReadFileStrategy::postImport() const
+{
+    wxString message;
+    message << "A total number of " << importedChessplayers;
+    if(importedChessplayers == 1)
+    {
+        message << " chessplayer were imported.";
+    }
+    else
+    {
+        message << " chessplayers were imported.";
+    }
+    wxMessageBox(message, "Done", wxOK | wxICON_INFORMATION);
+}
 
 void ReadXMLFile::execute()
 {
+    importedChessplayers = 0;
     ImportChessplayersModel *iModel = (ImportChessplayersModel*) model;
     if(!misc::fileExists(iModel->getFile().c_str()))
     {
@@ -107,15 +122,14 @@ void ReadXMLFile::execute()
             }
             else
             {
-                abortProcess();
+                abortProcess(chessplayerModel);
             }
         }
         else if(lineNumber > 1 && line == "</chessplayer>")
         {
-            chessplayerModel->print();
             if(chessplayerModel->validate() == false)
             {
-                abortProcess();
+                abortProcess(chessplayerModel);
             }
             else
             {
@@ -170,8 +184,83 @@ void ReadXMLFile::execute()
 
     for(ChessplayerModel aModel : chessplayerList)
     {
-        aModel.print();
+        try
+        {
+            aModel.addToDatabase();
+            importedChessplayers++;
+        }
+        catch(DatabaseErrorException &exception)
+        {
+            wxMessageBox(exception.what(),
+                 "Error", wxOK | wxICON_INFORMATION);
+        }
+    }
+    postImport();
+}
+
+void ReadTextFile::execute()
+{
+    std::cout << "here" << std::endl;
+    importedChessplayers = 0;
+    ImportChessplayersModel *iModel = (ImportChessplayersModel*) model;
+    if(!misc::fileExists(iModel->getFile().c_str()))
+    {
+        throw IOErrorException("The selected file does not exist.");
     }
 
+    ChessplayerModel *chessplayerModel = nullptr;
+    std::set<ChessplayerModel> chessplayerList;
+    boost::filesystem::ifstream fileHandler(model->getFile());
+    std::string line;
+    while (getline(fileHandler, line))
+    {
+        wxString wString = line;
+
+        std::vector<wxString> splitVector;
+        misc::split(wString, ':', splitVector);
+        if(splitVector.size() != 7)
+        {
+            abortProcess(chessplayerModel);
+        }
+
+        if(chessplayerModel != nullptr)
+        {
+            delete chessplayerModel;
+            chessplayerModel = nullptr;
+        }
+
+        chessplayerModel = new ChessplayerModel;
+        chessplayerModel->setID(wxAtoi(splitVector[0]));
+        chessplayerModel->setFirstname(splitVector[1]);
+        chessplayerModel->setLastname(splitVector[2]);
+        chessplayerModel->setBiologicalSex(splitVector[3]);
+        chessplayerModel->setBirthDate(splitVector[4]);
+        chessplayerModel->setFederation(splitVector[5]);
+        chessplayerModel->setChessclub(splitVector[6]);
+
+        if(chessplayerModel->validate() == false)
+        {
+            abortProcess(chessplayerModel);
+        }
+        else
+        {
+            chessplayerList.insert(*chessplayerModel);
+        }
+    }
+
+    for(ChessplayerModel aModel : chessplayerList)
+    {
+        try
+        {
+            aModel.addToDatabase();
+            importedChessplayers++;
+        }
+        catch(DatabaseErrorException &exception)
+        {
+            wxMessageBox(exception.what(),
+                 "Error", wxOK | wxICON_INFORMATION);
+        }
+    }
+    postImport();
 }
 

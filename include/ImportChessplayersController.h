@@ -26,13 +26,15 @@ class ReadFileStrategy : public Strategy
 {
     public:
         ReadFileStrategy(ImportChessplayersModel *_model):
-            model(_model) {}
+            model(_model), importedChessplayers(0) {}
         virtual ~ReadFileStrategy() {}
         virtual void execute() = 0;
 
     protected:
         ImportChessplayersModel *model;
-        void abortProcess();
+        unsigned int importedChessplayers;
+        void abortProcess(ChessplayerModel *chessplayerModel);
+        void postImport() const;
 
 };
 
@@ -42,6 +44,15 @@ class ReadXMLFile : public ReadFileStrategy
         ReadXMLFile(ImportChessplayersModel *_model):
                     ReadFileStrategy(_model) {}
         virtual ~ReadXMLFile() {}
+        virtual void execute();
+};
+
+class ReadTextFile : public ReadFileStrategy
+{
+    public:
+        ReadTextFile(ImportChessplayersModel *_model):
+                    ReadFileStrategy(_model) {}
+        virtual ~ReadTextFile() {}
         virtual void execute();
 };
 

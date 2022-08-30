@@ -6,6 +6,7 @@
 #include "ListChessplayersView.h"
 #include "Misc.h"
 #include "Exception.h"
+#include "ListTournamentsView.h"
 
 /**
     Den här funktionen motsvarar funktionen 'main' i konsolapplikationer.
@@ -52,10 +53,10 @@ void ChessPairerFrame::createMenuSystem()
     menuFile->Append(wxID_EXIT);
 
     wxMenu *menuDatabase = new wxMenu;
+    menuDatabase->Append(ID_LIST_TOURNAMENTS, "&List all tournaments...");
     menuDatabase->Append(ID_LIST_CHESSPLAYERS, "&List all chessplayers...");
     menuDatabase->Append(ID_RESET_DATABASE, "&Reset database...");
     menuDatabase->Append(ID_IMPORT_CHESSPLAYERS, "&Import chessplayers...");
-
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT);
@@ -86,12 +87,12 @@ void ChessPairerFrame::destroy()
 */
 void ChessPairerFrame::addEvents()
 {
+    Bind(wxEVT_MENU, &ChessPairerFrame::OnListTournaments, this, ID_LIST_TOURNAMENTS);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnListChessplayers, this, ID_LIST_CHESSPLAYERS);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnResetDatabase, this, ID_RESET_DATABASE);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnImportChessplayers, this, ID_IMPORT_CHESSPLAYERS);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnAbout, this, wxID_ABOUT);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnExit, this, wxID_EXIT);
-
 }
 
 /**
@@ -124,7 +125,7 @@ void ChessPairerFrame::showView(const wxString &name)
         }
     }
 
-    this->SetMinClientSize(wxSize(700, 700));
+    this->SetMinClientSize(wxSize(DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT));
 }
 
 
@@ -133,8 +134,9 @@ void ChessPairerFrame::showView(const wxString &name)
 */
 void ChessPairerFrame::createModels()
 {
-    chessplayerListModel = new ChessplayerListModel;
+    chessplayerListModel = new ListModel<ChessplayerModel>;
     importChessplayersModel = new ImportChessplayersModel;
+    tournamentListModel = new ListModel<TournamentModel>;
 }
 
 /**
@@ -142,12 +144,15 @@ void ChessPairerFrame::createModels()
 */
 void ChessPairerFrame::createViews()
 {
+    views["LIST_TOURNAMENTS"] = new ListTournamentsView(this);
     views["LIST_CHESSPLAYERS"] = new ListChessplayersView(this);
     views["IMPORT_CHESSPLAYERS"] = new ImportChessplayersView(this);
+
 }
 
 void ChessPairerFrame::createControllers()
 {
+    listTournamentsController = new ListTournamentsController(tournamentListModel, views["LIST_TOURNAMENTS"]);
     listChessplayersController = new ListChessplayersController(chessplayerListModel, views["LIST_CHESSPLAYERS"]);
     importChessplayersController = new ImportChessplayersController(importChessplayersModel, views["IMPORT_CHESSPLAYERS"]);
 }
@@ -159,6 +164,8 @@ void ChessPairerFrame::createControllers()
 void ChessPairerFrame::initMVC()
 {
     createControllers();
+    tournamentListModel->addView(views["LIST_TOURNAMENTS"]);
+    views["LIST_TOURNAMENTS"]->setController(listTournamentsController);
     chessplayerListModel->addView(views["LIST_CHESSPLAYERS"]);
     views["LIST_CHESSPLAYERS"]->setController(listChessplayersController);
     importChessplayersModel->addView(views["IMPORT_CHESSPLAYERS"]);
@@ -196,6 +203,26 @@ void ChessPairerFrame::OnAbout(wxCommandEvent& event)
 
     wxMessageBox(message, "About", wxOK | wxICON_INFORMATION);
 }
+
+
+
+void ChessPairerFrame::OnListTournaments(wxCommandEvent& event)
+{
+    try
+    {
+        tournamentListModel->getAll();
+        tournamentListModel->notifyAllViews();
+    }
+    catch(Exception &exception)
+    {
+        wxMessageBox(exception.what(),
+                 "Error", wxOK | wxICON_INFORMATION);
+        exit(-1);
+    }
+
+    showView("LIST_TOURNAMENTS");
+}
+
 
 /**
     Den här händelsestyrda funktionen köra när användaren har valt alternativet 'List all chessplayers'.

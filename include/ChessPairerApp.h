@@ -14,6 +14,9 @@
 #include "ImportChessplayersView.h"
 #include "ImportChessplayersController.h"
 #include "ImportChessplayersModel.h"
+#include "TournamentModel.h"
+#include "ListTournamentsController.h"
+#include "ListModel.h"
 
 class ChessPairerFrame;
 
@@ -40,6 +43,8 @@ class ChessPairerFrame : public wxFrame
         ChessPairerFrame(const unsigned int &width = 500, const unsigned int &height = 500);
 
     private:
+
+        void OnListTournaments(wxCommandEvent& event);
         void OnListChessplayers(wxCommandEvent& event);
         void OnResetDatabase(wxCommandEvent& event);
         void OnExit(wxCommandEvent& event);
@@ -57,12 +62,14 @@ class ChessPairerFrame : public wxFrame
 
         // Models
         /// Den här pekarvariabeln håller en instans av 'ChessplayerList', som är en modell, som hanterar data om schackspelarna.
-        ChessplayerListModel *chessplayerListModel;
+        ListModel<ChessplayerModel> *chessplayerListModel;
         ImportChessplayersModel *importChessplayersModel;
+        ListModel<TournamentModel> *tournamentListModel;
 
         // Controllers
         ListChessplayersController *listChessplayersController;
         ImportChessplayersController *importChessplayersController;
+        ListTournamentsController *listTournamentsController;
 
         // MVC
 

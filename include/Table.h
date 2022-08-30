@@ -18,7 +18,6 @@ class Table : public wxGrid
     private:
         const static unsigned int DEFAULT_ROW_COUNT;
         void setColumnName(const unsigned int &columnIndex, const wxString &columName);
-        int rowCount;
 
 };
 

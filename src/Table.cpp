@@ -13,7 +13,7 @@ const unsigned int Table::DEFAULT_ROW_COUNT = 2;
     endast möjlighet att välja celler rad för rad. Texten i varje cell är centrerad.
 **/
 Table::Table(wxWindow *parent, std::vector<wxString> &columnNames):
-    wxGrid(parent, wxID_ANY), rowCount(DEFAULT_ROW_COUNT)
+    wxGrid(parent, wxID_ANY)
 {
     this->CreateGrid(DEFAULT_ROW_COUNT, columnNames.size());
     for(unsigned int index = 0; index < columnNames.size(); index++)
@@ -55,7 +55,11 @@ void Table::setRowCount(const int &rows)
     {
         throw RangeErrorException("Illegal number of rows (rows < 0). ");
     }
-    rowCount = rows;
+
+    while(this->GetNumberRows() < rows)
+    {
+        this->AppendRows();
+    }
 }
 
 

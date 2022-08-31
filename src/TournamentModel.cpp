@@ -69,7 +69,18 @@ void TournamentModel::addToDatabase() const
 
 void TournamentModel::removeFromDatabase() const
 {
+    wxString ss;
+    ss << "delete from tournaments where id='" << id << "'";
 
+    try
+    {
+        Database *database = Database::getInstance();
+        database->executeSql(ss);
+    }
+    catch(DatabaseErrorException &)
+    {
+        throw;
+    }
 }
 
 void TournamentModel::reset()

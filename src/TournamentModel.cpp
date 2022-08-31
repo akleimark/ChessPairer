@@ -97,3 +97,15 @@ void TournamentModel::print() const
         << "Lottningssystem: " << pairingSystem << std::endl
         << "----------------------------------------------------" << std::endl;
 }
+
+TournamentPlayerModel& TournamentModel::operator[](const unsigned int &index) const
+{
+    if(index >= tournamentPlayers.size())
+    {
+        throw ArgumentErrorException("Illegalt index.");
+    }
+
+    return *tournamentPlayers[index];
+}
+
+

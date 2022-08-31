@@ -53,7 +53,7 @@ void Table::setRowCount(const int &rows)
 {
     if(rows < 0)
     {
-        throw RangeErrorException("Illegal number of rows (rows < 0). ");
+        throw ArgumentErrorException("Illegal number of rows (rows < 0). ");
     }
 
     while(this->GetNumberRows() < rows)

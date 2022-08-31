@@ -5,6 +5,7 @@
 #include "Exception.h"
 #include "ListModel.h"
 #include "ListTournamentsView.h"
+#include "Defs.h"
 
 ListTournamentsController::ListTournamentsController(Model *_model, View *_view):
     Controller(_model, _view)
@@ -24,7 +25,9 @@ ListTournamentsController::~ListTournamentsController()
 **/
 void ListTournamentsController::addTournament(wxCommandEvent &event)
 {
-    AddTournamentDialog *dialog = new AddTournamentDialog("Add a new tournament");
+    wxString title;
+    title << ADD_STRING << " en ny turnering";
+    AddTournamentDialog *dialog = new AddTournamentDialog(title);
 
     if (dialog->ShowModal() == wxID_OK )
     {
@@ -38,15 +41,25 @@ void ListTournamentsController::removeTournament(wxCommandEvent &event)
     ListModel<TournamentModel> *listModel = (ListModel<TournamentModel>*) model;
     ListTournamentsView *lView = (ListTournamentsView*) view;
     wxArrayInt rowNumbers = lView->getTable()->GetSelectedRows();
+
+    if(rowNumbers.size() == 0)
+    {
+        return;
+    }
+
     for(unsigned int index = 0; index < rowNumbers.size(); index++)
     {
+        if(rowNumbers[index] >= listModel->getSize())
+        {
+            continue;
+        }
         const TournamentModel tournament = listModel->get(rowNumbers[index]);
         tournament.print();
 
         wxString message;
-        message << "Are you sure you want to delete the tournament with the id = " << tournament.getId();
+        message << CONFIRM_MESSAGE << "radera turneringen med id = " << tournament.getId() << "?";
 
-        int result = wxMessageBox(message,"Confirm", wxOK|wxCANCEL | wxICON_INFORMATION);
+        int result = wxMessageBox(message, CONFIRM_LABEL, wxOK|wxCANCEL | wxICON_INFORMATION);
 
         if(result == wxOK)
         {
@@ -57,10 +70,9 @@ void ListTournamentsController::removeTournament(wxCommandEvent &event)
             catch(DatabaseErrorException &exception)
             {
                 wxMessageBox(exception.what(),
-                 "Error", wxOK | wxICON_INFORMATION);
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
             }
         }
-
 
         listModel->getAll();
         listModel->notifyAllViews();

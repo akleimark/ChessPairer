@@ -4,6 +4,7 @@
 #include <wx/msgdlg.h>
 #include "Exception.h"
 #include "ListModel.h"
+#include "Defs.h"
 
 ListChessplayersController::ListChessplayersController(Model *_model, View *_view):
     Controller(_model, _view)
@@ -23,7 +24,9 @@ ListChessplayersController::~ListChessplayersController()
 **/
 void ListChessplayersController::addChessplayer(wxCommandEvent &event)
 {
-    AddChessplayerDialog *dialog = new AddChessplayerDialog(L"L\u00E4gg till en schackspelare");
+    wxString message;
+    message << ADD_STRING << " en schackspelare";
+    AddChessplayerDialog *dialog = new AddChessplayerDialog(message);
 
     if (dialog->ShowModal() == wxID_OK )
     {
@@ -38,13 +41,23 @@ void ListChessplayersController::removeChessplayer(wxCommandEvent &event)
     ListModel<ChessplayerModel> *listModel = (ListModel<ChessplayerModel>*) model;
     ListChessplayersView *lView = (ListChessplayersView*) view;
     wxArrayInt rowNumbers = lView->getTable()->GetSelectedRows();
+
+    if(rowNumbers.size() == 0)
+    {
+        return;
+    }
     for(unsigned int index = 0; index < rowNumbers.size(); index++)
     {
+        if(rowNumbers[index] >= listModel->getSize())
+        {
+            continue;
+        }
+
         const ChessplayerModel chessplayer = listModel->get(rowNumbers[index]);
         chessplayer.print();
 
         wxString message;
-        message << L"\u00C5r du s\u00E4ker p\u00E5 att du vill radera schackspelaren med id = " << chessplayer.getId() << "?";
+        message << CONFIRM_MESSAGE << "radera schackspelaren med id = " << chessplayer.getId() << "?";
 
         int result = wxMessageBox(message,"Svara", wxOK|wxCANCEL | wxICON_INFORMATION);
 
@@ -57,7 +70,7 @@ void ListChessplayersController::removeChessplayer(wxCommandEvent &event)
             catch(DatabaseErrorException &exception)
             {
                 wxMessageBox(exception.what(),
-                 "Error", wxOK | wxICON_INFORMATION);
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
             }
         }
 

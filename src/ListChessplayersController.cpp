@@ -23,7 +23,7 @@ ListChessplayersController::~ListChessplayersController()
 **/
 void ListChessplayersController::addChessplayer(wxCommandEvent &event)
 {
-    AddChessplayerDialog *dialog = new AddChessplayerDialog("Add a new chessplayer");
+    AddChessplayerDialog *dialog = new AddChessplayerDialog(L"L\u00E4gg till en schackspelare");
 
     if (dialog->ShowModal() == wxID_OK )
     {
@@ -44,9 +44,9 @@ void ListChessplayersController::removeChessplayer(wxCommandEvent &event)
         chessplayer.print();
 
         wxString message;
-        message << "Are you sure you want to delete the chessplayer with the id = " << chessplayer.getId();
+        message << L"\u00C5r du s\u00E4ker p\u00E5 att du vill radera schackspelaren med id = " << chessplayer.getId() << "?";
 
-        int result = wxMessageBox(message,"Confirm", wxOK|wxCANCEL | wxICON_INFORMATION);
+        int result = wxMessageBox(message,"Svara", wxOK|wxCANCEL | wxICON_INFORMATION);
 
         if(result == wxOK)
         {

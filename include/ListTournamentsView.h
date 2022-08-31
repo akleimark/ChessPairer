@@ -18,6 +18,7 @@ class ListTournamentsView : public View
         virtual ~ListTournamentsView();
         virtual void update(Model *model);
         virtual void setController(Controller *_controller);
+        Table* getTable() const { return table; }
     protected:
 
     private:

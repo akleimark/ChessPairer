@@ -13,15 +13,15 @@
     panel med knappar, där denne exempelvis kan välja att lägga till en ny schackspelare eller radera en befintlig.
 **/
 ListChessplayersView::ListChessplayersView(wxWindow *p_parent):
-    View(p_parent, "List chessplayers")
+    View(p_parent, "Visa alla schackspelare")
 {
-    std::vector<wxString> columns = {"Id", "Name", "Birthdate", "Club"};
+    std::vector<wxString> columns = {"Id", "Namn", L"F\u00F6delsedatum", "Klubb"};
     table = new Table(parent, columns);
     this->Add(table, 10, wxALL, View::MARGIN);
 
     buttonBox = new wxBoxSizer(wxHORIZONTAL);
-    addButton = new wxButton(parent, -1, "Add");
-    removeButton = new wxButton(parent, -1, "Remove");
+    addButton = new wxButton(parent, -1, L"L\u00E4gg till");
+    removeButton = new wxButton(parent, -1, "Ta bort");
 
     buttonBox->Add(addButton, 0, wxALL, 10);
     buttonBox->Add(removeButton, 0, wxALL, 10);
@@ -51,7 +51,7 @@ void ListChessplayersView::update(Model *model)
     catch(RangeErrorException &exception)
     {
         wxMessageBox(exception.what(),
-                 "Error", wxOK | wxICON_INFORMATION);
+                 "Fel", wxOK | wxICON_INFORMATION);
         exit(-1);
     }
 

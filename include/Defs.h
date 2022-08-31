@@ -18,6 +18,6 @@ const unsigned int MINIMUM_LENGTH = 2;
 const unsigned int MINIMUM_YEAR = 1900;
 const unsigned int DEFAULT_FRAME_WIDTH = 700;
 const unsigned int DEFAULT_FRAME_HEIGHT = 700;
-
+const wxString GENERAL_ERROR_MESSAGE = "Fel";
 
 #endif // DEFS_H_INCLUDED

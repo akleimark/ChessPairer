@@ -1,6 +1,6 @@
+
 #include "ChessPairerApp.h"
 #include "Defs.h"
-#include "AddTournamentForm.h"
 #include <iostream>
 #include "ChessplayerModel.h"
 #include "ListChessplayersView.h"
@@ -9,7 +9,7 @@
 #include "ListTournamentsView.h"
 
 /**
-    Den h‰r funktionen motsvarar funktionen 'main' i konsolapplikationer.
+    Den h√§r funktionen motsvarar funktionen 'main' i konsolapplikationer.
 */
 bool ChessPairerApp::OnInit()
 {
@@ -35,7 +35,7 @@ ChessPairerFrame::ChessPairerFrame(const unsigned int &width, const unsigned int
 {
     createMenuSystem();
     CreateStatusBar();
-    SetStatusText("Welcome to " + APPLICATION_NAME + " .");
+    SetStatusText(L"V\u00E4lkommen till " + APPLICATION_NAME + " .");
 
     addEvents();
     createModels();
@@ -43,7 +43,7 @@ ChessPairerFrame::ChessPairerFrame(const unsigned int &width, const unsigned int
     initMVC();
 }
 /**
-    Den h‰r funktionen skapar menysystemet.
+    Den h√§r funktionen skapar menysystemet.
 */
 void ChessPairerFrame::createMenuSystem()
 {
@@ -53,24 +53,24 @@ void ChessPairerFrame::createMenuSystem()
     menuFile->Append(wxID_EXIT);
 
     wxMenu *menuDatabase = new wxMenu;
-    menuDatabase->Append(ID_LIST_TOURNAMENTS, "&List all tournaments...");
-    menuDatabase->Append(ID_LIST_CHESSPLAYERS, "&List all chessplayers...");
-    menuDatabase->Append(ID_RESET_DATABASE, "&Reset database...");
-    menuDatabase->Append(ID_IMPORT_CHESSPLAYERS, "&Import chessplayers...");
+    menuDatabase->Append(ID_LIST_TOURNAMENTS, "&Visa alla turneringar...");
+    menuDatabase->Append(ID_LIST_CHESSPLAYERS, "&Visa alla schackspelare...");
+    menuDatabase->Append(ID_IMPORT_CHESSPLAYERS, "&Importera schackspelare...");
+    menuDatabase->Append(ID_RESET_DATABASE, L"\u00C5terst\u00E4ll databasen...");
 
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(wxID_ABOUT);
+    menuHelp->Append(wxID_ABOUT, "Om");
 
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(menuDatabase, "&Database");
-    menuBar->Append(menuHelp, "&Help");
+    menuBar->Append(menuFile, "&Arkiv");
+    menuBar->Append(menuDatabase, "&Databas");
+    menuBar->Append(menuHelp, L"Hj\u00E4lp");
 
     SetMenuBar(menuBar);
 }
 
 /**
-    Den h‰r funktionen kˆrs, n‰r programmet avslutas.
+    Den h√§r funktionen k√∂rs, n√§r programmet avslutas.
 */
 void ChessPairerFrame::destroy()
 {
@@ -83,7 +83,7 @@ void ChessPairerFrame::destroy()
 
 
 /**
-    Den h‰r funktionen l‰gger till alla 'events'.
+    Den h√§r funktionen l√§gger till alla 'events'.
 */
 void ChessPairerFrame::addEvents()
 {
@@ -96,7 +96,7 @@ void ChessPairerFrame::addEvents()
 }
 
 /**
-    Den h‰r funktionen gˆmmer alla vyer. Detta gˆrs, n‰r alla vyerna har skapats.
+    Den h√§r funktionen g√∂mmer alla vyer. Detta g√∂rs, n√§r alla vyerna har skapats.
 */
 void ChessPairerFrame::hideAllViews()
 {
@@ -107,7 +107,7 @@ void ChessPairerFrame::hideAllViews()
 }
 
 /**
-    Den h‰r funktionen kˆrs, n‰r en viss vy skall visas.
+    Den h√§r funktionen k√∂rs, n√§r en viss vy skall visas.
 */
 void ChessPairerFrame::showView(const wxString &name)
 {
@@ -130,7 +130,7 @@ void ChessPairerFrame::showView(const wxString &name)
 
 
 /**
-    I den h‰r funktionen skapas alla de modeller som behˆvs fˆr att applikationen skall fungera.
+    I den h√§r funktionen skapas alla de modeller som beh√∂vs f√∂r att applikationen skall fungera.
 */
 void ChessPairerFrame::createModels()
 {
@@ -140,7 +140,7 @@ void ChessPairerFrame::createModels()
 }
 
 /**
-    Den h‰r funktionen har ansvar fˆr att skapa alla de vyer som applikationen anv‰nder sig av.
+    Den h√§r funktionen har ansvar f√∂r att skapa alla de vyer som applikationen anv√§nder sig av.
 */
 void ChessPairerFrame::createViews()
 {
@@ -159,7 +159,7 @@ void ChessPairerFrame::createControllers()
 
 
 /**
-    Den h‰r funktionen initierar 'Model-View'Controller'.
+    Den h√§r funktionen initierar 'Model-View'Controller'.
 */
 void ChessPairerFrame::initMVC()
 {
@@ -174,7 +174,7 @@ void ChessPairerFrame::initMVC()
 }
 
 /**
-    Den h‰r h‰ndelsestyrda funktionen kˆra n‰r anv‰ndaren har valt alternativet 'Quit'.
+    Den h√§r h√§ndelsestyrda funktionen k√∂ra n√§r anv√§ndaren har valt alternativet 'Quit'.
 */
 void ChessPairerFrame::OnExit(wxCommandEvent& event)
 {
@@ -193,13 +193,13 @@ void ChessPairerFrame::OnExit(wxCommandEvent& event)
 }
 
 /**
-    Den h‰r h‰ndelsestyrda funktionen kˆra n‰r anv‰ndaren har valt alternativet 'About'.
+    Den h√§r h√§ndelsestyrda funktionen k√∂ra n√§r anv√§ndaren har valt alternativet 'About'.
 */
 void ChessPairerFrame::OnAbout(wxCommandEvent& event)
 {
     wxString message;
-    message << "ChessPairer is an application for pairing chess tournaments." << "\n\n" << "Author: Anders Kleimark\n"
-        << "Contact: " << "akleimark@gmail.com\n";
+    message << L"ChessPairer \u00E4r ett program f\u00F6r att lotta schackturneringar." << "\n\n" << L"F\u00F6rfattare: Anders Kleimark\n"
+        << "E-post: " << "akleimark@gmail.com\n";
 
     wxMessageBox(message, "About", wxOK | wxICON_INFORMATION);
 }
@@ -225,7 +225,7 @@ void ChessPairerFrame::OnListTournaments(wxCommandEvent& event)
 
 
 /**
-    Den h‰r h‰ndelsestyrda funktionen kˆra n‰r anv‰ndaren har valt alternativet 'List all chessplayers'.
+    Den h√§r h√§ndelsestyrda funktionen k√∂ra n√§r anv√§ndaren har valt alternativet 'List all chessplayers'.
 */
 void ChessPairerFrame::OnListChessplayers(wxCommandEvent& event)
 {

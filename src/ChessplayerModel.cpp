@@ -43,7 +43,7 @@ bool ChessplayerModel::validate() const
         return false;
     }
 
-    if(!(biologicalSex == "male" || biologicalSex == "female"))
+    if(!(biologicalSex == "man" || biologicalSex == "kvinna"))
     {
         return false;
     }
@@ -182,11 +182,11 @@ void ChessplayerModel::print() const
     const unsigned int GAP = 25;
 
     std::cout << "Id:" << std::setw(GAP) << id << std::endl
-        << "Name: " << std::setw(GAP) << firstname << " " << lastname << std::endl
-        << "Biological sex: " << std::setw(GAP) << biologicalSex << std::endl
-        << "Birth date: " << std::setw(GAP) << birthDate << std::endl
-        << "Federation: " << std::setw(GAP) << federation << std::endl
-        << "Chess club: " << std::setw(GAP) << chessclub << std::endl
+        << "Namn: " << std::setw(GAP) << firstname << " " << lastname << std::endl
+        << L"Biologiskt k\u00F6n: " << std::setw(GAP) << biologicalSex << std::endl
+        << L"F\u00F6delsedatum: " << std::setw(GAP) << birthDate << std::endl
+        << "Nation: " << std::setw(GAP) << federation << std::endl
+        << "Schackkklubb: " << std::setw(GAP) << chessclub << std::endl
         << "--------------------------------------------------------------" << std::endl;
 }
 

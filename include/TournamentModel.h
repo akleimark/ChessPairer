@@ -9,7 +9,7 @@
     lagras är antalet ronder och namnet på lottningssystemet. Vidare finns det naturligtvis information om vilka spelare som ingår
     i turneringen och de resultat som dessa spelare har uppnått i turneringen.
 */
-class TournamentModel
+class TournamentModel : public Model, public Reset, public Validate, public DatabaseInterface, public Print
 {
     public:
         TournamentModel();
@@ -21,12 +21,18 @@ class TournamentModel
         /// Den här funktionen ansvarar för att ställa in namnet på lottningssystemet.
         void setPairingSystem(const wxString &pSystem) {pairingSystem = pSystem; }
         /// Den här funktionen returnerar turneringens unika ID.
-        wxString getId() const { return pairingSystem; }
+        wxString getId() const { return id; }
         /// Med hjälp av den här funktionen fås antalet ronder som skall spelas i turneringen.
         unsigned int getNumberOfRounds () const { return numberOfRounds; }
         /// Den här funktionen ger namnet på det lottningssystem, som turneringen tillämpar.
         wxString getPairingSystem() const { return pairingSystem; }
-
+        // Gränssnitt
+        virtual bool validate() const;
+        virtual void save() const;
+        virtual void addToDatabase() const;
+        virtual void removeFromDatabase() const;
+        virtual void reset();
+        virtual void print() const;
 
     protected:
 
@@ -37,6 +43,9 @@ class TournamentModel
         unsigned int numberOfRounds;
         /// Den här variabeln agrar namnet på det lottningssystem, som turneringen tillämpar.
         wxString pairingSystem;
+        const static unsigned int MINIMUM_NUMBER_OF_ROUNDS;
+        const static unsigned int MAXIMUM_NUMBER_OF_ROUNDS;
+        const static std::vector<wxString> PAIRING_SYSTEMS;
 };
 
 

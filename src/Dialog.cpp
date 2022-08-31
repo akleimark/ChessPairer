@@ -5,9 +5,10 @@
 #include "ChessplayerModel.h"
 #include <wx/msgdlg.h>
 #include "Exception.h"
+#include "Defs.h"
 
 const unsigned int Dialog::LEFT_MARGIN = 5;
-const unsigned int AddChessplayerDialog::SPACE = 10;
+const unsigned int Dialog::SPACE = 10;
 const unsigned int Dialog::DEFAULT_WIDTH = 700;
 const unsigned int Dialog::DEFAULT_HEIGHT = 700;
 const wxFont Dialog::LABEL_FONT = wxFont(11, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
@@ -62,7 +63,7 @@ void AddChessplayerDialog::create()
     verticalBox->Add(idBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     firstnameBox = new wxBoxSizer(wxHORIZONTAL);
-    firstnameLabel = new wxStaticText(this, -1, "Firstname: ");
+    firstnameLabel = new wxStaticText(this, -1, L"F\u00F6rnamn: ");
     firstnameField = new wxTextCtrl(this, -1);
     firstnameLabel->SetFont(LABEL_FONT);
     firstnameBox->Add(firstnameLabel, 0, wxALL, AddChessplayerDialog::SPACE);
@@ -70,7 +71,7 @@ void AddChessplayerDialog::create()
     verticalBox->Add(firstnameBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     lastnameBox = new wxBoxSizer(wxHORIZONTAL);
-    lastnameLabel = new wxStaticText(this, -1, "Lastname: ");
+    lastnameLabel = new wxStaticText(this, -1, "Efternamn: ");
     lastnameField = new wxTextCtrl(this, -1);
     lastnameLabel->SetFont(LABEL_FONT);
     lastnameBox->Add(lastnameLabel, 0, wxALL, AddChessplayerDialog::SPACE);
@@ -78,9 +79,9 @@ void AddChessplayerDialog::create()
     verticalBox->Add(lastnameBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     biologicalSexBox = new wxBoxSizer(wxHORIZONTAL);
-    biologicalSexLabel = new wxStaticText(this, -1, "Biological sex: ");
-    maleButton = new wxRadioButton(this, -1, "Male");
-    femaleButton = new wxRadioButton(this, -1, "Female");
+    biologicalSexLabel = new wxStaticText(this, -1, L"Biologiskt k\u00F6n: ");
+    maleButton = new wxRadioButton(this, -1, "Man");
+    femaleButton = new wxRadioButton(this, -1, "Kvinna");
     biologicalSexLabel->SetFont(LABEL_FONT);
     biologicalSexBox->Add(biologicalSexLabel, 0, wxALL, AddChessplayerDialog::SPACE);
     biologicalSexBox->Add(maleButton, 0, wxALL, AddChessplayerDialog::SPACE);
@@ -88,7 +89,7 @@ void AddChessplayerDialog::create()
     verticalBox->Add(biologicalSexBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     birthdateBox = new wxBoxSizer(wxHORIZONTAL);
-    birthdateLabel = new wxStaticText(this, -1, "Birthdate: ");
+    birthdateLabel = new wxStaticText(this, -1, L"F\u00F6delsedatum: ");
     birthdateField = new wxTextCtrl(this, -1);
     birthdateLabel->SetFont(LABEL_FONT);
     birthdateBox->Add(birthdateLabel, 0, wxALL, AddChessplayerDialog::SPACE);
@@ -96,7 +97,7 @@ void AddChessplayerDialog::create()
     verticalBox->Add(birthdateBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     federationBox = new wxBoxSizer(wxHORIZONTAL);
-    federationLabel = new wxStaticText(this, -1, "Federation: ");
+    federationLabel = new wxStaticText(this, -1, "Nation: ");
     federationField = new wxTextCtrl(this, -1);
     federationLabel->SetFont(LABEL_FONT);
     federationBox->Add(federationLabel, 0, wxALL, AddChessplayerDialog::SPACE);
@@ -104,7 +105,7 @@ void AddChessplayerDialog::create()
     verticalBox->Add(federationBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     clubBox = new wxBoxSizer(wxHORIZONTAL);
-    clubLabel = new wxStaticText(this, -1, "Club: ");
+    clubLabel = new wxStaticText(this, -1, "Klubb: ");
     clubField = new wxTextCtrl(this, -1);
     clubLabel->SetFont(LABEL_FONT);
     clubBox->Add(clubLabel, 0, wxALL, AddChessplayerDialog::SPACE);
@@ -112,12 +113,12 @@ void AddChessplayerDialog::create()
     verticalBox->Add(clubBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     buttonBox = new wxBoxSizer(wxHORIZONTAL);
-    addButton = new wxButton(this, -1, "Add");
-    resetButton = new wxButton(this, -1, "Reset");
-    closeButton = new wxButton(this, -1, "Close");
-    buttonBox->Add(addButton, 0, wxALL, AddChessplayerDialog::SPACE);
-    buttonBox->Add(resetButton, 0, wxALL, AddChessplayerDialog::SPACE);
-    buttonBox->Add(closeButton, 0, wxALL, AddChessplayerDialog::SPACE);
+    addButton = new wxButton(this, -1, L"L\u00E4gg till");
+    resetButton = new wxButton(this, -1, L"\u00C5terst\u00E4ll");
+    closeButton = new wxButton(this, -1, L"St\u00E4ng");
+    buttonBox->Add(addButton, 0, wxALL, Dialog::SPACE);
+    buttonBox->Add(resetButton, 0, wxALL, Dialog::SPACE);
+    buttonBox->Add(closeButton, 0, wxALL, Dialog::SPACE);
     verticalBox->Add(buttonBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
 }
@@ -131,17 +132,16 @@ void AddChessplayerDialog::addBinds()
 
 void AddChessplayerDialog::addChessplayer(wxCommandEvent &event)
 {
-
     chessplayer.setID(wxAtoi(idField->GetValue()));
     chessplayer.setFirstname(firstnameField->GetValue());
     chessplayer.setLastname(lastnameField->GetValue());
     if(maleButton->GetValue() == true)
     {
-        chessplayer.setBiologicalSex("male");
+        chessplayer.setBiologicalSex("man");
     }
     else
     {
-        chessplayer.setBiologicalSex("female");
+        chessplayer.setBiologicalSex("kvinna");
     }
 
     chessplayer.setBirthDate(birthdateField->GetValue());
@@ -158,13 +158,13 @@ void AddChessplayerDialog::addChessplayer(wxCommandEvent &event)
         catch(DatabaseErrorException &exception)
         {
             wxMessageBox(exception.what(),
-                 "Error", wxOK | wxICON_INFORMATION);
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
         }
     }
     else
     {
-        wxMessageBox("There are errors in the form. Check your values.",
-                 "Error", wxOK | wxICON_INFORMATION);
+        wxMessageBox(L"Det finns fel i formul\u00E4ret.",
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
     }
 }
 
@@ -184,3 +184,108 @@ void AddChessplayerDialog::closeDialog(wxCommandEvent &event)
     this->EndModal(true);
 }
 
+
+/**
+    I den här konstruktorn körs de tre funktionerna 'preCreate', 'create' och 'postCreate'.
+*/
+AddTournamentDialog::AddTournamentDialog(const wxString &title):
+    Dialog(title)
+{
+    preCreate();
+    create();
+    postCreate();
+    addBinds();
+}
+
+AddTournamentDialog::~AddTournamentDialog()
+{
+
+}
+
+void AddTournamentDialog::create()
+{
+    idBox = new wxBoxSizer(wxHORIZONTAL);
+    idLabel = new wxStaticText(this, -1, "Id: ");
+    idField = new wxTextCtrl(this, -1);
+    idLabel->SetFont(LABEL_FONT);
+    idBox->Add(idLabel, 0, wxALL, Dialog::SPACE);
+    idBox->Add(idField, 0, wxALL, Dialog::SPACE);
+    verticalBox->Add(idBox, Dialog::LEFT_MARGIN, wxALL, 0);
+
+    numberOfRoundsBox = new wxBoxSizer(wxHORIZONTAL);
+    numberOfRoundsLabel = new wxStaticText(this, -1, "Antal ronder: ");
+    numberOfRoundsField = new wxTextCtrl(this, -1);
+    numberOfRoundsLabel->SetFont(LABEL_FONT);
+    numberOfRoundsBox->Add(numberOfRoundsLabel, 0, wxALL, Dialog::SPACE);
+    numberOfRoundsBox->Add(numberOfRoundsField, 0, wxALL, Dialog::SPACE);
+    verticalBox->Add(numberOfRoundsBox, Dialog::LEFT_MARGIN, wxALL, 0);
+
+    pairingSystemBox = new wxBoxSizer(wxHORIZONTAL);
+    pairingSystemLabel = new wxStaticText(this, -1, "Lottningssystem: ");
+    pairingSystemComboBox = new wxComboBox(this, -1);
+    pairingSystemComboBox->Append("Monrad");
+    pairingSystemComboBox->Append("Berger");
+
+    pairingSystemLabel->SetFont(LABEL_FONT);
+    pairingSystemBox->Add(pairingSystemLabel, 0, wxALL, Dialog::SPACE);
+    pairingSystemBox->Add(pairingSystemComboBox, 0, wxALL, Dialog::SPACE);
+    verticalBox->Add(pairingSystemBox, Dialog::LEFT_MARGIN, wxALL, 0);
+
+    buttonBox = new wxBoxSizer(wxHORIZONTAL);
+    addButton = new wxButton(this, -1, L"L\u00E4gg till");
+    resetButton = new wxButton(this, -1, L"\u00C5terst\u00E4ll");
+    closeButton = new wxButton(this, -1, L"St\u00E4ng");
+    buttonBox->Add(addButton, 0, wxALL, AddTournamentDialog::SPACE);
+    buttonBox->Add(resetButton, 0, wxALL, AddTournamentDialog::SPACE);
+    buttonBox->Add(closeButton, 0, wxALL, AddTournamentDialog::SPACE);
+    verticalBox->Add(buttonBox, Dialog::LEFT_MARGIN, wxALL, 0);
+
+}
+
+void AddTournamentDialog::addBinds()
+{
+    addButton->Bind(wxEVT_BUTTON, &AddTournamentDialog::addTournament, this);
+    resetButton->Bind(wxEVT_BUTTON, &AddTournamentDialog::resetForm, this);
+    closeButton->Bind(wxEVT_BUTTON, &AddTournamentDialog::closeDialog, this);
+}
+
+void AddTournamentDialog::addTournament(wxCommandEvent &event)
+{
+    tournamentModel.setID(idField->GetValue());
+    tournamentModel.setNumberOfRounds(wxAtoi(numberOfRoundsField->GetValue()));
+    tournamentModel.setPairingSystem(pairingSystemComboBox->GetValue());
+
+    if(tournamentModel.validate())
+    {
+        try
+        {
+            tournamentModel.addToDatabase();
+            this->EndModal(true);
+
+        }
+        catch(DatabaseErrorException &exception)
+        {
+            wxMessageBox(exception.what(),
+                 "Error", wxOK | wxICON_INFORMATION);
+        }
+    }
+    else
+    {
+        wxMessageBox(L"Det finns fel i formul\u00E4ret.",
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
+    }
+
+}
+
+void AddTournamentDialog::resetForm(wxCommandEvent &event)
+{
+    idField->SetValue("");
+    numberOfRoundsField->SetValue("");
+    pairingSystemComboBox->SetValue("");
+
+}
+
+void AddTournamentDialog::closeDialog(wxCommandEvent &event)
+{
+    this->EndModal(true);
+}

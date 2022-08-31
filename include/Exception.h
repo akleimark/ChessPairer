@@ -30,12 +30,12 @@ class Exception
     Den här klassen av typen 'Exception' används för alla typer av
     undantagstillstånd, där ett visst värde har erhållit ett för lågt eller för högt värde.
 */
-class RangeErrorException : public Exception
+class ArgumentErrorException : public Exception
 {
     public:
-        RangeErrorException(const wxString &whatArg):
+        ArgumentErrorException(const wxString &whatArg):
             Exception(whatArg) {}
-        virtual ~RangeErrorException() {}
+        virtual ~ArgumentErrorException() {}
         virtual wxString what() const noexcept;
 
     protected:
@@ -75,33 +75,6 @@ class IOErrorException : public Exception
 
     private:
 };
-
-class ModelErrorException : public Exception
-{
-    public:
-        ModelErrorException(const wxString &whatArg):
-            Exception(whatArg) {}
-        virtual ~ModelErrorException() {}
-        virtual wxString what() const noexcept;
-
-    protected:
-
-    private:
-};
-
-class NullpointerException : public Exception
-{
-    public:
-        NullpointerException(const wxString &whatArg):
-            Exception(whatArg) {}
-        virtual ~NullpointerException() {}
-        virtual wxString what() const noexcept;
-
-    protected:
-
-    private:
-};
-
 
 
 

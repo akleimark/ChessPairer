@@ -30,4 +30,7 @@ const wxString CONFIRM_MESSAGE = L"\u00C4r du s\u00E4ker p\u00E5 att du vill ";
 const wxString CONFIRM_LABEL = "Svara";
 const wxString SUCCESS_MESSAGE = "Klart";
 
+const wxString NO_RESULT = "-";
+
+
 #endif // DEFS_H_INCLUDED

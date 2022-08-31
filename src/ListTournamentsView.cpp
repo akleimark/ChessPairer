@@ -9,21 +9,23 @@
 #include "ListChessplayersController.h"
 #include "ListTournamentsController.h"
 #include "ListModel.h"
+#include "Defs.h"
+
 
 /**
     Med hjälp av den här konstruktorn skapas en instans av klassen. När den visas ser användaren en rubrik, en tabell med turneringar, samt en
     panel med knappar, där denne exempelvis kan välja att lägga till en ny turnering eller radera en befintlig.
 **/
 ListTournamentsView::ListTournamentsView(wxWindow *p_parent):
-    View(p_parent, "List tournaments")
+    View(p_parent, "Visa alla turneringar")
 {
     std::vector<wxString> columns = {"Id", "Antal ronder", "Lottningssystem"};
     table = new Table(parent, columns);
     this->Add(table, 10, wxALL, View::MARGIN);
 
     buttonBox = new wxBoxSizer(wxHORIZONTAL);
-    addButton = new wxButton(parent, -1, L"L\u00E4gg till");
-    removeButton = new wxButton(parent, -1, "Ta bort");
+    addButton = new wxButton(parent, -1, ADD_STRING);
+    removeButton = new wxButton(parent, -1, REMOVE_STRING);
 
     buttonBox->Add(addButton, 0, wxALL, 10);
     buttonBox->Add(removeButton, 0, wxALL, 10);
@@ -50,10 +52,10 @@ void ListTournamentsView::update(Model *model)
         table->setRowCount(m->getSize());
 
     }
-    catch(RangeErrorException &exception)
+    catch(ArgumentErrorException &exception)
     {
         wxMessageBox(exception.what(),
-                 "Fel", wxOK | wxICON_INFORMATION);
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
         exit(-1);
     }
 

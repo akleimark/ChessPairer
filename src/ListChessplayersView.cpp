@@ -7,6 +7,7 @@
 #include "Exception.h"
 #include "ListChessplayersController.h"
 #include "ListModel.h"
+#include "Defs.h"
 
 /**
     Med hjälp av den här konstruktorn skapas en instans av klassen. När den visas ser användaren en rubrik, en tabell med schackspelare, samt en
@@ -20,8 +21,8 @@ ListChessplayersView::ListChessplayersView(wxWindow *p_parent):
     this->Add(table, 10, wxALL, View::MARGIN);
 
     buttonBox = new wxBoxSizer(wxHORIZONTAL);
-    addButton = new wxButton(parent, -1, L"L\u00E4gg till");
-    removeButton = new wxButton(parent, -1, "Ta bort");
+    addButton = new wxButton(parent, -1, ADD_STRING);
+    removeButton = new wxButton(parent, -1, REMOVE_STRING);
 
     buttonBox->Add(addButton, 0, wxALL, 10);
     buttonBox->Add(removeButton, 0, wxALL, 10);
@@ -48,7 +49,7 @@ void ListChessplayersView::update(Model *model)
         table->setRowCount(m->getSize());
 
     }
-    catch(RangeErrorException &exception)
+    catch(ArgumentErrorException &exception)
     {
         wxMessageBox(exception.what(),
                  "Fel", wxOK | wxICON_INFORMATION);

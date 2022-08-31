@@ -7,6 +7,7 @@
 #include "Misc.h"
 #include "Exception.h"
 #include "ListTournamentsView.h"
+#include "ManageTournamentPlayersView.h"
 
 /**
     Den här funktionen motsvarar funktionen 'main' i konsolapplikationer.
@@ -50,7 +51,7 @@ void ChessPairerFrame::createMenuSystem()
     wxMenu *menuFile = new wxMenu;
 
     menuFile->AppendSeparator();
-    menuFile->Append(wxID_EXIT);
+    menuFile->Append(wxID_EXIT, "Avsluta");
 
     wxMenu *menuDatabase = new wxMenu;
     menuDatabase->Append(ID_LIST_TOURNAMENTS, "&Visa alla turneringar...");
@@ -58,12 +59,16 @@ void ChessPairerFrame::createMenuSystem()
     menuDatabase->Append(ID_IMPORT_CHESSPLAYERS, "&Importera schackspelare...");
     menuDatabase->Append(ID_RESET_DATABASE, L"\u00C5terst\u00E4ll databasen...");
 
+    wxMenu *menuTournaments = new wxMenu;
+    menuTournaments->Append(ID_LIST_TOURNAMENT_PLAYERS, "&Hantera spelare...");
+
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT, "Om");
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(menuFile, "&Arkiv");
     menuBar->Append(menuDatabase, "&Databas");
+    menuBar->Append(menuTournaments, "&Turneringar");
     menuBar->Append(menuHelp, L"Hj\u00E4lp");
 
     SetMenuBar(menuBar);
@@ -91,6 +96,7 @@ void ChessPairerFrame::addEvents()
     Bind(wxEVT_MENU, &ChessPairerFrame::OnListChessplayers, this, ID_LIST_CHESSPLAYERS);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnResetDatabase, this, ID_RESET_DATABASE);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnImportChessplayers, this, ID_IMPORT_CHESSPLAYERS);
+    Bind(wxEVT_MENU, &ChessPairerFrame::OnManageTournamentPlayers, this, ID_LIST_TOURNAMENT_PLAYERS);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnAbout, this, wxID_ABOUT);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnExit, this, wxID_EXIT);
 }
@@ -147,6 +153,7 @@ void ChessPairerFrame::createViews()
     views["LIST_TOURNAMENTS"] = new ListTournamentsView(this);
     views["LIST_CHESSPLAYERS"] = new ListChessplayersView(this);
     views["IMPORT_CHESSPLAYERS"] = new ImportChessplayersView(this);
+    views["MANAGE_TOURNAMENT_PLAYERS"] = new ManageTournamentPlayersView(this);
 
 }
 
@@ -201,7 +208,7 @@ void ChessPairerFrame::OnAbout(wxCommandEvent& event)
     message << L"ChessPairer \u00E4r ett program f\u00F6r att lotta schackturneringar." << "\n\n" << L"F\u00F6rfattare: Anders Kleimark\n"
         << "E-post: " << "akleimark@gmail.com\n";
 
-    wxMessageBox(message, "About", wxOK | wxICON_INFORMATION);
+    wxMessageBox(message, "Om", wxOK | wxICON_INFORMATION);
 }
 
 
@@ -216,7 +223,7 @@ void ChessPairerFrame::OnListTournaments(wxCommandEvent& event)
     catch(Exception &exception)
     {
         wxMessageBox(exception.what(),
-                 "Error", wxOK | wxICON_INFORMATION);
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
         exit(-1);
     }
 
@@ -237,7 +244,7 @@ void ChessPairerFrame::OnListChessplayers(wxCommandEvent& event)
     catch(Exception &exception)
     {
         wxMessageBox(exception.what(),
-                 "Error", wxOK | wxICON_INFORMATION);
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
         exit(-1);
     }
 
@@ -246,8 +253,9 @@ void ChessPairerFrame::OnListChessplayers(wxCommandEvent& event)
 
 void ChessPairerFrame::OnResetDatabase(wxCommandEvent& event)
 {
-    int result = wxMessageBox("Are you sure you want to reset the database?",
-                 "Confirm", wxOK | wxCANCEL);
+    wxString message;
+    message << CONFIRM_MESSAGE << L"\u00E5terst\u00E4lla databasen?";
+    int result = wxMessageBox(message, CONFIRM_LABEL, wxOK | wxCANCEL);
     if(result == wxOK)
     {
         Database *database = Database::getInstance();
@@ -258,12 +266,11 @@ void ChessPairerFrame::OnResetDatabase(wxCommandEvent& event)
         catch(DatabaseErrorException &exception)
         {
             wxMessageBox(exception.what(),
-                 "Error", wxOK | wxICON_INFORMATION);
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
             return;
         }
 
-        wxMessageBox("Success",
-                 "Success", wxOK | wxICON_INFORMATION);
+        wxMessageBox(SUCCESS_MESSAGE, SUCCESS_MESSAGE, wxOK | wxICON_INFORMATION);
     }
 }
 
@@ -271,3 +278,10 @@ void ChessPairerFrame::OnImportChessplayers(wxCommandEvent &event)
 {
     showView("IMPORT_CHESSPLAYERS");
 }
+
+void ChessPairerFrame::OnManageTournamentPlayers(wxCommandEvent &event)
+{
+    showView("MANAGE_TOURNAMENT_PLAYERS");
+}
+
+

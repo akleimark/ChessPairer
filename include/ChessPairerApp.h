@@ -50,6 +50,7 @@ class ChessPairerFrame : public wxFrame
         void OnExit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
         void OnImportChessplayers(wxCommandEvent &event);
+        void OnManageTournamentPlayers(wxCommandEvent &event);
         void createMenuSystem();
         void addEvents();
         void destroy();

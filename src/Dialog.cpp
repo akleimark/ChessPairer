@@ -113,9 +113,9 @@ void AddChessplayerDialog::create()
     verticalBox->Add(clubBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     buttonBox = new wxBoxSizer(wxHORIZONTAL);
-    addButton = new wxButton(this, -1, L"L\u00E4gg till");
-    resetButton = new wxButton(this, -1, L"\u00C5terst\u00E4ll");
-    closeButton = new wxButton(this, -1, L"St\u00E4ng");
+    addButton = new wxButton(this, -1, ADD_STRING);
+    resetButton = new wxButton(this, -1, RESET_STRING);
+    closeButton = new wxButton(this, -1, CLOSE_STRING);
     buttonBox->Add(addButton, 0, wxALL, Dialog::SPACE);
     buttonBox->Add(resetButton, 0, wxALL, Dialog::SPACE);
     buttonBox->Add(closeButton, 0, wxALL, Dialog::SPACE);
@@ -163,8 +163,7 @@ void AddChessplayerDialog::addChessplayer(wxCommandEvent &event)
     }
     else
     {
-        wxMessageBox(L"Det finns fel i formul\u00E4ret.",
-                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
+        wxMessageBox(FORM_ERROR, GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
     }
 }
 
@@ -232,9 +231,9 @@ void AddTournamentDialog::create()
     verticalBox->Add(pairingSystemBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     buttonBox = new wxBoxSizer(wxHORIZONTAL);
-    addButton = new wxButton(this, -1, L"L\u00E4gg till");
-    resetButton = new wxButton(this, -1, L"\u00C5terst\u00E4ll");
-    closeButton = new wxButton(this, -1, L"St\u00E4ng");
+    addButton = new wxButton(this, -1, ADD_STRING);
+    resetButton = new wxButton(this, -1, RESET_STRING);
+    closeButton = new wxButton(this, -1, CLOSE_STRING);
     buttonBox->Add(addButton, 0, wxALL, AddTournamentDialog::SPACE);
     buttonBox->Add(resetButton, 0, wxALL, AddTournamentDialog::SPACE);
     buttonBox->Add(closeButton, 0, wxALL, AddTournamentDialog::SPACE);
@@ -266,13 +265,12 @@ void AddTournamentDialog::addTournament(wxCommandEvent &event)
         catch(DatabaseErrorException &exception)
         {
             wxMessageBox(exception.what(),
-                 "Error", wxOK | wxICON_INFORMATION);
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
         }
     }
     else
     {
-        wxMessageBox(L"Det finns fel i formul\u00E4ret.",
-                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
+        wxMessageBox(FORM_ERROR, GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
     }
 
 }

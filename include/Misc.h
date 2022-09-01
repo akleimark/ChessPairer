@@ -11,24 +11,31 @@
 
 namespace misc
 {
-    bool isLeapYear(const unsigned int &year);
     void split(const wxString &textstring, const wxChar &delim, std::vector<wxString> &vector_split);
     bool fileExists(const wxString &fileName);
 }
 
+/**
+    Den här klassen är till för att hantera datum.
+*/
 class Date : public Validate
 {
     public:
-        Date(const unsigned int &_year, const unsigned int &_month = 1, const unsigned int &_day = 1);
+        Date();
+        Date(const unsigned int &_year, const unsigned int &_month, const unsigned int &_day);
         static unsigned int currentYear();
         bool isLeapYear() const;
         virtual bool validate() const;
-
+        void setDateString(const wxString &dateString);
+        wxString getDateString() const;
 
     private:
-        const unsigned int year;
-        const unsigned int month;
-        const unsigned int day;
+        /// Den här variabeln håller reda på årtalet.
+        unsigned int year;
+        /// Den här variabeln håller reda på månaden [1, 12].
+        unsigned int month;
+        /// Den här variabeln håller reda på dagen i månaden [1, 31].
+        unsigned int day;
 
 
 };

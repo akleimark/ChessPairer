@@ -1,7 +1,24 @@
 #include "Misc.h"
 #include "Defs.h"
 #include "Exception.h"
+#include <wx/wxchar.h>
 
+/**
+    Den förvalda konstruktorn skapar en instans av klassen med hjälp
+    av dagens datum. De privata variablerna ställs in därefter.
+*/
+Date::Date()
+{
+    std::time_t t = std::time(0);
+    std::tm* now = std::localtime(&t);
+    year = now->tm_year + 1900;
+    month = now->tm_mon + 1;
+    day = now->tm_mday;
+}
+
+/**
+    Den här konstruktorn tar argument för år, månad och dag.
+*/
 Date::Date(const unsigned int &_year, const unsigned int &_month, const unsigned int &_day):
     year(_year), month(_month), day(_day)
 {
@@ -49,6 +66,10 @@ bool Date::isLeapYear() const
     }
 }
 
+/**
+    Den här funktionen kontrollerar, huruvida datumet är korrekt eller ej.
+    Om det är korrekt, returneras 'true'.
+*/
 bool Date::validate() const
 {
     if(year < MINIMUM_YEAR || year > Date::currentYear())
@@ -140,6 +161,45 @@ bool Date::validate() const
 
     return true;
 
+}
+
+/**
+    Med hjälp av den här funktionen kan man enkelt ställa in variablerna 'year', 'month' och 'day' med hjälp
+    av en textsträng.
+*/
+void Date::setDateString(const wxString &dateString)
+{
+    std::vector<wxString> vector_split;
+    misc::split(dateString, '-', vector_split);
+    if(vector_split.size() != 3)
+    {
+        throw ArgumentErrorException("Felaktig datumsträng.");
+    }
+    year = wxAtoi(vector_split[0]);
+    month = wxAtoi(vector_split[1]);
+    day = wxAtoi(vector_split[2]);
+}
+
+/**
+    Den här funktionen returnerar datumet enligt formatet YYYY-MM-DD.
+*/
+wxString Date::getDateString() const
+{
+    wxString dateString;
+    dateString << year << "-";
+    if(month < 10)
+    {
+        dateString << "0";
+    }
+    dateString << month << "-";
+    if(day < 10)
+    {
+        dateString << "-";
+    }
+
+    dateString << day;
+
+    return dateString;
 }
 
 

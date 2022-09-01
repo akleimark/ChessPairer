@@ -1,9 +1,18 @@
 #include "Misc.h"
+#include "Defs.h"
+#include "Exception.h"
+
+Date::Date(const unsigned int &_year, const unsigned int &_month, const unsigned int &_day):
+    year(_year), month(_month), day(_day)
+{
+
+}
+
 
 /**
     Den här funktionen returnerar ett heltal med det nuvarande året.
 */
-unsigned int misc::getCurrentYear()
+unsigned int Date::currentYear()
 {
     std::time_t t = std::time(nullptr);
     std::tm *const pTInfo = std::localtime(&t);
@@ -14,7 +23,7 @@ unsigned int misc::getCurrentYear()
     Den här funktionen returnerar huruvida ett givet år är skottår eller ej.
     Exempelvis ger isLeapYear(1905) false, medan isLeapYear(2020) true.
 */
-bool misc::isLeapYear(const unsigned int &year)
+bool Date::isLeapYear() const
 {
     if(year % 100 != 0)
     {
@@ -39,6 +48,100 @@ bool misc::isLeapYear(const unsigned int &year)
         }
     }
 }
+
+bool Date::validate() const
+{
+    if(year < MINIMUM_YEAR || year > Date::currentYear())
+    {
+        return false;
+    }
+
+    if(month < 1 || month > 12)
+    {
+        return false;
+    }
+
+    unsigned int maxDay;
+    switch(month)
+    {
+        case 1:
+        {
+            maxDay = 31;
+            break;
+        }
+        case 2:
+        {
+            maxDay = 28;
+            break;
+        }
+        case 3:
+        {
+            maxDay = 31;
+            break;
+        }
+        case 4:
+        {
+            maxDay = 30;
+            break;
+        }
+        case 5:
+        {
+            maxDay = 31;
+            break;
+        }
+        case 6:
+        {
+            maxDay = 30;
+            break;
+        }
+        case 7:
+        {
+            maxDay = 31;
+            break;
+        }
+        case 8:
+        {
+            maxDay = 31;
+            break;
+        }
+        case 9:
+        {
+            maxDay = 30;
+            break;
+        }
+        case 10:
+        {
+            maxDay = 31;
+            break;
+        }
+        case 11:
+        {
+            maxDay = 30;
+            break;
+        }
+        case 12:
+        {
+            maxDay = 31;
+            break;
+        }
+        default:
+            throw ArgumentErrorException("Felaktigt datum.");
+    }
+
+    if(month == 2 && this->isLeapYear())
+    {
+        maxDay = 29;
+    }
+
+    if(day > maxDay || day < 1)
+    {
+       return false;
+    }
+
+    return true;
+
+}
+
 
 /**
     Den här funktionen delar upp en textsträng i mindre textstränger.

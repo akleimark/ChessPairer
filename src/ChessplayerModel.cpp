@@ -65,48 +65,14 @@ bool ChessplayerModel::validate() const
 
     std::vector<wxString> vector_split;
     misc::split(birthDate, '-', vector_split);
+
     if(vector_split.size() != 3)
     {
         return false;
     }
-    const unsigned int year = wxAtoi(vector_split[0]);
-    if(year < MINIMUM_YEAR || year > misc::getCurrentYear())
-    {
-        return false;
-    }
+    Date date(wxAtoi(vector_split[0]), wxAtoi(vector_split[1]), wxAtoi(vector_split[2]));
+    return (date.validate());
 
-    if(wxAtoi(vector_split[1]) < 1 || wxAtoi(vector_split[1]) > 12)
-    {
-        return false;
-    }
-    const unsigned int month = wxAtoi(vector_split[2]);
-    unsigned int maxDay;
-    if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
-    {
-        maxDay = 31;
-    }
-    else if(month == 4 || month == 6 || month == 9 || month == 11)
-    {
-        maxDay = 30;
-    }
-    else if(month == 2)
-    {
-        if(misc::isLeapYear(year))
-        {
-            maxDay = 29;
-        }
-        else
-        {
-            maxDay = 28;
-        }
-    }
-
-    if((wxAtoi(vector_split[2]) > maxDay) || (wxAtoi(vector_split[1]) > 1))
-    {
-       return false;
-    }
-
-    return true;
 }
 
 /**

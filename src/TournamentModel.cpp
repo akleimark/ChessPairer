@@ -40,6 +40,16 @@ bool TournamentModel::validate() const
         return false;
     }
 
+    if(startDate.validate() == false || endDate.validate() == false || startDate > endDate)
+    {
+        return false;
+    }
+
+    if(startDate > endDate)
+    {
+        return false;
+    }
+
 
     return true;
 }
@@ -88,11 +98,15 @@ void TournamentModel::reset()
     id = "";
     numberOfRounds = 0;
     pairingSystem = "";
+    startDate.reset();
+    endDate.reset();
 }
 
 void TournamentModel::print() const
 {
     std::cout << "Id: " << id << std::endl
+        << "Startdatum: " << startDate.getDateString() << std::endl
+        << "Slutdatum: " << endDate.getDateString() << std::endl
         << "Antal ronder: " << numberOfRounds << std::endl
         << "Lottningssystem: " << pairingSystem << std::endl
         << "----------------------------------------------------" << std::endl;

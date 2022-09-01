@@ -3,6 +3,7 @@
 
 #include <wx/string.h>
 #include "ChessplayerModel.h"
+#include "Misc.h"
 
 /**
     Den här klassen har hand om alla data, som rör turneringar. Varje turnering har bland annat ett unikt ID. Andra data som
@@ -21,6 +22,9 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
         void setNumberOfRounds(const unsigned int &nRounds) {numberOfRounds = nRounds; }
         /// Den här funktionen ansvarar för att ställa in namnet på lottningssystemet.
         void setPairingSystem(const wxString &pSystem) {pairingSystem = pSystem; }
+        void setStartDate(const wxString &date) {startDate.setDateString(date); }
+        void setEndDate(const wxString &date) {endDate.setDateString(date); }
+
         /// Den här funktionen returnerar turneringens unika ID.
         wxString getId() const { return id; }
         /// Med hjälp av den här funktionen fås antalet ronder som skall spelas i turneringen.
@@ -44,6 +48,10 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
         unsigned int numberOfRounds;
         /// Den här variabeln agrar namnet på det lottningssystem, som turneringen tillämpar.
         wxString pairingSystem;
+        /// Startdatumet för turneringen.
+        Date startDate;
+        /// Slutdatumet för turneringen.
+        Date endDate;
 
         std::vector<TournamentPlayerModel*> tournamentPlayers;
 

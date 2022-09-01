@@ -125,7 +125,7 @@ bool Date::validate() const
             break;
         }
         default:
-            throw ArgumentErrorException("Felaktigt datum.");
+            return false;
     }
 
     if(month == 2 && this->isLeapYear())

@@ -3,6 +3,10 @@
 #include "Exception.h"
 #include <wx/wxchar.h>
 
+const unsigned int Date::MINIMUM_YEAR = 1900;
+const unsigned int Date::MAXIMUM_YEAR = 2100;
+
+
 /**
     Den förvalda konstruktorn skapar en instans av klassen med hjälp
     av dagens datum. De privata variablerna ställs in därefter.
@@ -24,7 +28,6 @@ Date::Date(const unsigned int &_year, const unsigned int &_month, const unsigned
 {
 
 }
-
 
 /**
     Den här funktionen returnerar ett heltal med det nuvarande året.
@@ -72,7 +75,7 @@ bool Date::isLeapYear() const
 */
 bool Date::validate() const
 {
-    if(year < MINIMUM_YEAR || year > Date::currentYear())
+    if(year < Date::MINIMUM_YEAR || year > Date::MAXIMUM_YEAR)
     {
         return false;
     }
@@ -171,13 +174,19 @@ void Date::setDateString(const wxString &dateString)
 {
     std::vector<wxString> vector_split;
     misc::split(dateString, '-', vector_split);
-    if(vector_split.size() != 3)
+    if(vector_split.size() == 3)
     {
-        throw ArgumentErrorException("Felaktig datumsträng.");
+        year = wxAtoi(vector_split[0]);
+        month = wxAtoi(vector_split[1]);
+        day = wxAtoi(vector_split[2]);
     }
-    year = wxAtoi(vector_split[0]);
-    month = wxAtoi(vector_split[1]);
-    day = wxAtoi(vector_split[2]);
+    else
+    {
+        year = 0;
+        month = 0;
+        day = 0;
+    }
+
 }
 
 /**
@@ -194,7 +203,7 @@ wxString Date::getDateString() const
     dateString << month << "-";
     if(day < 10)
     {
-        dateString << "-";
+        dateString << "0";
     }
 
     dateString << day;

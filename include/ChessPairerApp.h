@@ -17,6 +17,8 @@
 #include "TournamentModel.h"
 #include "ListTournamentsController.h"
 #include "ListModel.h"
+#include "ViewModel.h"
+#include "ManageTournamentPlayersController.h"
 
 class ChessPairerFrame;
 
@@ -66,11 +68,13 @@ class ChessPairerFrame : public wxFrame
         ListModel<ChessplayerModel> *chessplayerListModel;
         ImportChessplayersModel *importChessplayersModel;
         ListModel<TournamentModel> *tournamentListModel;
+        ManageTournamentPlayersViewModel *manageTournamentPlayersViewModel;
 
         // Controllers
         ListChessplayersController *listChessplayersController;
         ImportChessplayersController *importChessplayersController;
         ListTournamentsController *listTournamentsController;
+        ManageTournamentPlayersController *manageTournamentPlayersController;
 
         // MVC
 

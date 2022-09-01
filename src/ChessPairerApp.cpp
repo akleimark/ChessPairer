@@ -143,6 +143,7 @@ void ChessPairerFrame::createModels()
     chessplayerListModel = new ListModel<ChessplayerModel>;
     importChessplayersModel = new ImportChessplayersModel;
     tournamentListModel = new ListModel<TournamentModel>;
+    manageTournamentPlayersViewModel = new ManageTournamentPlayersViewModel(*tournamentListModel, *chessplayerListModel);
 }
 
 /**
@@ -162,6 +163,7 @@ void ChessPairerFrame::createControllers()
     listTournamentsController = new ListTournamentsController(tournamentListModel, views["LIST_TOURNAMENTS"]);
     listChessplayersController = new ListChessplayersController(chessplayerListModel, views["LIST_CHESSPLAYERS"]);
     importChessplayersController = new ImportChessplayersController(importChessplayersModel, views["IMPORT_CHESSPLAYERS"]);
+    manageTournamentPlayersController = new ManageTournamentPlayersController(manageTournamentPlayersViewModel, views["MANAGE_TOURNAMENT_PLAYERS"]);
 }
 
 
@@ -177,6 +179,8 @@ void ChessPairerFrame::initMVC()
     views["LIST_CHESSPLAYERS"]->setController(listChessplayersController);
     importChessplayersModel->addView(views["IMPORT_CHESSPLAYERS"]);
     views["IMPORT_CHESSPLAYERS"]->setController(importChessplayersController);
+    manageTournamentPlayersViewModel->addView(views["MANAGE_TOURNAMENT_PLAYERS"]);
+    views["MANAGE_TOURNAMENT_PLAYERS"]->setController(manageTournamentPlayersController);
     hideAllViews();
 }
 
@@ -281,6 +285,10 @@ void ChessPairerFrame::OnImportChessplayers(wxCommandEvent &event)
 
 void ChessPairerFrame::OnManageTournamentPlayers(wxCommandEvent &event)
 {
+    tournamentListModel->getAll();
+    chessplayerListModel->getAll();
+    manageTournamentPlayersViewModel->notifyAllViews();
+
     showView("MANAGE_TOURNAMENT_PLAYERS");
 }
 

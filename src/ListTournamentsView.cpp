@@ -19,7 +19,7 @@
 ListTournamentsView::ListTournamentsView(wxWindow *p_parent):
     View(p_parent, "Visa alla turneringar")
 {
-    std::vector<wxString> columns = {"Id", "Antal ronder", "Lottningssystem"};
+    std::vector<wxString> columns = {"Id", "Startdatum", "Slutdatum", "Antal ronder", "Lottningssystem"};
     table = new Table(parent, columns);
     this->Add(table, 10, wxALL, View::MARGIN);
 
@@ -63,8 +63,10 @@ void ListTournamentsView::update(Model *model)
     {
         TournamentModel tournament = m->get(index);
         table->SetCellValue(index, 0, tournament.getId());
-        table->SetCellValue(index, 1, std::to_string(tournament.getNumberOfRounds()));
-        table->SetCellValue(index, 2, tournament.getPairingSystem());
+        table->SetCellValue(index, 1, tournament.getStartDate().getDateString());
+        table->SetCellValue(index, 2, tournament.getEndDate().getDateString());
+        table->SetCellValue(index, 3, std::to_string(tournament.getNumberOfRounds()));
+        table->SetCellValue(index, 4, tournament.getPairingSystem());
     }
 
     table->Fit();

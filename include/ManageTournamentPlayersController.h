@@ -9,6 +9,7 @@ class ManageTournamentPlayersController : public Controller
         ManageTournamentPlayersController(Model *_model, View *_view):
             Controller(_model, _view) {}
         virtual ~ManageTournamentPlayersController() {}
+        void changeTournament(wxCommandEvent &event);
 
     protected:
 

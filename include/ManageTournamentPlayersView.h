@@ -2,6 +2,9 @@
 #define MANAGETOURNAMENTPLAYERSVIEW_H
 
 #include "ModelViewController.h"
+#include <wx/combobox.h>
+#include "Table.h"
+#include "ListModel.h"
 
 class ManageTournamentPlayersView : public View
 {
@@ -14,6 +17,12 @@ class ManageTournamentPlayersView : public View
     protected:
 
     private:
+        wxBoxSizer *tournamentBox;
+        wxComboBox *tournamentComboBox;
+        wxBoxSizer *tableBox;
+        Table *chessplayerPool;
+        Table *tournamentPlayers;
+        void updatePlayerPool(ListModel<ChessplayerModel> *model);
 
 
 };

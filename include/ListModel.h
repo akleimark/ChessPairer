@@ -39,10 +39,12 @@ class ListModel : public Model
             kör kodsnutten ListModel<ChessplayerModel> model; model.getAll(); model.get(2);.
         */
         T get(const unsigned int &index) const { return data[index]; }
+
         /**
             Den här funktionen returnerar storleken på vektorn 'data', där alla objekt är lagrade.
         */
         unsigned int getSize() const { return data.size(); }
+        const T& operator[](const unsigned int &index) const { return data[index]; }
 
     protected:
         /**

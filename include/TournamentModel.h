@@ -35,7 +35,7 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
         Date getStartDate() const { return startDate; }
         /// Den här funktionen returnerar det slutdatum, som turneringen använder sig av (en instans av klassen 'Date').
         Date getEndDate() const { return endDate; }
-
+        void getAllTournamentPlayers();
         // Gränssnitt
         virtual bool validate() const;
         virtual void save() const;
@@ -59,6 +59,7 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
         Date endDate;
 
         std::vector<TournamentPlayerModel*> tournamentPlayers;
+        void clearTournamentPlayers();
 
         // Klasskonstanter
         const static unsigned int MINIMUM_NUMBER_OF_ROUNDS;
@@ -76,8 +77,8 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
 class TournamentPlayerModel : public Model
 {
     public:
-        TournamentPlayerModel():
-            chessplayerID(0), playerNumber(0) {}
+        TournamentPlayerModel(const unsigned int &cID = 0, const unsigned int &pNumber = 0):
+            chessplayerID(cID), playerNumber(pNumber) {}
         virtual ~TournamentPlayerModel() {}
         void setPlayerNumber(const unsigned int &number) {playerNumber = number; }
         void setChessplayerID(const unsigned int &id) {chessplayerID = id; }

@@ -113,6 +113,52 @@ void TournamentModel::print() const
         << "----------------------------------------------------" << std::endl;
 }
 
+/**
+    Med hjälp av den här funktionen hämtas alla turneringsspelarna i turneringen från databasen och
+    läggs i vektorn 'tournamentPlayers'.
+*/
+
+void TournamentModel::getAllTournamentPlayers()
+{
+    clearTournamentPlayers();
+    Database *database = Database::getInstance();
+    wxString sql = "select chessplayer_id, player_number from tournament_players ";
+    sql << "where tournament_id='" << id << "' order by player_number";
+
+    try
+    {
+        database->executeSql(sql);
+
+        for(unsigned int index = 0; index < database->getSize(); index++)
+        {
+            TournamentPlayerModel *tournamentPlayerModel = new TournamentPlayerModel(wxAtoi(database->atIndex(index, 0)), wxAtoi(database->atIndex(index, 1)));
+            tournamentPlayers.push_back(tournamentPlayerModel);
+        }
+
+    }
+    catch(DatabaseErrorException &error)
+    {
+        throw;
+    }
+
+}
+
+void TournamentModel::clearTournamentPlayers()
+{
+    for(TournamentPlayerModel *player : tournamentPlayers)
+    {
+        if(player != nullptr)
+        {
+            delete player;
+            player = nullptr;
+        }
+    }
+
+    tournamentPlayers.clear();
+
+}
+
+
 TournamentPlayerModel& TournamentModel::operator[](const unsigned int &index) const
 {
     if(index >= tournamentPlayers.size())

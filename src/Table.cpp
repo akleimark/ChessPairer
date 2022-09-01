@@ -12,7 +12,7 @@ const unsigned int Table::DEFAULT_ROW_COUNT = 2;
     namnet på kolumnerna. Varje tabell som skapas med hjälp av den här kontruktorn är oredigerbar och användaren har
     endast möjlighet att välja celler rad för rad. Texten i varje cell är centrerad.
 **/
-Table::Table(wxWindow *parent, std::vector<wxString> &columnNames):
+Table::Table(wxWindow *parent, const std::vector<wxString> &columnNames):
     wxGrid(parent, wxID_ANY)
 {
     this->CreateGrid(DEFAULT_ROW_COUNT, columnNames.size());

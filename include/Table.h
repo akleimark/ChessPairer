@@ -9,7 +9,7 @@
 class Table : public wxGrid
 {
     public:
-        Table(wxWindow *parent, std::vector<wxString> &columnNames);
+        Table(wxWindow *parent, const std::vector<wxString> &columnNames);
         virtual ~Table();
         void setRowCount(const int &rows);
 

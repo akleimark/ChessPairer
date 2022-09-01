@@ -29,8 +29,10 @@ void ListModel<TournamentModel>::addToContainer()
     {
         TournamentModel tournamentModel;
         tournamentModel.setID(database->atIndex(index, 0));
-        tournamentModel.setNumberOfRounds(wxAtoi(database->atIndex(index, 1)));
-        tournamentModel.setPairingSystem(database->atIndex(index, 2));
+        tournamentModel.setStartDate(database->atIndex(index, 1));
+        tournamentModel.setEndDate(database->atIndex(index, 2));
+        tournamentModel.setNumberOfRounds(wxAtoi(database->atIndex(index, 3)));
+        tournamentModel.setPairingSystem(database->atIndex(index, 4));
 
         data.push_back(tournamentModel);
     }

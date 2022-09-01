@@ -211,6 +211,22 @@ void AddTournamentDialog::create()
     idBox->Add(idField, 0, wxALL, Dialog::SPACE);
     verticalBox->Add(idBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
+    startDateBox = new wxBoxSizer(wxHORIZONTAL);
+    startDateLabel = new wxStaticText(this, -1, "Startdatum: ");
+    startDateField = new wxTextCtrl(this, -1);
+    startDateLabel->SetFont(LABEL_FONT);
+    startDateBox->Add(startDateLabel, 0, wxALL, Dialog::SPACE);
+    startDateBox->Add(startDateField, 0, wxALL, Dialog::SPACE);
+    verticalBox->Add(startDateBox, Dialog::LEFT_MARGIN, wxALL, 0);
+
+    endDateBox = new wxBoxSizer(wxHORIZONTAL);
+    endDateLabel = new wxStaticText(this, -1, "Slutdatum: ");
+    endDateField = new wxTextCtrl(this, -1);
+    endDateLabel->SetFont(LABEL_FONT);
+    endDateBox->Add(endDateLabel, 0, wxALL, Dialog::SPACE);
+    endDateBox->Add(endDateField, 0, wxALL, Dialog::SPACE);
+    verticalBox->Add(endDateBox, Dialog::LEFT_MARGIN, wxALL, 0);
+
     numberOfRoundsBox = new wxBoxSizer(wxHORIZONTAL);
     numberOfRoundsLabel = new wxStaticText(this, -1, "Antal ronder: ");
     numberOfRoundsField = new wxTextCtrl(this, -1);
@@ -251,6 +267,8 @@ void AddTournamentDialog::addBinds()
 void AddTournamentDialog::addTournament(wxCommandEvent &event)
 {
     tournamentModel.setID(idField->GetValue());
+    tournamentModel.setStartDate(startDateField->GetValue());
+    tournamentModel.setEndDate(endDateField->GetValue());
     tournamentModel.setNumberOfRounds(wxAtoi(numberOfRoundsField->GetValue()));
     tournamentModel.setPairingSystem(pairingSystemComboBox->GetValue());
 
@@ -272,6 +290,8 @@ void AddTournamentDialog::addTournament(wxCommandEvent &event)
     {
         wxMessageBox(FORM_ERROR, GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
     }
+
+
 
 }
 

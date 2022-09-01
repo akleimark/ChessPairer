@@ -140,6 +140,15 @@ class AddTournamentDialog : public Dialog
         wxStaticText *idLabel;
         /// Den här instansen av 'wxTextCtrl' ger användaren möjlighet att skriva in den tänkta spelarens id.
         wxTextCtrl *idField;
+
+        wxBoxSizer *startDateBox;
+        wxStaticText *startDateLabel;
+        wxTextCtrl *startDateField;
+
+        wxBoxSizer *endDateBox;
+        wxStaticText *endDateLabel;
+        wxTextCtrl *endDateField;
+
         wxBoxSizer *numberOfRoundsBox;
         wxStaticText *numberOfRoundsLabel;
         wxTextCtrl *numberOfRoundsField;

@@ -53,12 +53,20 @@ void Table::setRowCount(const int &rows)
 {
     if(rows < 0)
     {
-        throw ArgumentErrorException("Illegal number of rows (rows < 0). ");
+        throw ArgumentErrorException("Felaktigt radnummer. ");
     }
 
     while(this->GetNumberRows() < rows)
     {
         this->AppendRows();
+    }
+
+    for(unsigned int row = 0; row < this->GetNumberRows(); row++)
+    {
+        for(unsigned int col = 0; col < this->GetNumberCols(); col++)
+        {
+            this->SetCellAlignment(row, col, wxALIGN_CENTER, wxALIGN_CENTER);
+        }
     }
 }
 

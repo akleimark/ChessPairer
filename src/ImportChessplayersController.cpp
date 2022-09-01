@@ -11,6 +11,7 @@
 #include <wx/msgdlg.h>
 #include <vector>
 #include <wx/string.h>
+#include "Defs.h"
 
 ImportChessplayersController::ImportChessplayersController(Model *_model, View *_view):
     Controller(_model, _view)
@@ -63,7 +64,7 @@ void ImportChessplayersController::startImport(wxCommandEvent &event)
     catch(Exception &exception)
     {
         wxMessageBox(exception.what(),
-                 "Error", wxOK | wxICON_INFORMATION);
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
     }
 }
 
@@ -74,22 +75,16 @@ void ReadFileStrategy::abortProcess(ChessplayerModel *chessplayerModel)
         delete chessplayerModel;
         chessplayerModel = nullptr;
     }
-    throw IOErrorException("The file is corrupt. We abort the import process.");
+    throw IOErrorException(L"Filen \u00E4r korrupt. Vi avbryter.");
 }
 
 void ReadFileStrategy::postImport() const
 {
     wxString message;
-    message << "A total number of " << importedChessplayers;
-    if(importedChessplayers == 1)
-    {
-        message << " chessplayer were imported.";
-    }
-    else
-    {
-        message << " chessplayers were imported.";
-    }
-    wxMessageBox(message, "Done", wxOK | wxICON_INFORMATION);
+    message << "Totalt " << importedChessplayers
+        << " schackspelare importerades.";
+
+    wxMessageBox(message, SUCCESS_MESSAGE, wxOK | wxICON_INFORMATION);
 }
 
 void ReadXMLFile::execute()
@@ -98,7 +93,7 @@ void ReadXMLFile::execute()
     ImportChessplayersModel *iModel = (ImportChessplayersModel*) model;
     if(!misc::fileExists(iModel->getFile().c_str()))
     {
-        throw IOErrorException("The selected file does not exist.");
+        throw IOErrorException("Filen existerar inte.");
     }
 
     ChessplayerModel *chessplayerModel = nullptr;
@@ -112,7 +107,7 @@ void ReadXMLFile::execute()
 
         if(lineNumber == 1 && line.substr(0, 5) != "<?xml")
         {
-            throw IOErrorException("The selected file is not an xml-file.");
+            throw IOErrorException(L"Den valda filen \u00E4r inte n\u00E5gon XML-fil.");
         }
         else if(lineNumber > 1 && line == "<chessplayer>")
         {
@@ -192,7 +187,7 @@ void ReadXMLFile::execute()
         catch(DatabaseErrorException &exception)
         {
             wxMessageBox(exception.what(),
-                 "Error", wxOK | wxICON_INFORMATION);
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
         }
     }
     postImport();
@@ -205,7 +200,7 @@ void ReadTextFile::execute()
     ImportChessplayersModel *iModel = (ImportChessplayersModel*) model;
     if(!misc::fileExists(iModel->getFile().c_str()))
     {
-        throw IOErrorException("The selected file does not exist.");
+        throw IOErrorException("Filen existerar inte.");
     }
 
     ChessplayerModel *chessplayerModel = nullptr;
@@ -258,7 +253,7 @@ void ReadTextFile::execute()
         catch(DatabaseErrorException &exception)
         {
             wxMessageBox(exception.what(),
-                 "Error", wxOK | wxICON_INFORMATION);
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
         }
     }
     postImport();

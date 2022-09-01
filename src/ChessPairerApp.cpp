@@ -51,7 +51,7 @@ void ChessPairerFrame::createMenuSystem()
     wxMenu *menuFile = new wxMenu;
 
     menuFile->AppendSeparator();
-    menuFile->Append(wxID_EXIT, "Avsluta");
+    menuFile->Append(wxID_EXIT, QUIT_MESSAGE);
 
     wxMenu *menuDatabase = new wxMenu;
     menuDatabase->Append(ID_LIST_TOURNAMENTS, "&Visa alla turneringar...");
@@ -63,7 +63,7 @@ void ChessPairerFrame::createMenuSystem()
     menuTournaments->Append(ID_LIST_TOURNAMENT_PLAYERS, "&Hantera spelare...");
 
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(wxID_ABOUT, "Om");
+    menuHelp->Append(wxID_ABOUT, ABOUT_MESSAGE);
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(menuFile, "&Arkiv");
@@ -205,10 +205,10 @@ void ChessPairerFrame::OnExit(wxCommandEvent& event)
 void ChessPairerFrame::OnAbout(wxCommandEvent& event)
 {
     wxString message;
-    message << L"ChessPairer \u00E4r ett program f\u00F6r att lotta schackturneringar." << "\n\n" << L"F\u00F6rfattare: Anders Kleimark\n"
-        << "E-post: " << "akleimark@gmail.com\n";
+    message << APPLICATION_NAME <<L" \u00E4r ett program f\u00F6r att lotta schackturneringar." << "\n\n" << L"Utvecklare: "
+    << DEVELOPER_NAME << "\n" << "E-post: " << DEVELOPER_EMAIL << "\n";
 
-    wxMessageBox(message, "Om", wxOK | wxICON_INFORMATION);
+    wxMessageBox(message, ABOUT_MESSAGE, wxOK | wxICON_INFORMATION);
 }
 
 

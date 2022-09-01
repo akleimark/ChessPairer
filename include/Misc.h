@@ -18,16 +18,21 @@ namespace misc
 /**
     Den här klassen är till för att hantera datum.
 */
-class Date : public Validate
+class Date : public Validate, public Reset
 {
     public:
         Date();
         Date(const unsigned int &_year, const unsigned int &_month, const unsigned int &_day);
+        virtual ~Date() {}
         static unsigned int currentYear();
         bool isLeapYear() const;
-        virtual bool validate() const;
         void setDateString(const wxString &dateString);
         wxString getDateString() const;
+        // Operatoröverlagringar.
+        bool operator>(const Date &date) const;
+        // Implementerade funktioner som härrör till gränssnitt.
+        virtual bool validate() const;
+        virtual void reset();
 
     private:
         /// Den här variabeln håller reda på årtalet.

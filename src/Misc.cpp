@@ -202,6 +202,34 @@ wxString Date::getDateString() const
     return dateString;
 }
 
+/**
+    Den här operatoröverlagringen jämför två instanser av klassen. Om
+    det första datumet inträffar efter det andra datumet, returneras 'true'.
+*/
+bool Date::operator>(const Date &date) const
+{
+    if(year > date.year)
+    {
+        return true;
+    }
+    if(year == date.year && month > date.month)
+    {
+        return true;
+    }
+    if(year == date.year && month == date.month && day > date.day)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+void Date::reset()
+{
+    year = 0;
+    month = 0;
+    day = 0;
+}
 
 /**
     Den här funktionen delar upp en textsträng i mindre textstränger.

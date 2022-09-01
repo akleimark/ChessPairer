@@ -62,8 +62,9 @@ void TournamentModel::save() const
 void TournamentModel::addToDatabase() const
 {
     wxString ss;
-    ss << "insert into tournaments(id, number_of_rounds, pairing_system) values('";
-    ss << id << "', " << numberOfRounds << ",'" << pairingSystem << "')";
+    ss << "insert into tournaments(id, start_date, end_date, number_of_rounds, pairing_system) values('";
+    ss << id << "','" << startDate.getDateString() << "', '" << endDate.getDateString() << "', "
+        << numberOfRounds << ",'" << pairingSystem << "')";
 
     try
     {

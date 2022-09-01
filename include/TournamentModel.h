@@ -31,6 +31,11 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
         unsigned int getNumberOfRounds () const { return numberOfRounds; }
         /// Den här funktionen ger namnet på det lottningssystem, som turneringen tillämpar.
         wxString getPairingSystem() const { return pairingSystem; }
+        /// Den här funktionen returnerar det startdatum, som turneringen använder sig av (en instans av klassen 'Date').
+        Date getStartDate() const { return startDate; }
+        /// Den här funktionen returnerar det slutdatum, som turneringen använder sig av (en instans av klassen 'Date').
+        Date getEndDate() const { return endDate; }
+
         // Gränssnitt
         virtual bool validate() const;
         virtual void save() const;

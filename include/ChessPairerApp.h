@@ -68,6 +68,8 @@ class ChessPairerFrame : public wxFrame
         ListModel<ChessplayerModel*> *chessplayerListModel;
         ImportChessplayersModel *importChessplayersModel;
         ListModel<TournamentModel*> *tournamentListModel;
+        TournamentModel *tournamentModel;
+        TournamentPlayerModel *tournamentPlayerModel;
         ManageTournamentPlayersViewModel *manageTournamentPlayersViewModel;
 
         // Controllers

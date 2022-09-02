@@ -31,6 +31,8 @@ Table::Table(wxWindow *parent, const std::vector<wxString> &columnNames):
     }
 
     this->SetSelectionMode(wxGrid::wxGridSelectRows);
+    //this->SetSelectionMode(wxGrid::wxGridSelectNone);
+
 }
 
 Table::~Table()

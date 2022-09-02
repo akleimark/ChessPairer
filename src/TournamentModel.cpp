@@ -169,4 +169,21 @@ TournamentPlayerModel& TournamentModel::operator[](const unsigned int &index) co
     return *tournamentPlayers[index];
 }
 
+TournamentPlayerModel* TournamentPlayerModel::clone(ChessplayerModel *chessplayer)
+{
+    if(chessplayer == nullptr)
+    {
+        return nullptr;
+    }
 
+    TournamentPlayerModel *tournamentPlayer = new TournamentPlayerModel;
+    tournamentPlayer->setChessplayerID(chessplayer->getId());
+    tournamentPlayer->setPlayerNumber(0);
+    return tournamentPlayer;
+}
+
+void TournamentPlayerModel::print() const
+{
+    std::cout << "Id: " << chessplayerID << std::endl
+        << "Playernumber: " << playerNumber << std::endl;
+}

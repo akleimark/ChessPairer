@@ -145,7 +145,9 @@ void ChessPairerFrame::createModels()
     chessplayerListModel = new ListModel<ChessplayerModel*>;
     importChessplayersModel = new ImportChessplayersModel;
     tournamentListModel = new ListModel<TournamentModel*>;
-    manageTournamentPlayersViewModel = new ManageTournamentPlayersViewModel(tournamentListModel, chessplayerListModel);
+    tournamentModel = nullptr;
+    tournamentPlayerModel = nullptr;
+    manageTournamentPlayersViewModel = new ManageTournamentPlayersViewModel(tournamentListModel, chessplayerListModel, tournamentModel, tournamentPlayerModel);
 }
 
 /**

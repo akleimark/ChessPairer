@@ -8,6 +8,7 @@ void ManageTournamentPlayersController::changeTournament(wxCommandEvent &event)
     unsigned int index = event.GetSelection();
 
     TournamentModel *tournament = viewModel->getTournaments()->get(index);
+    viewModel->tournament(tournament);
 
     try
     {
@@ -18,4 +19,22 @@ void ManageTournamentPlayersController::changeTournament(wxCommandEvent &event)
         std::cout << error.what() << std::endl;
     }
 
+    //viewModel->notifyView(view);
+
 }
+void ManageTournamentPlayersController::selectPlayer(wxGridEvent &event)
+{
+    ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+    ChessplayerModel *chessplayer = viewModel->getChessplayerList()->get(event.GetRow());
+    TournamentPlayerModel *tournamentPlayer = TournamentPlayerModel::clone(chessplayer);
+    viewModel->tournamentPlayer(tournamentPlayer);
+}
+
+void ManageTournamentPlayersController::addPlayer(wxCommandEvent &event)
+{
+    ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+    TournamentPlayerModel *player = viewModel->getTournamentPlayerModel();
+    player->print();
+
+}
+

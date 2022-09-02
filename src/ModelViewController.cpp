@@ -2,6 +2,7 @@
 
 const unsigned int View::MARGIN = 20;
 const wxFont View::LABEL_FONT = wxFont(11, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+const wxFont View::H3_FONT = wxFont(9, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
 
 View::View(wxWindow *p_parent, const wxString &labelString):
     wxBoxSizer(wxVERTICAL), parent(p_parent)

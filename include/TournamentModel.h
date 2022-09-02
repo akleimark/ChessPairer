@@ -74,7 +74,7 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
     Klassen har två privata variabler (chessplayerID och playerNumber). I många lottningssystem
     lottar man med hjälp av ett spelarnummer.
 */
-class TournamentPlayerModel : public Model
+class TournamentPlayerModel : public Model, public Print
 {
     public:
         TournamentPlayerModel(const unsigned int &cID = 0, const unsigned int &pNumber = 0):
@@ -86,6 +86,8 @@ class TournamentPlayerModel : public Model
         unsigned int getChessplayerID() const { return chessplayerID; }
         /// Den här funktionen returnerar spelarnumret.
         unsigned int getPlayerNumber() const { return playerNumber; }
+        static TournamentPlayerModel* clone(ChessplayerModel *chessplayer);
+        virtual void print() const;
 
     private:
         /// Värdet på den här variabeln är samma som för motsvarande schackspelar-id.

@@ -5,6 +5,7 @@
 #include <wx/combobox.h>
 #include "Table.h"
 #include "ListModel.h"
+#include <wx/button.h>
 
 class ManageTournamentPlayersView : public View
 {
@@ -19,10 +20,19 @@ class ManageTournamentPlayersView : public View
     private:
         wxBoxSizer *tournamentBox;
         wxComboBox *tournamentComboBox;
-        wxBoxSizer *tableBox;
+        wxBoxSizer *bottomSizer;
+        wxBoxSizer *leftSizer;
+        wxBoxSizer *rightSizer;
+
         Table *chessplayerPool;
         Table *tournamentPlayers;
-        void updatePlayerPool(ListModel<ChessplayerModel> *model);
+        wxStaticText *playerPoolHeader;
+        wxStaticText *tournamentPlayersHeader;
+
+        wxButton *addButton;
+
+
+        void updatePlayerPool(ListModel<ChessplayerModel*> *model);
 
 
 };

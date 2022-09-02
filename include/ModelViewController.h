@@ -41,6 +41,7 @@ class View : public wxBoxSizer
         wxFont *font;
         const static unsigned int MARGIN;
         const static wxFont LABEL_FONT;
+        const static wxFont H3_FONT;
 
     private:
 

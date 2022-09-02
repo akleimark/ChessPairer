@@ -28,8 +28,3 @@ wxString IOErrorException::what() const noexcept
     return errorString;
 }
 
-
-
-
-
-

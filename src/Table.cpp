@@ -1,6 +1,7 @@
 #include "Table.h"
 #include "Exception.h"
 
+const wxColor Table::DEFAULT_BACKGROUND_COLOR = wxColor("Darkblue");
 
 /**
     Varje instans av klassen kommer att skapa en tabell med antalet rader satt till den här variabeln.
@@ -31,13 +32,7 @@ Table::Table(wxWindow *parent, const std::vector<wxString> &columnNames):
     }
 
     this->SetSelectionMode(wxGrid::wxGridSelectRows);
-    //this->SetSelectionMode(wxGrid::wxGridSelectNone);
-
-}
-
-Table::~Table()
-{
-
+    this->SetSelectionBackground(DEFAULT_BACKGROUND_COLOR);
 }
 
 /**
@@ -71,5 +66,3 @@ void Table::setRowCount(const int &rows)
         }
     }
 }
-
-

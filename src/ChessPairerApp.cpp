@@ -1,4 +1,3 @@
-
 #include "ChessPairerApp.h"
 #include "Defs.h"
 #include <iostream>
@@ -84,10 +83,7 @@ void ChessPairerFrame::destroy()
         delete chessplayerListModel;
         chessplayerListModel = nullptr;
     }
-
-
 }
-
 
 /**
     Den här funktionen lägger till alla 'events'.
@@ -136,7 +132,6 @@ void ChessPairerFrame::showView(const wxString &name)
     this->SetMinClientSize(wxSize(DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT));
 }
 
-
 /**
     I den här funktionen skapas alla de modeller som behövs för att applikationen skall fungera.
 */
@@ -159,7 +154,6 @@ void ChessPairerFrame::createViews()
     views["LIST_CHESSPLAYERS"] = new ListChessplayersView(this);
     views["IMPORT_CHESSPLAYERS"] = new ImportChessplayersView(this);
     views["MANAGE_TOURNAMENT_PLAYERS"] = new ManageTournamentPlayersView(this);
-
 }
 
 void ChessPairerFrame::createControllers()
@@ -169,7 +163,6 @@ void ChessPairerFrame::createControllers()
     importChessplayersController = new ImportChessplayersController(importChessplayersModel, views["IMPORT_CHESSPLAYERS"]);
     manageTournamentPlayersController = new ManageTournamentPlayersController(manageTournamentPlayersViewModel, views["MANAGE_TOURNAMENT_PLAYERS"]);
 }
-
 
 /**
     Den här funktionen initierar 'Model-View'Controller'.
@@ -219,8 +212,6 @@ void ChessPairerFrame::OnAbout(wxCommandEvent& event)
     wxMessageBox(message, ABOUT_MESSAGE, wxOK | wxICON_INFORMATION);
 }
 
-
-
 void ChessPairerFrame::OnListTournaments(wxCommandEvent& event)
 {
     try
@@ -237,7 +228,6 @@ void ChessPairerFrame::OnListTournaments(wxCommandEvent& event)
 
     showView("LIST_TOURNAMENTS");
 }
-
 
 /**
     Den här händelsestyrda funktionen köra när användaren har valt alternativet 'List all chessplayers'.
@@ -295,5 +285,4 @@ void ChessPairerFrame::OnManageTournamentPlayers(wxCommandEvent &event)
 
     showView("MANAGE_TOURNAMENT_PLAYERS");
 }
-
 

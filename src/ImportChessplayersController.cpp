@@ -258,4 +258,3 @@ void ReadTextFile::execute()
     }
     postImport();
 }
-

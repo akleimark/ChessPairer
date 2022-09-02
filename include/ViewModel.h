@@ -24,7 +24,6 @@ class ManageTournamentPlayersViewModel : public Model
         ListModel<ChessplayerModel*> *chessplayers;
         TournamentModel *tournamentModel;
         TournamentPlayerModel *tournamentPlayerModel;
-
 };
 
 #endif // VIEWMODEL_H

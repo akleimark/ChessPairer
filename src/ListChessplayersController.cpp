@@ -33,7 +33,6 @@ void ListChessplayersController::addChessplayer(wxCommandEvent &event)
         model->notifyAllViews();
     }
     dialog->Destroy();
-
 }
 
 void ListChessplayersController::removeChessplayer(wxCommandEvent &event)
@@ -74,9 +73,7 @@ void ListChessplayersController::removeChessplayer(wxCommandEvent &event)
             }
         }
 
-
         listModel->getAll();
         listModel->notifyAllViews();
     }
-
 }

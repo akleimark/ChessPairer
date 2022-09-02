@@ -11,7 +11,6 @@
 #include "ListModel.h"
 #include "Defs.h"
 
-
 /**
     Med hjälp av den här konstruktorn skapas en instans av klassen. När den visas ser användaren en rubrik, en tabell med turneringar, samt en
     panel med knappar, där denne exempelvis kan välja att lägga till en ny turnering eller radera en befintlig.
@@ -58,7 +57,6 @@ void ListTournamentsView::update(Model *model)
                  GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
         exit(-1);
     }
-
     for(unsigned int index = 0; index < m->getSize(); index++)
     {
         TournamentModel *tournament = m->get(index);
@@ -68,7 +66,6 @@ void ListTournamentsView::update(Model *model)
         table->SetCellValue(index, 3, std::to_string(tournament->getNumberOfRounds()));
         table->SetCellValue(index, 4, tournament->getPairingSystem());
     }
-
     table->Fit();
 }
 
@@ -79,6 +76,3 @@ void ListTournamentsView::setController(Controller *_controller)
     addButton->Bind(wxEVT_BUTTON, &ListTournamentsController::addTournament, controller);
     removeButton->Bind(wxEVT_BUTTON, &ListTournamentsController::removeTournament, controller);
 }
-
-
-

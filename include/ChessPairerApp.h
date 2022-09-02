@@ -79,14 +79,11 @@ class ChessPairerFrame : public wxFrame
         ManageTournamentPlayersController *manageTournamentPlayersController;
 
         // MVC
-
         void createModels();
         void createViews();
         void createControllers();
         void initMVC();
-
 };
-
 
 wxIMPLEMENT_APP(ChessPairerApp);
 

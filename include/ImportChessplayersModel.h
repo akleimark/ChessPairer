@@ -16,7 +16,6 @@ class ImportChessplayersModel : public Model
         std::string file;
 
     private:
-
 };
 
 

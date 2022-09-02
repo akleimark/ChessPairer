@@ -52,7 +52,6 @@ void ListModel<ChessplayerModel*>::getAll()
     {
         throw;
     }
-
      addToContainer();
 }
 
@@ -70,8 +69,5 @@ void ListModel<TournamentModel*>::getAll()
     {
         throw;
     }
-
      addToContainer();
 }
-
-

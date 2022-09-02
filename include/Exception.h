@@ -77,5 +77,4 @@ class IOErrorException : public Exception
 };
 
 
-
 #endif // EXCEPTION_H

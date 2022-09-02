@@ -25,7 +25,6 @@ class Database
         unsigned int getSize() const { return dataRecords.size(); }
         void resetDatabase();
 
-
     protected:
 
     private:

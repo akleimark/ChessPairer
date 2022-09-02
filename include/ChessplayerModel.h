@@ -60,6 +60,7 @@ class ChessplayerModel : public Model, public Validate, public Print, public Dat
         virtual void removeFromDatabase() const;
         virtual void save() const;
         virtual void reset();
+        static ChessplayerModel* findById(const unsigned int &playerID);
 
     protected:
 
@@ -81,7 +82,5 @@ class ChessplayerModel : public Model, public Validate, public Print, public Dat
         /// I den här variabeln lagras schackspelarens klubbtillhörighet.
         wxString chessclub;
 };
-
-
 
 #endif // CHESSPLAYER_H

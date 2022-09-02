@@ -50,9 +50,6 @@ class Strategy
 {
     public:
         virtual void execute() = 0;
-
 };
-
-
 
 #endif // INTERFACES_H_INCLUDED

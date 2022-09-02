@@ -29,12 +29,10 @@ ImportChessplayersView::ImportChessplayersView(wxWindow *parent):
     selectFileBox->Add(selectFileField, 0, wxALL, 10);
     this->Add(selectFileBox, View::MARGIN, wxALL, 0);
 
-
     buttonBox = new wxBoxSizer(wxHORIZONTAL);
     importButton = new wxButton(parent, -1, "Importera");
     buttonBox->Add(importButton, 0, wxALL, 10);
     this->Add(buttonBox, View::MARGIN, wxALL, 0);
-
 }
 
 

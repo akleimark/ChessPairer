@@ -27,9 +27,16 @@ ManageTournamentPlayersView::ManageTournamentPlayersView(wxWindow *p_parent):
     rightSizer = new wxBoxSizer(wxVERTICAL);
     tournamentPlayersHeader = new wxStaticText(parent, -1, "Turneringsspelare");
     tournamentPlayersHeader->SetFont(View::H3_FONT);
-    tournamentPlayers = new Table(parent, {"Id", "Namn"});
+    tournamentPlayers = new Table(parent, {"Id", "Namn", "Spelarnummer"});
+    rightButtonPanel = new wxBoxSizer(wxHORIZONTAL);
+    removeButton = new wxButton(parent, -1, "Ta bort");
+    generateButton = new wxButton(parent, -1, "Generera");
+    rightButtonPanel->Add(removeButton, 0, wxALL, 0);
+    rightButtonPanel->Add(generateButton, 0, wxLEFT, 10);
+
     rightSizer->Add(tournamentPlayersHeader, 0, wxALL | wxEXPAND, 10);
     rightSizer->Add(tournamentPlayers, 0, wxALL, 10);
+    rightSizer->Add(rightButtonPanel, 0, wxALL, 10);
     bottomSizer->Add(rightSizer, 1, wxALL, 10);
 
     this->Add(bottomSizer, View::MARGIN, wxALL | wxEXPAND, 0);
@@ -46,19 +53,19 @@ void ManageTournamentPlayersView::update(Model *model)
 
     ListModel<TournamentModel*> *tournaments = viewModel->getTournaments();
     ListModel<ChessplayerModel*> *chessplayers = viewModel->getChessplayerList();
-
-    tournamentComboBox->Clear();
-    tournamentComboBox->SetValue(L"V\u00E4lj turnering");
-
-    for(unsigned int index = 0; index < tournaments->getSize(); index++)
+    //if(tournamentBox->IsEmpty())
     {
-        TournamentModel *tournament = tournaments->atIndex(index);
-        tournamentComboBox->Append(tournament->getId());
+        for(unsigned int index = 0; index < tournaments->getSize(); index++)
+        {
+            TournamentModel *tournament = tournaments->atIndex(index);
+            {
+                tournamentComboBox->Append(tournament->getId());
+            }
+        }
     }
-
     updatePlayerPool(chessplayers);
+    updateTournamentPlayers(viewModel->getTournamentModel());
     addButton->Enable(chessplayers->getSize() != 0 && viewModel->getTournamentModel() != nullptr);
-
 }
 
 void ManageTournamentPlayersView::setController(Controller *_controller)
@@ -70,10 +77,40 @@ void ManageTournamentPlayersView::setController(Controller *_controller)
     addButton->Bind(wxEVT_BUTTON, &ManageTournamentPlayersController::addPlayer, mController);
 }
 
+void ManageTournamentPlayersView::updateTournamentPlayers(TournamentModel *model)
+{
+    if(model == nullptr)
+    {
+        return;
+    }
+    tournamentPlayers->ClearGrid();
+
+    try
+    {
+        tournamentPlayers->setRowCount(model->getNumberOfPlayers());
+
+    }
+    catch(ArgumentErrorException &exception)
+    {
+        wxMessageBox(exception.what(),
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
+        exit(-1);
+    }
+
+    for(unsigned int index = 0; index < model->getNumberOfPlayers(); index++)
+    {
+        TournamentPlayerModel *player = model->atIndex(index);
+        tournamentPlayers->SetCellValue(index, 0, std::to_string(player->getChessplayerID()));
+        ChessplayerModel *chessplayer = ChessplayerModel::findById(player->getChessplayerID());
+        tournamentPlayers->SetCellValue(index, 1, chessplayer->getName());
+        tournamentPlayers->SetCellValue(index, 2, std::to_string(player->getPlayerNumber()));
+    }
+    tournamentPlayers->Fit();
+}
+
 void ManageTournamentPlayersView::updatePlayerPool(ListModel<ChessplayerModel*> *model)
 {
     chessplayerPool->ClearGrid();
-
     try
     {
         chessplayerPool->setRowCount(model->getSize());
@@ -92,7 +129,5 @@ void ManageTournamentPlayersView::updatePlayerPool(ListModel<ChessplayerModel*> 
         chessplayerPool->SetCellValue(index, 0, std::to_string(chessplayer->getId()));
         chessplayerPool->SetCellValue(index, 1, chessplayer->getName());
     }
-
     chessplayerPool->Fit();
-
 }

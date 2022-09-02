@@ -77,5 +77,4 @@ void ListTournamentsController::removeTournament(wxCommandEvent &event)
         listModel->getAll();
         listModel->notifyAllViews();
     }
-
 }

@@ -38,5 +38,4 @@ const wxString CONFIRM_LABEL = "Svara";
 const wxString SUCCESS_MESSAGE = "Klart";
 const wxString NO_RESULT = "-";
 
-
 #endif // DEFS_H_INCLUDED

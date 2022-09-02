@@ -8,6 +8,9 @@ const unsigned int TournamentModel::MINIMUM_NUMBER_OF_ROUNDS = 1;
 const unsigned int TournamentModel::MAXIMUM_NUMBER_OF_ROUNDS = 100;
 const std::vector<wxString> TournamentModel::PAIRING_SYSTEMS = {"Monrad", "Berger"};
 
+/**
+    I den förvalda konstruktorn sätts turneringens id till "", antalet ronder till 0, samt lottningssystemet till "".
+*/
 TournamentModel::TournamentModel():
     id(""), numberOfRounds(0), pairingSystem("")
 {
@@ -50,7 +53,6 @@ bool TournamentModel::validate() const
         return false;
     }
 
-
     return true;
 }
 
@@ -75,7 +77,6 @@ void TournamentModel::addToDatabase() const
     {
         throw;
     }
-
 }
 
 void TournamentModel::removeFromDatabase() const
@@ -131,16 +132,14 @@ void TournamentModel::getAllTournamentPlayers()
 
         for(unsigned int index = 0; index < database->getSize(); index++)
         {
-            TournamentPlayerModel *tournamentPlayerModel = new TournamentPlayerModel(wxAtoi(database->atIndex(index, 0)), wxAtoi(database->atIndex(index, 1)));
-            tournamentPlayers.push_back(tournamentPlayerModel);
+            TournamentPlayerModel *tournamentPlayerModel = new TournamentPlayerModel(id, wxAtoi(database->atIndex(index, 0)), wxAtoi(database->atIndex(index, 1)));
+            tournamentPlayers.insert(tournamentPlayerModel);
         }
-
     }
     catch(DatabaseErrorException &error)
     {
         throw;
     }
-
 }
 
 void TournamentModel::clearTournamentPlayers()
@@ -155,18 +154,30 @@ void TournamentModel::clearTournamentPlayers()
     }
 
     tournamentPlayers.clear();
-
 }
 
-
-TournamentPlayerModel& TournamentModel::operator[](const unsigned int &index) const
+void TournamentModel::addTournamentPlayer(TournamentPlayerModel *player)
 {
-    if(index >= tournamentPlayers.size())
+    if(player == nullptr)
     {
-        throw ArgumentErrorException("Illegalt index.");
+        throw ArgumentErrorException(L"V\u00E4rdet p\u00E5 'player' \u00E4r 'null'");
     }
 
-    return *tournamentPlayers[index];
+    tournamentPlayers.insert(player);
+}
+
+TournamentPlayerModel* TournamentModel::atIndex(const unsigned int index) const
+{
+    unsigned int i = 0;
+    for(TournamentPlayerModel *player : tournamentPlayers)
+    {
+        if(index == i)
+        {
+            return player;
+        }
+    }
+
+    return nullptr;
 }
 
 TournamentPlayerModel* TournamentPlayerModel::clone(ChessplayerModel *chessplayer)
@@ -187,3 +198,32 @@ void TournamentPlayerModel::print() const
     std::cout << "Id: " << chessplayerID << std::endl
         << "Playernumber: " << playerNumber << std::endl;
 }
+
+void TournamentPlayerModel::save() const
+{
+
+}
+
+void TournamentPlayerModel::addToDatabase() const
+{
+    Database *database = Database::getInstance();
+    wxString sql;
+    sql << "insert into tournament_players(tournament_id, chessplayer_id, player_number) values('";
+    sql << tournamentID << "', " << chessplayerID << ", " << playerNumber << ")";
+
+    try
+    {
+        Database *database = Database::getInstance();
+        database->executeSql(sql);
+    }
+    catch(DatabaseErrorException &)
+    {
+        throw;
+    }
+}
+
+void TournamentPlayerModel::removeFromDatabase() const
+{
+
+}
+

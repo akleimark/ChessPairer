@@ -9,12 +9,16 @@
 #include "TournamentModel.h"
 #include <iostream>
 
+/**
+    Den här klassen används för att kunna använda listor av klasser.
+*/
+
 template <class T>
 class ListModel : public Model
 {
     public:
         /**
-            I konstruktorn sätts storleken å vektorn till noll element.
+            I konstruktorn sätts storleken och vektorn till noll element.
         */
         ListModel<T>()
         {
@@ -32,7 +36,6 @@ class ListModel : public Model
                     delete item;
                     item = nullptr;
                 }
-
             }
 
             data.clear();
@@ -54,7 +57,9 @@ class ListModel : public Model
             Den här funktionen returnerar storleken på vektorn 'data', där alla objekt är lagrade.
         */
         unsigned int getSize() const { return data.size(); }
+        /// Den här operatoröverlagringen returnerar en referens till objekt 'index' i containern 'data'.
         const T& operator[](const unsigned int &index) const { return data[index]; }
+        /// Den här funktionen returnerar objekt T i containern 'data'.
         T atIndex(const unsigned int &index) {return data[index]; }
 
     protected:
@@ -69,6 +74,5 @@ class ListModel : public Model
 
     private:
 };
-
 
 #endif // LISTMODEL_H

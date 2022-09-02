@@ -16,5 +16,4 @@ class ListTournamentsController : public Controller
     private:
 };
 
-
 #endif // LISTTOURNAMENTSCONTROLLER_H

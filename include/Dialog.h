@@ -38,7 +38,6 @@ class Dialog : public wxDialog
         const static unsigned int LEFT_MARGIN;
 
     private:
-
 };
 
 class AddChessplayerDialog : public Dialog
@@ -114,7 +113,6 @@ class AddChessplayerDialog : public Dialog
         ChessplayerModel chessplayer;
 };
 
-
 class AddTournamentDialog : public Dialog
 {
     public:
@@ -165,6 +163,5 @@ class AddTournamentDialog : public Dialog
         /// Den här instansen av klassen 'TournamentModel' används för att spara data och lägga till schackspelaren till databasen.
         TournamentModel tournamentModel;
 };
-
 
 #endif // DIALOG_H

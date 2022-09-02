@@ -51,5 +51,4 @@ class Date : public Validate, public Reset
         const static unsigned int MAXIMUM_YEAR;
 };
 
-
 #endif // MISC_H_INCLUDED

@@ -35,7 +35,6 @@ class ReadFileStrategy : public Strategy
         unsigned int importedChessplayers;
         void abortProcess(ChessplayerModel *chessplayerModel);
         void postImport() const;
-
 };
 
 class ReadXMLFile : public ReadFileStrategy
@@ -55,6 +54,5 @@ class ReadTextFile : public ReadFileStrategy
         virtual ~ReadTextFile() {}
         virtual void execute();
 };
-
 
 #endif // IMPORTCHESSPLAYERSCONTROLLER_H

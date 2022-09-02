@@ -15,9 +15,12 @@ class ListChessplayersView : public View
 {
     public:
         ListChessplayersView(wxWindow *p_parent);
-        virtual ~ListChessplayersView();
+        /// Alla klassens pekare har en förälder som hör till wxWidgets. Det innebär
+        /// att wxWidgets ansvarar för att radera dessa objekt.
+        virtual ~ListChessplayersView() {}
         virtual void update(Model *model);
         virtual void setController(Controller *_controller);
+        /// Den här funktionen returnerar tabellen som används.
         Table* getTable() const { return table; }
 
     protected:
@@ -32,9 +35,6 @@ class ListChessplayersView : public View
         wxButton *addButton;
         /// Den här variabeln används för att visa en knapp, som ger användaren möjlighet att ta bort en schackspelare.
         wxButton *removeButton;
-
-
-
 };
 
 #endif // LISTCHESSPLAYERS_H

@@ -20,7 +20,6 @@ class Model
     protected:
         std::set<View*> views;
 
-
     private:
 };
 
@@ -44,7 +43,6 @@ class View : public wxBoxSizer
         const static wxFont H3_FONT;
 
     private:
-
 };
 
 class Controller
@@ -55,10 +53,6 @@ class Controller
         virtual ~Controller() {}
         Model *model;
         View *view;
-
-
 };
-
-
 
 #endif // MODELVIEWCONTROLLER_H

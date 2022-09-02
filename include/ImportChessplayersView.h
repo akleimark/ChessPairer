@@ -40,8 +40,6 @@ class ImportChessplayersView: public View
         wxStaticText *selectFileLabel;
         /// Den här instansen av 'wxTextCtrl' används för att ge användaren möjlighet att välja sökväg till filen, som skall användas.
         wxTextCtrl *selectFileField;
-
 };
-
 
 #endif // IMPORTCHESSPLAYERSVIEW_H

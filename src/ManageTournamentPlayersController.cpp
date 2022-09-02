@@ -1,6 +1,8 @@
 #include "ManageTournamentPlayersController.h"
 #include <iostream>
 #include "ViewModel.h"
+#include "Defs.h"
+#include <wx/msgdlg.h>
 
 void ManageTournamentPlayersController::changeTournament(wxCommandEvent &event)
 {
@@ -19,22 +21,40 @@ void ManageTournamentPlayersController::changeTournament(wxCommandEvent &event)
         std::cout << error.what() << std::endl;
     }
 
-    //viewModel->notifyView(view);
-
+    viewModel->notifyView(view);
 }
 void ManageTournamentPlayersController::selectPlayer(wxGridEvent &event)
 {
     ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+    if(viewModel->getTournamentModel() == nullptr)
+    {
+        return;
+    }
     ChessplayerModel *chessplayer = viewModel->getChessplayerList()->get(event.GetRow());
     TournamentPlayerModel *tournamentPlayer = TournamentPlayerModel::clone(chessplayer);
+    tournamentPlayer->setTournamentID(viewModel->getTournamentModel()->getId());
     viewModel->tournamentPlayer(tournamentPlayer);
 }
 
 void ManageTournamentPlayersController::addPlayer(wxCommandEvent &event)
 {
-    ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
-    TournamentPlayerModel *player = viewModel->getTournamentPlayerModel();
-    player->print();
+    try
+    {
+        ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+        TournamentPlayerModel *player = viewModel->getTournamentPlayerModel();
+        TournamentModel *tournament = viewModel->getTournamentModel();
+        if(tournament == nullptr || player == nullptr)
+        {
+            return;
+        }
 
+        player->addToDatabase();
+        tournament->addTournamentPlayer(player);
+        viewModel->notifyView(view);
+    }
+    catch(Exception &error)
+    {
+        wxMessageBox(error.what(),
+                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
+    }
 }
-

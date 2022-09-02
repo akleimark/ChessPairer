@@ -29,10 +29,6 @@ ListChessplayersView::ListChessplayersView(wxWindow *p_parent):
     this->Add(buttonBox, View::MARGIN, wxALL, 0);
 }
 
-ListChessplayersView::~ListChessplayersView()
-{
-
-}
 
 /**
     Den här funktionen uppdaterar vyn med hjälp av en instans av en modellklass.

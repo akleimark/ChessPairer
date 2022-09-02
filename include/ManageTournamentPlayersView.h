@@ -23,6 +23,7 @@ class ManageTournamentPlayersView : public View
         wxBoxSizer *bottomSizer;
         wxBoxSizer *leftSizer;
         wxBoxSizer *rightSizer;
+        wxBoxSizer *rightButtonPanel;
 
         Table *chessplayerPool;
         Table *tournamentPlayers;
@@ -30,12 +31,12 @@ class ManageTournamentPlayersView : public View
         wxStaticText *tournamentPlayersHeader;
 
         wxButton *addButton;
-
+        wxButton *removeButton;
+        wxButton *generateButton;
 
         void updatePlayerPool(ListModel<ChessplayerModel*> *model);
-
+        void updateTournamentPlayers(TournamentModel *model);
 
 };
-
 
 #endif // MANAGETOURNAMENTPLAYERSVIEW_H

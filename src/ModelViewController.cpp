@@ -17,7 +17,6 @@ View::View(wxWindow *p_parent, const wxString &labelString):
     this->Show(false);
 }
 
-
 void Model::addView(View *view)
 {
     views.insert(view);
@@ -35,7 +34,6 @@ void Model::notifyView(View *view)
     }
 }
 
-
 void Model::notifyAllViews()
 {
     for(View *view : views)
@@ -49,7 +47,5 @@ Controller::Controller(Model *_model, View *_view):
 {
 
 }
-
-
 
 

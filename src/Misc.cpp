@@ -6,7 +6,6 @@
 const unsigned int Date::MINIMUM_YEAR = 1900;
 const unsigned int Date::MAXIMUM_YEAR = 2100;
 
-
 /**
     Den förvalda konstruktorn skapar en instans av klassen med hjälp
     av dagens datum. De privata variablerna ställs in därefter.
@@ -151,7 +150,6 @@ bool Date::validate() const
         default:
             return false;
     }
-
     if(month == 2 && this->isLeapYear())
     {
         maxDay = 29;
@@ -161,9 +159,7 @@ bool Date::validate() const
     {
        return false;
     }
-
     return true;
-
 }
 
 /**
@@ -186,7 +182,6 @@ void Date::setDateString(const wxString &dateString)
         month = 0;
         day = 0;
     }
-
 }
 
 /**

@@ -33,5 +33,4 @@ class ListTournamentsView : public View
         wxButton *removeButton;
 };
 
-
 #endif // LISTTOURNAMENTSVIEW_H

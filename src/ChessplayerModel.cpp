@@ -219,3 +219,36 @@ void ChessplayerModel::reset()
     federation = "";
     chessclub = "";
 }
+
+ChessplayerModel* ChessplayerModel::findById(const unsigned int &playerID)
+{
+    ChessplayerModel *chessplayer = nullptr;
+    Database *database = Database::getInstance();
+    wxString sql;
+    sql << "select * from chessplayers where id=" << playerID;
+
+    try
+    {
+        database->executeSql(sql);
+
+        if(database->getSize() == 1)
+        {
+            chessplayer = new ChessplayerModel;
+            chessplayer->setID(wxAtoi(database->atIndex(0, 0)));
+            chessplayer->setFirstname(database->atIndex(0, 1));
+            chessplayer->setLastname(database->atIndex(0, 2));
+            chessplayer->setBiologicalSex(database->atIndex(0, 3));
+            chessplayer->setBirthDate(database->atIndex(0, 4));
+            chessplayer->setFederation(database->atIndex(0, 5));
+            chessplayer->setChessclub(database->atIndex(0, 6));
+        }
+
+    }
+    catch(DatabaseErrorException &)
+    {
+        throw;
+    }
+
+    return chessplayer;
+
+}

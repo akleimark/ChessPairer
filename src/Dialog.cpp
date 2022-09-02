@@ -32,7 +32,6 @@ void Dialog::postCreate()
 {
     SetSizer(verticalBox);
     Centre();
-
 }
 
 /**
@@ -120,7 +119,6 @@ void AddChessplayerDialog::create()
     buttonBox->Add(resetButton, 0, wxALL, Dialog::SPACE);
     buttonBox->Add(closeButton, 0, wxALL, Dialog::SPACE);
     verticalBox->Add(buttonBox, Dialog::LEFT_MARGIN, wxALL, 0);
-
 }
 
 void AddChessplayerDialog::addBinds()
@@ -153,7 +151,6 @@ void AddChessplayerDialog::addChessplayer(wxCommandEvent &event)
         {
             chessplayer.addToDatabase();
             this->EndModal(true);
-
         }
         catch(DatabaseErrorException &exception)
         {
@@ -182,7 +179,6 @@ void AddChessplayerDialog::closeDialog(wxCommandEvent &event)
 {
     this->EndModal(true);
 }
-
 
 /**
     I den här konstruktorn körs de tre funktionerna 'preCreate', 'create' och 'postCreate'.
@@ -254,7 +250,6 @@ void AddTournamentDialog::create()
     buttonBox->Add(resetButton, 0, wxALL, AddTournamentDialog::SPACE);
     buttonBox->Add(closeButton, 0, wxALL, AddTournamentDialog::SPACE);
     verticalBox->Add(buttonBox, Dialog::LEFT_MARGIN, wxALL, 0);
-
 }
 
 void AddTournamentDialog::addBinds()
@@ -290,9 +285,6 @@ void AddTournamentDialog::addTournament(wxCommandEvent &event)
     {
         wxMessageBox(FORM_ERROR, GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
     }
-
-
-
 }
 
 void AddTournamentDialog::resetForm(wxCommandEvent &event)
@@ -300,7 +292,6 @@ void AddTournamentDialog::resetForm(wxCommandEvent &event)
     idField->SetValue("");
     numberOfRoundsField->SetValue("");
     pairingSystemComboBox->SetValue("");
-
 }
 
 void AddTournamentDialog::closeDialog(wxCommandEvent &event)

@@ -33,22 +33,24 @@ void ManageTournamentPlayersView::update(Model *model)
 {
     ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
 
-    ListModel<TournamentModel> tournaments = viewModel->getTournaments();
-    ListModel<ChessplayerModel> chessplayers = viewModel->getChessplayerList();
+    ListModel<TournamentModel*> *tournaments = viewModel->getTournaments();
+    ListModel<ChessplayerModel*> *chessplayers = viewModel->getChessplayerList();
 
     tournamentComboBox->Clear();
     tournamentComboBox->SetValue(L"V\u00E4lj turnering");
 
-    for(unsigned int index = 0; index < tournaments.getSize(); index++)
+    for(unsigned int index = 0; index < tournaments->getSize(); index++)
     {
-        tournamentComboBox->Append(tournaments[index].getId());
+        TournamentModel *tournament = tournaments->atIndex(index);
+        tournamentComboBox->Append(tournament->getId());
+        //tournamentComboBox->Append(tournaments[index].getId());
     }
 
     chessplayerPool->ClearGrid();
 
     try
     {
-        chessplayerPool->setRowCount(chessplayers.getSize());
+        chessplayerPool->setRowCount(chessplayers->getSize());
 
     }
     catch(ArgumentErrorException &exception)
@@ -58,11 +60,11 @@ void ManageTournamentPlayersView::update(Model *model)
         exit(-1);
     }
 
-    for(unsigned int index = 0; index < chessplayers.getSize(); index++)
+    for(unsigned int index = 0; index < chessplayers->getSize(); index++)
     {
-        ChessplayerModel chessplayer = chessplayers.get(index);
-        chessplayerPool->SetCellValue(index, 0, std::to_string(chessplayer.getId()));
-        chessplayerPool->SetCellValue(index, 1, chessplayer.getName());
+        ChessplayerModel *chessplayer = chessplayers->get(index);
+        chessplayerPool->SetCellValue(index, 0, std::to_string(chessplayer->getId()));
+        chessplayerPool->SetCellValue(index, 1, chessplayer->getName());
     }
 
     chessplayerPool->Fit();

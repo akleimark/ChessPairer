@@ -65,9 +65,9 @@ class ChessPairerFrame : public wxFrame
 
         // Models
         /// Den här pekarvariabeln håller en instans av 'ChessplayerList', som är en modell, som hanterar data om schackspelarna.
-        ListModel<ChessplayerModel> *chessplayerListModel;
+        ListModel<ChessplayerModel*> *chessplayerListModel;
         ImportChessplayersModel *importChessplayersModel;
-        ListModel<TournamentModel> *tournamentListModel;
+        ListModel<TournamentModel*> *tournamentListModel;
         ManageTournamentPlayersViewModel *manageTournamentPlayersViewModel;
 
         // Controllers

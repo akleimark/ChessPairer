@@ -7,11 +7,11 @@ void ManageTournamentPlayersController::changeTournament(wxCommandEvent &event)
     ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
     unsigned int index = event.GetSelection();
 
-    TournamentModel tournament = viewModel->getTournaments().get(index);
+    TournamentModel *tournament = viewModel->getTournaments()->get(index);
 
     try
     {
-         tournament.getAllTournamentPlayers();
+         tournament->getAllTournamentPlayers();
     }
     catch(DatabaseErrorException &error)
     {

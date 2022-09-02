@@ -41,7 +41,7 @@ ListChessplayersView::~ListChessplayersView()
 **/
 void ListChessplayersView::update(Model *model)
 {
-    ListModel<ChessplayerModel> *m = (ListModel<ChessplayerModel>*) model;
+    ListModel<ChessplayerModel*> *m = (ListModel<ChessplayerModel*>*) model;
     table->ClearGrid();
 
     try
@@ -58,11 +58,11 @@ void ListChessplayersView::update(Model *model)
 
     for(unsigned int index = 0; index < m->getSize(); index++)
     {
-        ChessplayerModel chessplayer = m->get(index);
-        table->SetCellValue(index, 0, std::to_string(chessplayer.getId()));
-        table->SetCellValue(index, 1, chessplayer.getName());
-        table->SetCellValue(index, 2, chessplayer.getBirthDate());
-        table->SetCellValue(index, 3, chessplayer.getChessclub());
+        ChessplayerModel *chessplayer = m->get(index);
+        table->SetCellValue(index, 0, std::to_string(chessplayer->getId()));
+        table->SetCellValue(index, 1, chessplayer->getName());
+        table->SetCellValue(index, 2, chessplayer->getBirthDate());
+        table->SetCellValue(index, 3, chessplayer->getChessclub());
     }
 
     table->Fit();

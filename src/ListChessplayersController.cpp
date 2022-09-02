@@ -38,7 +38,7 @@ void ListChessplayersController::addChessplayer(wxCommandEvent &event)
 
 void ListChessplayersController::removeChessplayer(wxCommandEvent &event)
 {
-    ListModel<ChessplayerModel> *listModel = (ListModel<ChessplayerModel>*) model;
+    ListModel<ChessplayerModel*> *listModel = (ListModel<ChessplayerModel*>*) model;
     ListChessplayersView *lView = (ListChessplayersView*) view;
     wxArrayInt rowNumbers = lView->getTable()->GetSelectedRows();
 
@@ -53,11 +53,11 @@ void ListChessplayersController::removeChessplayer(wxCommandEvent &event)
             continue;
         }
 
-        const ChessplayerModel chessplayer = listModel->get(rowNumbers[index]);
-        chessplayer.print();
+        ChessplayerModel *chessplayer = listModel->get(rowNumbers[index]);
+        chessplayer->print();
 
         wxString message;
-        message << CONFIRM_MESSAGE << "radera schackspelaren med id = " << chessplayer.getId() << "?";
+        message << CONFIRM_MESSAGE << "radera schackspelaren med id = " << chessplayer->getId() << "?";
 
         int result = wxMessageBox(message,"Svara", wxOK|wxCANCEL | wxICON_INFORMATION);
 
@@ -65,7 +65,7 @@ void ListChessplayersController::removeChessplayer(wxCommandEvent &event)
         {
             try
             {
-                chessplayer.removeFromDatabase();
+                chessplayer->removeFromDatabase();
             }
             catch(DatabaseErrorException &exception)
             {

@@ -44,7 +44,7 @@ ListTournamentsView::~ListTournamentsView()
 **/
 void ListTournamentsView::update(Model *model)
 {
-    ListModel<TournamentModel> *m = (ListModel<TournamentModel>*) model;
+    ListModel<TournamentModel*> *m = (ListModel<TournamentModel*>*) model;
     table->ClearGrid();
 
     try
@@ -61,12 +61,12 @@ void ListTournamentsView::update(Model *model)
 
     for(unsigned int index = 0; index < m->getSize(); index++)
     {
-        TournamentModel tournament = m->get(index);
-        table->SetCellValue(index, 0, tournament.getId());
-        table->SetCellValue(index, 1, tournament.getStartDate().getDateString());
-        table->SetCellValue(index, 2, tournament.getEndDate().getDateString());
-        table->SetCellValue(index, 3, std::to_string(tournament.getNumberOfRounds()));
-        table->SetCellValue(index, 4, tournament.getPairingSystem());
+        TournamentModel *tournament = m->get(index);
+        table->SetCellValue(index, 0, tournament->getId());
+        table->SetCellValue(index, 1, tournament->getStartDate().getDateString());
+        table->SetCellValue(index, 2, tournament->getEndDate().getDateString());
+        table->SetCellValue(index, 3, std::to_string(tournament->getNumberOfRounds()));
+        table->SetCellValue(index, 4, tournament->getPairingSystem());
     }
 
     table->Fit();

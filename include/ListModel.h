@@ -25,6 +25,16 @@ class ListModel : public Model
         */
         virtual ~ListModel<T>()
         {
+            for(T item : data)
+            {
+                if(item != nullptr)
+                {
+                    delete item;
+                    item = nullptr;
+                }
+
+            }
+
             data.clear();
             data.resize(0);
         }
@@ -45,6 +55,7 @@ class ListModel : public Model
         */
         unsigned int getSize() const { return data.size(); }
         const T& operator[](const unsigned int &index) const { return data[index]; }
+        T atIndex(const unsigned int &index) {return data[index]; }
 
     protected:
         /**
@@ -58,38 +69,6 @@ class ListModel : public Model
 
     private:
 };
-
-template <class T>
-void ListModel<T>::getAll()
-{
-    wxString tableName = "";
-    wxString className = typeid(T).name();
-
-    if(className.find("ChessplayerModel") != std::string::npos)
-    {
-        tableName = "chessplayers";
-    }
-    else if(className.find("TournamentModel") != std::string::npos)
-    {
-        tableName = "tournaments";
-    }
-
-    Database *database = Database::getInstance();
-    wxString sql = "select * from ";
-    sql << tableName <<  " order by id";
-
-    try
-    {
-        database->executeSql(sql);
-    }
-    catch(DatabaseErrorException &)
-    {
-        throw;
-    }
-
-     addToContainer();
-}
-
 
 
 #endif // LISTMODEL_H

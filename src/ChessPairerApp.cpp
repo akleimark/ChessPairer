@@ -84,6 +84,8 @@ void ChessPairerFrame::destroy()
         delete chessplayerListModel;
         chessplayerListModel = nullptr;
     }
+
+
 }
 
 
@@ -140,10 +142,10 @@ void ChessPairerFrame::showView(const wxString &name)
 */
 void ChessPairerFrame::createModels()
 {
-    chessplayerListModel = new ListModel<ChessplayerModel>;
+    chessplayerListModel = new ListModel<ChessplayerModel*>;
     importChessplayersModel = new ImportChessplayersModel;
-    tournamentListModel = new ListModel<TournamentModel>;
-    manageTournamentPlayersViewModel = new ManageTournamentPlayersViewModel(*tournamentListModel, *chessplayerListModel);
+    tournamentListModel = new ListModel<TournamentModel*>;
+    manageTournamentPlayersViewModel = new ManageTournamentPlayersViewModel(tournamentListModel, chessplayerListModel);
 }
 
 /**

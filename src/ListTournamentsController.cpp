@@ -38,7 +38,7 @@ void ListTournamentsController::addTournament(wxCommandEvent &event)
 
 void ListTournamentsController::removeTournament(wxCommandEvent &event)
 {
-    ListModel<TournamentModel> *listModel = (ListModel<TournamentModel>*) model;
+    ListModel<TournamentModel*> *listModel = (ListModel<TournamentModel*>*) model;
     ListTournamentsView *lView = (ListTournamentsView*) view;
     wxArrayInt rowNumbers = lView->getTable()->GetSelectedRows();
 
@@ -53,11 +53,11 @@ void ListTournamentsController::removeTournament(wxCommandEvent &event)
         {
             continue;
         }
-        const TournamentModel tournament = listModel->get(rowNumbers[index]);
-        tournament.print();
+        TournamentModel *tournament = listModel->get(rowNumbers[index]);
+        tournament->print();
 
         wxString message;
-        message << CONFIRM_MESSAGE << "radera turneringen med id = " << tournament.getId() << "?";
+        message << CONFIRM_MESSAGE << "radera turneringen med id = " << tournament->getId() << "?";
 
         int result = wxMessageBox(message, CONFIRM_LABEL, wxOK|wxCANCEL | wxICON_INFORMATION);
 
@@ -65,7 +65,7 @@ void ListTournamentsController::removeTournament(wxCommandEvent &event)
         {
             try
             {
-                tournament.removeFromDatabase();
+                tournament->removeFromDatabase();
             }
             catch(DatabaseErrorException &exception)
             {

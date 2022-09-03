@@ -12,7 +12,10 @@ class ManageTournamentPlayersController : public Controller
         virtual ~ManageTournamentPlayersController() {}
         void changeTournament(wxCommandEvent &event);
         void selectPlayer(wxGridEvent &event);
+        void selectTournamentPlayer(wxGridEvent &event);
         void addPlayer(wxCommandEvent &event);
+        void removePlayer(wxCommandEvent &event);
+        void generatePlayerNumbers(wxCommandEvent &event);
 
     protected:
 

@@ -36,6 +36,21 @@ void ManageTournamentPlayersController::selectPlayer(wxGridEvent &event)
     viewModel->tournamentPlayer(tournamentPlayer);
 }
 
+void ManageTournamentPlayersController::selectTournamentPlayer(wxGridEvent &event)
+{
+    const unsigned int ROW_INDEX = event.GetRow();
+    ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+    if(viewModel->getTournamentModel() == nullptr)
+    {
+        return;
+    }
+
+    TournamentPlayerModel *tournamentPlayer = viewModel->getTournamentModel()->atIndex(ROW_INDEX);
+    viewModel->tournamentPlayer(tournamentPlayer);
+}
+
+
+
 void ManageTournamentPlayersController::addPlayer(wxCommandEvent &event)
 {
     try
@@ -58,3 +73,32 @@ void ManageTournamentPlayersController::addPlayer(wxCommandEvent &event)
                  GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
     }
 }
+
+void ManageTournamentPlayersController::removePlayer(wxCommandEvent &event)
+{
+    try
+    {
+        ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+        TournamentPlayerModel *tournamentPlayer = viewModel->getTournamentPlayerModel();
+        viewModel->getTournamentModel()->removeTournamentPlayer(tournamentPlayer);
+        viewModel->notifyView(view);
+    }
+    catch(Exception &error)
+    {
+        error.showDialog();
+    }
+}
+
+void ManageTournamentPlayersController::generatePlayerNumbers(wxCommandEvent &event)
+{
+    ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+    TournamentModel *tournament = viewModel->getTournamentModel();
+    if(tournament == nullptr)
+    {
+        return;
+    }
+
+    tournament->generatePlayerNumbers();
+    viewModel->notifyView(view);
+}
+

@@ -18,6 +18,8 @@ class Exception
         virtual wxString what() const noexcept = 0;
         /// Den här funktionen används för att erhålla felmeddelandet.
         const wxString getErrorMessage() const { return errorMessage; }
+        /// Den här funktionen kan användas för att visa felmeddelandet i en dialogruta.
+        void showDialog() const;
 
     protected:
         /// I den här variabeln lagras felmeddelandet.
@@ -69,6 +71,7 @@ class IOErrorException : public Exception
         IOErrorException(const wxString &whatArg):
             Exception(whatArg) {}
         virtual ~IOErrorException() {}
+        /// Den här funktionen returnerar strängen 'I/O-fel:', följt av en mer precis förklaring av vad som gick fel.
         virtual wxString what() const noexcept;
 
     protected:

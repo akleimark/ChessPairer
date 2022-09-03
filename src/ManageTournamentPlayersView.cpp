@@ -41,6 +41,7 @@ ManageTournamentPlayersView::ManageTournamentPlayersView(wxWindow *p_parent):
 
     this->Add(bottomSizer, View::MARGIN, wxALL | wxEXPAND, 0);
 
+
 }
 ManageTournamentPlayersView::~ManageTournamentPlayersView()
 {

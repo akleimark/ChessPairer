@@ -19,6 +19,9 @@
 #include "ListModel.h"
 #include "ViewModel.h"
 #include "ManageTournamentPlayersController.h"
+#include "ManageTiebreaksController.h"
+#include "ManageTiebreaksView.h"
+#include "TiebreakModel.h"
 
 class ChessPairerFrame;
 
@@ -53,6 +56,7 @@ class ChessPairerFrame : public wxFrame
         void OnAbout(wxCommandEvent& event);
         void OnImportChessplayers(wxCommandEvent &event);
         void OnManageTournamentPlayers(wxCommandEvent &event);
+        void OnManageTournamentTiebreaks(wxCommandEvent &event);
         void createMenuSystem();
         void addEvents();
         void destroy();
@@ -71,12 +75,15 @@ class ChessPairerFrame : public wxFrame
         TournamentModel *tournamentModel;
         TournamentPlayerModel *tournamentPlayerModel;
         ManageTournamentPlayersViewModel *manageTournamentPlayersViewModel;
+        ListModel<TiebreakModel*> *tiebreaksListModel;
+        ManageTiebreaksViewModel *manageTiebreaksViewModel;
 
         // Controllers
         ListChessplayersController *listChessplayersController;
         ImportChessplayersController *importChessplayersController;
         ListTournamentsController *listTournamentsController;
         ManageTournamentPlayersController *manageTournamentPlayersController;
+        ManageTiebreaksController *manageTiebreaksController;
 
         // MVC
         void createModels();

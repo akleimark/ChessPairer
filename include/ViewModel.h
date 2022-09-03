@@ -3,6 +3,7 @@
 
 #include "ListModel.h"
 #include "TournamentModel.h"
+#include "TiebreakModel.h"
 
 class ManageTournamentPlayersViewModel : public Model
 {
@@ -25,5 +26,27 @@ class ManageTournamentPlayersViewModel : public Model
         TournamentModel *tournamentModel;
         TournamentPlayerModel *tournamentPlayerModel;
 };
+
+class ManageTiebreaksViewModel : public Model
+{
+    public:
+        ManageTiebreaksViewModel(ListModel<TournamentModel*>*p_tournaments, ListModel<TiebreakModel*> *p_tiebreaks, TournamentModel *tModel):
+            tournaments(p_tournaments), tiebreaks(p_tiebreaks), tournamentModel(tModel) {}
+        virtual ~ManageTiebreaksViewModel() {}
+        ListModel<TournamentModel*> *getListModel() const { return tournaments; }
+        TournamentModel* getTournament() const { return tournamentModel; }
+        ListModel<TiebreakModel*> *getTiebreaks() const { return tiebreaks; }
+
+
+
+    private:
+        ListModel<TournamentModel*>*tournaments;
+        ListModel<TiebreakModel*> *tiebreaks;
+        TournamentModel *tournamentModel;
+
+
+
+};
+
 
 #endif // VIEWMODEL_H

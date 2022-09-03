@@ -60,6 +60,7 @@ void ChessPairerFrame::createMenuSystem()
 
     wxMenu *menuTournaments = new wxMenu;
     menuTournaments->Append(ID_LIST_TOURNAMENT_PLAYERS, "&Hantera spelare...");
+    menuTournaments->Append(ID_LIST_TOURNAMENT_TIEBREAKS, L"&St\u00E4ll in särskiljning...");
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(wxID_ABOUT, ABOUT_MESSAGE);
@@ -95,6 +96,7 @@ void ChessPairerFrame::addEvents()
     Bind(wxEVT_MENU, &ChessPairerFrame::OnResetDatabase, this, ID_RESET_DATABASE);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnImportChessplayers, this, ID_IMPORT_CHESSPLAYERS);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnManageTournamentPlayers, this, ID_LIST_TOURNAMENT_PLAYERS);
+    Bind(wxEVT_MENU, &ChessPairerFrame::OnManageTournamentTiebreaks, this, ID_LIST_TOURNAMENT_TIEBREAKS);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnAbout, this, wxID_ABOUT);
     Bind(wxEVT_MENU, &ChessPairerFrame::OnExit, this, wxID_EXIT);
 }
@@ -142,7 +144,9 @@ void ChessPairerFrame::createModels()
     tournamentListModel = new ListModel<TournamentModel*>;
     tournamentModel = nullptr;
     tournamentPlayerModel = nullptr;
+    tiebreaksListModel = new ListModel<TiebreakModel*>;
     manageTournamentPlayersViewModel = new ManageTournamentPlayersViewModel(tournamentListModel, chessplayerListModel, tournamentModel, tournamentPlayerModel);
+    manageTiebreaksViewModel = new ManageTiebreaksViewModel(tournamentListModel, tiebreaksListModel, tournamentModel);
 }
 
 /**
@@ -154,6 +158,7 @@ void ChessPairerFrame::createViews()
     views["LIST_CHESSPLAYERS"] = new ListChessplayersView(this);
     views["IMPORT_CHESSPLAYERS"] = new ImportChessplayersView(this);
     views["MANAGE_TOURNAMENT_PLAYERS"] = new ManageTournamentPlayersView(this);
+    views["MANAGE_TOURNAMENT_TIEBREAKS"] = new ManageTiebreaksView(this);
 }
 
 void ChessPairerFrame::createControllers()
@@ -162,6 +167,7 @@ void ChessPairerFrame::createControllers()
     listChessplayersController = new ListChessplayersController(chessplayerListModel, views["LIST_CHESSPLAYERS"]);
     importChessplayersController = new ImportChessplayersController(importChessplayersModel, views["IMPORT_CHESSPLAYERS"]);
     manageTournamentPlayersController = new ManageTournamentPlayersController(manageTournamentPlayersViewModel, views["MANAGE_TOURNAMENT_PLAYERS"]);
+    manageTiebreaksController = new ManageTiebreaksController(manageTiebreaksViewModel, views["MANAGE_TOURNAMENT_TIEBREAKS"]);
 }
 
 /**
@@ -178,6 +184,9 @@ void ChessPairerFrame::initMVC()
     views["IMPORT_CHESSPLAYERS"]->setController(importChessplayersController);
     manageTournamentPlayersViewModel->addView(views["MANAGE_TOURNAMENT_PLAYERS"]);
     views["MANAGE_TOURNAMENT_PLAYERS"]->setController(manageTournamentPlayersController);
+    manageTiebreaksViewModel->addView(views["MANAGE_TOURNAMENT_TIEBREAKS"]);
+    views["MANAGE_TOURNAMENT_TIEBREAKS"]->setController(manageTiebreaksController);
+
     hideAllViews();
 }
 
@@ -286,3 +295,7 @@ void ChessPairerFrame::OnManageTournamentPlayers(wxCommandEvent &event)
     showView("MANAGE_TOURNAMENT_PLAYERS");
 }
 
+void ChessPairerFrame::OnManageTournamentTiebreaks(wxCommandEvent &event)
+{
+    showView("MANAGE_TOURNAMENT_TIEBREAKS");
+}

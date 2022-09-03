@@ -10,6 +10,7 @@ const unsigned int ID_RESET_DATABASE = 2;
 const unsigned int ID_IMPORT_CHESSPLAYERS = 3;
 const unsigned int ID_LIST_TOURNAMENTS = 4;
 const unsigned int ID_LIST_TOURNAMENT_PLAYERS = 5;
+const unsigned int ID_LIST_TOURNAMENT_TIEBREAKS = 6;
 
 //Knappar
 const unsigned int XML_BUTTON_ID = 0;

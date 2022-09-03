@@ -1,4 +1,5 @@
 #include "ListModel.h"
+#include "TiebreakModel.h"
 
 template <>
 void ListModel<ChessplayerModel*>::addToContainer()
@@ -39,14 +40,28 @@ void ListModel<TournamentModel*>::addToContainer()
 }
 
 template <>
+void ListModel<TiebreakModel*>::addToContainer()
+{
+    Database *database = Database::getInstance();
+    data.clear();
+    for(unsigned int index = 0; index < database->getSize(); index++)
+    {
+        TiebreakModel *tiebreak = new TiebreakModel(database->atIndex(index, 0));
+        data.push_back(tiebreak);
+    }
+}
+
+
+template <>
 void ListModel<ChessplayerModel*>::getAll()
 {
     Database *database = Database::getInstance();
-    wxString sql = "select * from chessplayers order by id";
+    std::stringstream ss;
+    ss << "select * from chessplayers order by id";
 
     try
     {
-        database->executeSql(sql);
+        database->executeSql(ss.str());
     }
     catch(DatabaseErrorException &)
     {
@@ -59,11 +74,12 @@ template <>
 void ListModel<TournamentModel*>::getAll()
 {
     Database *database = Database::getInstance();
-    wxString sql = "select * from tournaments order by id";
+    std::stringstream ss;
+    ss << "select * from tournaments order by id";
 
     try
     {
-        database->executeSql(sql);
+        database->executeSql(ss.str());
     }
     catch(DatabaseErrorException &)
     {
@@ -71,3 +87,23 @@ void ListModel<TournamentModel*>::getAll()
     }
      addToContainer();
 }
+
+template <>
+void ListModel<TiebreakModel*>::getAll()
+{
+    Database *database = Database::getInstance();
+    std::stringstream ss;
+    ss << "select * from tiebreaks order by id";
+
+    try
+    {
+        database->executeSql(ss.str());
+    }
+    catch(DatabaseErrorException &)
+    {
+        throw;
+    }
+     addToContainer();
+}
+
+

@@ -65,7 +65,7 @@ void TournamentModel::save() const
 
 void TournamentModel::addToDatabase() const
 {
-    wxString ss;
+    std::stringstream ss;
     ss << "insert into tournaments(id, start_date, end_date, number_of_rounds, pairing_system) values('";
     ss << id << "','" << startDate.getDateString() << "', '" << endDate.getDateString() << "', "
         << numberOfRounds << ",'" << pairingSystem << "')";
@@ -73,7 +73,7 @@ void TournamentModel::addToDatabase() const
     try
     {
         Database *database = Database::getInstance();
-        database->executeSql(ss);
+        database->executeSql(ss.str());
     }
     catch(DatabaseErrorException &)
     {
@@ -83,13 +83,13 @@ void TournamentModel::addToDatabase() const
 
 void TournamentModel::removeFromDatabase() const
 {
-    wxString ss;
+    std::stringstream ss;
     ss << "delete from tournaments where id='" << id << "'";
 
     try
     {
         Database *database = Database::getInstance();
-        database->executeSql(ss);
+        database->executeSql(ss.str());
     }
     catch(DatabaseErrorException &)
     {
@@ -125,17 +125,42 @@ void TournamentModel::getAllTournamentPlayers()
 {
     clearTournamentPlayers();
     Database *database = Database::getInstance();
-    wxString sql = "select chessplayer_id, player_number from tournament_players ";
-    sql << "where tournament_id='" << id << "' order by player_number";
+    std::stringstream ss;
+    ss << "select chessplayer_id, player_number from tournament_players ";
+    ss << "where tournament_id='" << id << "' order by player_number";
 
     try
     {
-        database->executeSql(sql);
+        database->executeSql(ss.str());
 
         for(unsigned int index = 0; index < database->getSize(); index++)
         {
             TournamentPlayerModel *tournamentPlayerModel = new TournamentPlayerModel(id, wxAtoi(database->atIndex(index, 0)), wxAtoi(database->atIndex(index, 1)));
             tournamentPlayers.insert(tournamentPlayerModel);
+        }
+    }
+    catch(DatabaseErrorException &error)
+    {
+        throw;
+    }
+}
+
+void TournamentModel::getAllTiebreaks()
+{
+    clearTournamentTiebreaks();
+    Database *database = Database::getInstance();
+    std::stringstream ss;
+    ss << "select tiebreak_id from tournament_tiebreaks ";
+    ss << "where tournament_id='" << id << "' order by tiebreak_order";
+
+    try
+    {
+        database->executeSql(ss.str());
+
+        for(unsigned int index = 0; index < database->getSize(); index++)
+        {
+            TiebreakModel *tiebreak = new TiebreakModel(database->atIndex(index, 0));
+            tiebreaks.push_back(tiebreak);
         }
     }
     catch(DatabaseErrorException &error)
@@ -156,6 +181,20 @@ void TournamentModel::clearTournamentPlayers()
     }
 
     tournamentPlayers.clear();
+}
+
+void TournamentModel::clearTournamentTiebreaks()
+{
+    for(TiebreakModel *tiebreak : tiebreaks)
+    {
+        if(tiebreak != nullptr)
+        {
+            delete tiebreak;
+            tiebreak = nullptr;
+        }
+    }
+
+    tiebreaks.clear();
 }
 
 void TournamentModel::addTournamentPlayer(TournamentPlayerModel *player)
@@ -212,8 +251,28 @@ void TournamentModel::generatePlayerNumbers()
     }
 }
 
+void TournamentModel::addTiebreakSystem(TiebreakModel *tiebreakModel)
+{
+    bool exists = false;
+    for(unsigned int index = 0; index < tiebreaks.size(); index++)
+    {
+        if(tiebreaks[index] == tiebreakModel)
+        {
+            exists = true;
+            return;
+        }
+    }
 
-TournamentPlayerModel* TournamentModel::atIndex(const unsigned int index) const
+    tiebreaks.push_back(tiebreakModel);
+}
+
+
+TiebreakModel* TournamentModel::getTiebreak(const unsigned int &index) const
+{
+    return tiebreaks[index];
+}
+
+TournamentPlayerModel* TournamentModel::atIndex(const unsigned int &index) const
 {
     unsigned int i = 0;
     for(TournamentPlayerModel *player : tournamentPlayers)
@@ -255,14 +314,14 @@ void TournamentPlayerModel::save() const
 void TournamentPlayerModel::addToDatabase() const
 {
     Database *database = Database::getInstance();
-    wxString sql;
-    sql << "insert into tournament_players(tournament_id, chessplayer_id, player_number) values('";
-    sql << tournamentID << "', " << chessplayerID << ", " << playerNumber << ")";
+    std::stringstream ss;
+    ss << "insert into tournament_players(tournament_id, chessplayer_id, player_number) values('";
+    ss << tournamentID << "', " << chessplayerID << ", " << playerNumber << ")";
 
     try
     {
         Database *database = Database::getInstance();
-        database->executeSql(sql);
+        database->executeSql(ss.str());
     }
     catch(DatabaseErrorException &)
     {
@@ -273,14 +332,14 @@ void TournamentPlayerModel::addToDatabase() const
 void TournamentPlayerModel::removeFromDatabase() const
 {
     Database *database = Database::getInstance();
-    wxString sql;
-    sql << "delete from tournament_players where tournament_id='" << tournamentID << "' and "
+    std::stringstream ss;
+    ss << "delete from tournament_players where tournament_id='" << tournamentID << "' and "
         << "chessplayer_id='" << chessplayerID << "'";
 
     try
     {
         Database *database = Database::getInstance();
-        database->executeSql(sql);
+        database->executeSql(ss.str());
     }
     catch(DatabaseErrorException &)
     {

@@ -30,19 +30,22 @@ class ManageTournamentPlayersViewModel : public Model
 class ManageTiebreaksViewModel : public Model
 {
     public:
-        ManageTiebreaksViewModel(ListModel<TournamentModel*>*p_tournaments, ListModel<TiebreakModel*> *p_tiebreaks, TournamentModel *tModel):
-            tournaments(p_tournaments), tiebreaks(p_tiebreaks), tournamentModel(tModel) {}
+        ManageTiebreaksViewModel(ListModel<TournamentModel*>*p_tournaments, ListModel<TiebreakModel*> *p_tiebreaks, TournamentModel *tModel, TiebreakModel *tiModel):
+            tournaments(p_tournaments), tiebreaks(p_tiebreaks), tournamentModel(tModel), tiebreakModel(tiModel) {}
         virtual ~ManageTiebreaksViewModel() {}
-        ListModel<TournamentModel*> *getListModel() const { return tournaments; }
+        ListModel<TournamentModel*> *getTournaments() const { return tournaments; }
         TournamentModel* getTournament() const { return tournamentModel; }
         ListModel<TiebreakModel*> *getTiebreaks() const { return tiebreaks; }
-
+        TiebreakModel* getTiebreakModel() const { return tiebreakModel; }
+        void tournament(TournamentModel *model) { tournamentModel = model; }
+        void setTiebreakModel(TiebreakModel *model) {tiebreakModel = model; }
 
 
     private:
         ListModel<TournamentModel*>*tournaments;
         ListModel<TiebreakModel*> *tiebreaks;
         TournamentModel *tournamentModel;
+        TiebreakModel *tiebreakModel;
 
 
 

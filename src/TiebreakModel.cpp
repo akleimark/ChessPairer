@@ -1,11 +1,8 @@
 #include "TiebreakModel.h"
 
-TiebreakModel::TiebreakModel()
+TiebreakModel::TiebreakModel(const wxString &pID):
+    id(pID)
 {
-    //ctor
+
 }
 
-TiebreakModel::~TiebreakModel()
-{
-    //dtor
-}

@@ -144,9 +144,10 @@ void ChessPairerFrame::createModels()
     tournamentListModel = new ListModel<TournamentModel*>;
     tournamentModel = nullptr;
     tournamentPlayerModel = nullptr;
+    tiebreakModel = nullptr;
     tiebreaksListModel = new ListModel<TiebreakModel*>;
     manageTournamentPlayersViewModel = new ManageTournamentPlayersViewModel(tournamentListModel, chessplayerListModel, tournamentModel, tournamentPlayerModel);
-    manageTiebreaksViewModel = new ManageTiebreaksViewModel(tournamentListModel, tiebreaksListModel, tournamentModel);
+    manageTiebreaksViewModel = new ManageTiebreaksViewModel(tournamentListModel, tiebreaksListModel, tournamentModel, tiebreakModel);
 }
 
 /**
@@ -297,5 +298,7 @@ void ChessPairerFrame::OnManageTournamentPlayers(wxCommandEvent &event)
 
 void ChessPairerFrame::OnManageTournamentTiebreaks(wxCommandEvent &event)
 {
+    tournamentListModel->getAll();
+    manageTiebreaksViewModel->notifyAllViews();
     showView("MANAGE_TOURNAMENT_TIEBREAKS");
 }

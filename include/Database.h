@@ -18,7 +18,7 @@ class Database
         virtual ~Database();
         void open();
         void close();
-        void executeSql(const wxString &sql);
+        void executeSql(const std::string &sql);
         char* getErrorMessage() const { return errorMessage; }
         static Database* getInstance();
         wxString atIndex(const unsigned int &i, const unsigned int &j) const;

@@ -3,6 +3,11 @@
 
 #include "ModelViewController.h"
 #include <wx/combobox.h>
+#include "Table.h"
+#include "TiebreakModel.h"
+#include "ListModel.h"
+#include <wx/listbox.h>
+#include <wx/button.h>
 
 class ManageTiebreaksView : public View
 {
@@ -17,6 +22,18 @@ class ManageTiebreaksView : public View
     private:
         wxBoxSizer *tournamentBox;
         wxComboBox *tournamentComboBox;
+        wxBoxSizer *bottomSizer;
+        wxBoxSizer *leftSizer;
+        wxBoxSizer *rightSizer;
+        Table *tiebreaksTable;
+        wxListBox *selectedTiebreaksList;
+        wxStaticText *tiebreaksTableHeader;
+        wxStaticText *selectedTiebreaksHeader;
+        wxButton *addButton;
+        void updateTiebreaks(ListModel<TiebreakModel*> *model);
+
+
+
 };
 
 #endif // MANAGETIEBREAKSVIEW_H

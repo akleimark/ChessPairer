@@ -4,6 +4,7 @@
 #include <wx/string.h>
 #include "ChessplayerModel.h"
 #include "Misc.h"
+#include "TiebreakModel.h"
 
 /**
     Den här klassen har hand om alla data, som rör turneringar. Varje turnering har bland annat ett unikt ID. Andra data som
@@ -40,14 +41,18 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
         Date getEndDate() const { return endDate; }
         /// Den här funktionen används för att hämta alla turneringesspelarna från databasen och sedan placera dem i containern 'tournamentPlayers'.
         void getAllTournamentPlayers();
+        void getAllTiebreaks();
         /// Den här funktionen returnerar en pekare till den turneringsspelare, som befinner sig på plats 'index' i containern 'tournamentPlayers'.
-        TournamentPlayerModel* atIndex(const unsigned int index) const;
+        TournamentPlayerModel* atIndex(const unsigned int &index) const;
+        TiebreakModel* getTiebreak(const unsigned int &index) const;
+        unsigned int getNumberOfTiebreaks() const { return tiebreaks.size(); }
         void addTournamentPlayer(TournamentPlayerModel *player);
         void removeTournamentPlayer(TournamentPlayerModel *player);
         /// Den här funktionen returnerar antalet spelare som finns i turneringen.
         unsigned int getNumberOfPlayers() const { return tournamentPlayers.size(); }
         /// Den här funktionen skapar nya inlottningsnummer för spelarna i turneringen.
         void generatePlayerNumbers();
+        void addTiebreakSystem(TiebreakModel *tiebreakModel);
 
         // Funktioner som implementeras via gränssnitt
         virtual bool validate() const;
@@ -72,8 +77,13 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
         Date endDate;
         /// I den här containern läggs alla turneringsspelarna in.
         std::set<TournamentPlayerModel*> tournamentPlayers;
+
+        std::vector<TiebreakModel*> tiebreaks;
+
         /// Med hjälp av den här funktionen kan alla turneringsspelarna raderas och frigöras från minnet.
         void clearTournamentPlayers();
+        /// Med hjälp av den här funktionen kan alla turneringens särskiljningssystem raderas och frigöras från minnet.
+        void clearTournamentTiebreaks();
 
         // Klasskonstanter
         /// Den här konstanten reglerar det minsta antalet ronder i en turnering.

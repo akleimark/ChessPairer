@@ -6,8 +6,9 @@
 class TiebreakModel : public Model
 {
     public:
-        TiebreakModel();
-        virtual ~TiebreakModel();
+        TiebreakModel(const wxString &pID);
+        virtual ~TiebreakModel() {}
+        wxString getID() const { return id; }
 
     protected:
 

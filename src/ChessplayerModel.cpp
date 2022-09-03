@@ -163,14 +163,17 @@ void ChessplayerModel::print() const
 */
 void ChessplayerModel::addToDatabase() const
 {
-    wxString ss;
+    std::stringstream ss;
     ss << "insert into chessplayers(id, firstname, lastname, biological_sex, birth_date, federation, chessclub) values(";
     ss << id << ", '" << firstname << "','" << lastname << "', '" << biologicalSex << "', '" << birthDate << "', '" << federation << "', '" << chessclub << "')";
+
+    std::cout << "Value: " << ss.str() << std::endl;
+
 
     try
     {
         Database *database = Database::getInstance();
-        database->executeSql(ss);
+        database->executeSql(ss.str());
     }
     catch(DatabaseErrorException &)
     {
@@ -183,13 +186,13 @@ void ChessplayerModel::addToDatabase() const
 */
 void ChessplayerModel::removeFromDatabase() const
 {
-    wxString ss;
+    std::stringstream ss;
     ss << "delete from chessplayers where id=" << id;
 
     try
     {
         Database *database = Database::getInstance();
-        database->executeSql(ss);
+        database->executeSql(ss.str());
     }
     catch(DatabaseErrorException &)
     {
@@ -224,12 +227,12 @@ ChessplayerModel* ChessplayerModel::findById(const unsigned int &playerID)
 {
     ChessplayerModel *chessplayer = nullptr;
     Database *database = Database::getInstance();
-    wxString sql;
-    sql << "select * from chessplayers where id=" << playerID;
+    std::stringstream ss;
+    ss << "select * from chessplayers where id=" << playerID;
 
     try
     {
-        database->executeSql(sql);
+        database->executeSql(ss.str());
 
         if(database->getSize() == 1)
         {

@@ -22,6 +22,8 @@ ManageTournamentPlayersView::ManageTournamentPlayersView(wxWindow *p_parent):
     leftSizer->Add(playerPoolHeader, 0, wxALL, 10);
     leftSizer->Add(chessplayerPool, 0, wxALL, 10);
     leftSizer->Add(addButton, 0, wxALL, 10);
+
+
     bottomSizer->Add(leftSizer, 1, wxALL, 10);
 
     rightSizer = new wxBoxSizer(wxVERTICAL);
@@ -90,7 +92,8 @@ void ManageTournamentPlayersView::updateTournamentPlayers(TournamentModel *model
     {
         return;
     }
-        tournamentPlayers->ClearGrid();
+
+    tournamentPlayers->ClearGrid();
 
     try
     {

@@ -53,7 +53,9 @@ void ManageTournamentPlayersView::update(Model *model)
 
     ListModel<TournamentModel*> *tournaments = viewModel->getTournaments();
     ListModel<ChessplayerModel*> *chessplayers = viewModel->getChessplayerList();
-    //if(tournamentBox->IsEmpty())
+
+
+    if(tournamentComboBox->GetCount() == 0)
     {
         for(unsigned int index = 0; index < tournaments->getSize(); index++)
         {
@@ -63,6 +65,7 @@ void ManageTournamentPlayersView::update(Model *model)
             }
         }
     }
+
     updatePlayerPool(chessplayers);
     updateTournamentPlayers(viewModel->getTournamentModel());
     addButton->Enable(chessplayers->getSize() != 0 && viewModel->getTournamentModel() != nullptr);
@@ -74,7 +77,10 @@ void ManageTournamentPlayersView::setController(Controller *_controller)
 
     tournamentComboBox->Bind(wxEVT_COMBOBOX, &ManageTournamentPlayersController::changeTournament, mController);
     chessplayerPool->Bind(wxEVT_GRID_SELECT_CELL, &ManageTournamentPlayersController::selectPlayer, mController);
+    tournamentPlayers->Bind(wxEVT_GRID_SELECT_CELL, &ManageTournamentPlayersController::selectTournamentPlayer, mController);
+    removeButton->Bind(wxEVT_BUTTON, &ManageTournamentPlayersController::removePlayer, mController);
     addButton->Bind(wxEVT_BUTTON, &ManageTournamentPlayersController::addPlayer, mController);
+    generateButton->Bind(wxEVT_BUTTON, &ManageTournamentPlayersController::generatePlayerNumbers, mController);
 }
 
 void ManageTournamentPlayersView::updateTournamentPlayers(TournamentModel *model)
@@ -83,7 +89,7 @@ void ManageTournamentPlayersView::updateTournamentPlayers(TournamentModel *model
     {
         return;
     }
-    tournamentPlayers->ClearGrid();
+        tournamentPlayers->ClearGrid();
 
     try
     {
@@ -93,13 +99,14 @@ void ManageTournamentPlayersView::updateTournamentPlayers(TournamentModel *model
     catch(ArgumentErrorException &exception)
     {
         wxMessageBox(exception.what(),
-                 GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
+                     GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
         exit(-1);
     }
 
     for(unsigned int index = 0; index < model->getNumberOfPlayers(); index++)
     {
         TournamentPlayerModel *player = model->atIndex(index);
+        player->print();
         tournamentPlayers->SetCellValue(index, 0, std::to_string(player->getChessplayerID()));
         ChessplayerModel *chessplayer = ChessplayerModel::findById(player->getChessplayerID());
         tournamentPlayers->SetCellValue(index, 1, chessplayer->getName());

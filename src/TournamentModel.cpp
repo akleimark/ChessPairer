@@ -3,6 +3,8 @@
 #include "Exception.h"
 #include "Defs.h"
 #include <iostream>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
 
 const unsigned int TournamentModel::MINIMUM_NUMBER_OF_ROUNDS = 1;
 const unsigned int TournamentModel::MAXIMUM_NUMBER_OF_ROUNDS = 100;
@@ -166,6 +168,51 @@ void TournamentModel::addTournamentPlayer(TournamentPlayerModel *player)
     tournamentPlayers.insert(player);
 }
 
+void TournamentModel::removeTournamentPlayer(TournamentPlayerModel *player)
+{
+    tournamentPlayers.erase(player);
+    try
+    {
+        player->removeFromDatabase();
+    }
+    catch(Exception &error)
+    {
+        throw;
+    }
+
+    delete player;
+    player = nullptr;
+}
+
+void TournamentModel::generatePlayerNumbers()
+{
+    std::set<TournamentPlayerModel*>::const_iterator it;
+    std::vector<bool> takenNumbers;
+    takenNumbers.reserve(tournamentPlayers.size());
+    for(it = tournamentPlayers.cbegin(); it != tournamentPlayers.cend(); ++it)
+    {
+        (*it)->setPlayerNumber(0);
+    }
+
+    boost::random::mt19937 gen;
+    gen.seed();
+    int playerNumber = 0;
+
+    for(it = tournamentPlayers.cbegin(); it != tournamentPlayers.cend(); ++it)
+    {
+        //do
+        {
+            boost::random::uniform_int_distribution<> dist(0, tournamentPlayers.size() - 1);
+            playerNumber = dist(gen);
+        }
+        //while(takenNumbers[playerNumber] == true);
+
+        takenNumbers[playerNumber] = true;
+        (*it)->setPlayerNumber(playerNumber);
+    }
+}
+
+
 TournamentPlayerModel* TournamentModel::atIndex(const unsigned int index) const
 {
     unsigned int i = 0;
@@ -175,6 +222,7 @@ TournamentPlayerModel* TournamentModel::atIndex(const unsigned int index) const
         {
             return player;
         }
+        i++;
     }
 
     return nullptr;
@@ -224,6 +272,19 @@ void TournamentPlayerModel::addToDatabase() const
 
 void TournamentPlayerModel::removeFromDatabase() const
 {
+    Database *database = Database::getInstance();
+    wxString sql;
+    sql << "delete from tournament_players where tournament_id='" << tournamentID << "' and "
+        << "chessplayer_id='" << chessplayerID << "'";
 
+    try
+    {
+        Database *database = Database::getInstance();
+        database->executeSql(sql);
+    }
+    catch(DatabaseErrorException &)
+    {
+        throw;
+    }
 }
 

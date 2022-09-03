@@ -43,9 +43,11 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
         /// Den här funktionen returnerar en pekare till den turneringsspelare, som befinner sig på plats 'index' i containern 'tournamentPlayers'.
         TournamentPlayerModel* atIndex(const unsigned int index) const;
         void addTournamentPlayer(TournamentPlayerModel *player);
-
+        void removeTournamentPlayer(TournamentPlayerModel *player);
         /// Den här funktionen returnerar antalet spelare som finns i turneringen.
         unsigned int getNumberOfPlayers() const { return tournamentPlayers.size(); }
+        /// Den här funktionen skapar nya inlottningsnummer för spelarna i turneringen.
+        void generatePlayerNumbers();
 
         // Funktioner som implementeras via gränssnitt
         virtual bool validate() const;

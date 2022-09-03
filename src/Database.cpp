@@ -87,8 +87,10 @@ void Database::createTables()
     std::vector<wxString> sqlQueries;
     sqlQueries.push_back("PRAGMA foreign_keys = ON");
     sqlQueries.push_back("create table chessplayers(id int primary key, firstname text not null, lastname text not null, biological_sex text not null, birth_date text not null, federation text not null, chessclub text not null)");
-    sqlQueries.push_back("create table tournaments(id text primary key, start_date date not null, end_date date not null, number_of_rounds int not null, pairing_system text not null)");
+    sqlQueries.push_back("create table tournaments(id text primary key, start_date date not null, end_date date not null, number_of_rounds int not null, pairing_system text not null, started BOOLEAN default 0)");
     sqlQueries.push_back("create table tournament_players(tournament_id text not null, chessplayer_id int not null, player_number int not null, primary key(tournament_id, chessplayer_id), foreign key(tournament_id) references tournaments(id) on delete cascade on update cascade,foreign key(chessplayer_id) references chessplayers(id) on delete cascade on update cascade)");
+    sqlQueries.push_back("create table tiebreaks(id text primary key)");
+    sqlQueries.push_back("create table tournament_tiebreaks(tournament_id text not null, tiebreak_id text not null, tiebreak_order int not null, primary key(tournament_id, tiebreak_id), foreign key(tournament_id) references tournaments(id) on delete cascade on update cascade, foreign key(tiebreak_id) references tiebreaks(id) on delete cascade on update cascade)");
 
     bool errors = false;
     for(wxString sql : sqlQueries)

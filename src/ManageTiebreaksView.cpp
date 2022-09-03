@@ -19,7 +19,7 @@ ManageTiebreaksView::ManageTiebreaksView(wxWindow *p_parent):
     tiebreaksTable = new Table(parent, {"Namn"});
     addButton = new wxButton(parent, -1, L"L\u00E4gg till");
     leftSizer->Add(tiebreaksTableHeader, 0, wxALL, 10);
-    leftSizer->Add(tiebreaksTable, 0, wxALL, 10);
+    leftSizer->Add(tiebreaksTable, 1, wxALL, 10);
     leftSizer->Add(addButton, 0, wxLEFT, 10);
     bottomSizer->Add(leftSizer, 0, wxALL, 10);
     tiebreaksTable->Fit();
@@ -27,9 +27,11 @@ ManageTiebreaksView::ManageTiebreaksView(wxWindow *p_parent):
     rightSizer = new wxBoxSizer(wxVERTICAL);
     selectedTiebreaksHeader = new wxStaticText(parent, -1, L"Valda s\u00E4rskiljningssystem");
     selectedTiebreaksHeader->SetFont(View::H3_FONT);
-    selectedTiebreaksList = new wxListBox(parent, -1);
+    selectedTiebreaksTable = new Table(parent, {"Namn"});
+    removeButton = new wxButton(parent, -1, "Ta bort");
     rightSizer->Add(selectedTiebreaksHeader, 0, wxALL, 10);
-    rightSizer->Add(selectedTiebreaksList, 0, wxALL, 10);
+    rightSizer->Add(selectedTiebreaksTable, 1, wxALL | wxEXPAND, 10);
+    rightSizer->Add(removeButton, 0, wxLEFT, 10);
     bottomSizer->Add(rightSizer, 0, wxALL, 10);
 
     this->Add(bottomSizer, View::MARGIN, wxALL, 0);
@@ -63,15 +65,14 @@ void ManageTiebreaksView::update(Model *model)
     TournamentModel *tournament = viewModel->getTournament();
     if(tournament != nullptr)
     {
-        selectedTiebreaksList->Clear();
+        selectedTiebreaksTable->setRowCount(tournament->getNumberOfTiebreaks());
         for(unsigned int index = 0; index < tournament->getNumberOfTiebreaks(); index++)
         {
-            selectedTiebreaksList->AppendAndEnsureVisible(tournament->getTiebreak(index)->getID());
+            selectedTiebreaksTable->SetCellValue(index, 0, tournament->getTiebreak(index)->getID());
         }
-        std::cout << "S: " << tournament->getNumberOfTiebreaks() << std::endl;
     }
-    selectedTiebreaksList->Fit();
-
+    selectedTiebreaksTable->Fit();
+    selectedTiebreaksTable->SetMinSize(wxSize(tiebreaksTable->GetSize()));
 }
 
 void ManageTiebreaksView::setController(Controller *_controller)

@@ -26,10 +26,11 @@ class ManageTiebreaksView : public View
         wxBoxSizer *leftSizer;
         wxBoxSizer *rightSizer;
         Table *tiebreaksTable;
-        wxListBox *selectedTiebreaksList;
+        Table *selectedTiebreaksTable;
         wxStaticText *tiebreaksTableHeader;
         wxStaticText *selectedTiebreaksHeader;
         wxButton *addButton;
+        wxButton *removeButton;
         void updateTiebreaks(ListModel<TiebreakModel*> *model);
 
 

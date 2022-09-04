@@ -76,7 +76,7 @@ class ChessPairerFrame : public wxFrame
         TournamentPlayerModel *tournamentPlayerModel;
         ManageTournamentPlayersViewModel *manageTournamentPlayersViewModel;
         ListModel<TiebreakModel*> *tiebreaksListModel;
-        TiebreakModel *tiebreakModel;
+        TiebreakModel *tiebreakModels[2];
         ManageTiebreaksViewModel *manageTiebreaksViewModel;
 
         // Controllers

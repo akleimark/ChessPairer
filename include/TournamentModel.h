@@ -16,8 +16,7 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
 {
     public:
         TournamentModel();
-        /// Klassen använder sig inte av några egna pekare, varpå destruktorn är tom.
-        virtual ~TournamentModel() {}
+        virtual ~TournamentModel();
         /// Den här funktionen sätter turneringens unika ID, som är en textsträng.
         void setID(const wxString &tID) {id = tID; }
         /// Med hjälp av den här funktionen ställs antalet ronder i turneringen in.
@@ -53,6 +52,7 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
         /// Den här funktionen skapar nya inlottningsnummer för spelarna i turneringen.
         void generatePlayerNumbers();
         void addTiebreakSystem(TiebreakModel *tiebreakModel);
+        void removeTiebreakSystem(TiebreakModel *tiebreakModel);
 
         // Funktioner som implementeras via gränssnitt
         virtual bool validate() const;
@@ -77,13 +77,15 @@ class TournamentModel : public Model, public Reset, public Validate, public Data
         Date endDate;
         /// I den här containern läggs alla turneringsspelarna in.
         std::set<TournamentPlayerModel*> tournamentPlayers;
-
+        /// I den här containern läggs alla särkiljningssystem som turneringen använder sig av in.
+        /// Containern är sorterad efter den ordning som särskiljningssystemen används.
         std::vector<TiebreakModel*> tiebreaks;
 
         /// Med hjälp av den här funktionen kan alla turneringsspelarna raderas och frigöras från minnet.
         void clearTournamentPlayers();
         /// Med hjälp av den här funktionen kan alla turneringens särskiljningssystem raderas och frigöras från minnet.
         void clearTournamentTiebreaks();
+        void resetTiebreaksOrder() const;
 
         // Klasskonstanter
         /// Den här konstanten reglerar det minsta antalet ronder i en turnering.

@@ -12,12 +12,13 @@ void ManageTiebreaksController::changeTournament(wxCommandEvent &event)
     unsigned int index = event.GetSelection();
 
     TournamentModel *tournament = viewModel->getTournaments()->get(index);
-    viewModel->tournament(tournament);
+    viewModel->setTournament(tournament);
 
     try
     {
         tournament->print();
          viewModel->getTiebreaks()->getAll();
+         tournament->getAllTiebreaks();
     }
     catch(DatabaseErrorException &error)
     {
@@ -28,7 +29,7 @@ void ManageTiebreaksController::changeTournament(wxCommandEvent &event)
 
 }
 
-void ManageTiebreaksController::selectTiebreakSystem(wxGridEvent &event)
+void ManageTiebreaksController::selectTiebreakToAdd(wxGridEvent &event)
 {
     ManageTiebreaksViewModel *viewModel = (ManageTiebreaksViewModel*) model;
     TournamentModel *tournament = viewModel->getTournament();
@@ -40,10 +41,11 @@ void ManageTiebreaksController::selectTiebreakSystem(wxGridEvent &event)
     unsigned int index = event.GetRow();
 
     TiebreakModel *tiebreakModel = viewModel->getTiebreaks()->atIndex(index);
-    viewModel->setTiebreakModel(tiebreakModel);
+    viewModel->setSecondTiebreakModel(nullptr);
+    viewModel->setFirstTiebreakModel(tiebreakModel);
 }
 
-void ManageTiebreaksController::addTiebreakSystem(wxCommandEvent &event)
+void ManageTiebreaksController::selectTiebreakToRemove(wxGridEvent &event)
 {
     ManageTiebreaksViewModel *viewModel = (ManageTiebreaksViewModel*) model;
     TournamentModel *tournament = viewModel->getTournament();
@@ -52,7 +54,60 @@ void ManageTiebreaksController::addTiebreakSystem(wxCommandEvent &event)
     {
         return;
     }
+    unsigned int index = event.GetRow();
 
-    tournament->addTiebreakSystem(viewModel->getTiebreakModel());
-    viewModel->notifyAllViews();
+    TiebreakModel *tiebreakModel = tournament->getTiebreak(index);
+    viewModel->setFirstTiebreakModel(nullptr);
+    viewModel->setSecondTiebreakModel(tiebreakModel);
 }
+
+
+void ManageTiebreaksController::addTiebreakSystem(wxCommandEvent &event)
+{
+    ManageTiebreaksViewModel *viewModel = (ManageTiebreaksViewModel*) model;
+    TournamentModel *tournament = viewModel->getTournament();
+
+    if(tournament == nullptr || viewModel->getFirstTiebreakModel() == nullptr)
+    {
+        return;
+    }
+    try
+    {
+        tournament->addTiebreakSystem(viewModel->getFirstTiebreakModel());
+        viewModel->setFirstTiebreakModel(nullptr);
+        viewModel->setSecondTiebreakModel(nullptr);
+        viewModel->notifyAllViews();
+    }
+    catch(Exception &error)
+    {
+        error.showDialog();
+    }
+
+}
+
+void ManageTiebreaksController::removeTiebreakSystem(wxCommandEvent &event)
+{
+    ManageTiebreaksViewModel *viewModel = (ManageTiebreaksViewModel*) model;
+    TournamentModel *tournament = viewModel->getTournament();
+
+    if(tournament == nullptr || viewModel->getSecondTiebreakModel() == nullptr)
+    {
+        return;
+    }
+
+    TiebreakModel* tiebreak = viewModel->getSecondTiebreakModel();
+
+    try
+    {
+        tournament->removeTiebreakSystem(tiebreak);
+        viewModel->setFirstTiebreakModel(nullptr);
+        viewModel->setSecondTiebreakModel(nullptr);
+        viewModel->notifyAllViews();
+    }
+    catch(Exception &error)
+    {
+        error.showDialog();
+    }
+}
+
+

@@ -13,7 +13,9 @@ class ManageTiebreaksController : public Controller
         virtual ~ManageTiebreaksController();
         void changeTournament(wxCommandEvent &event);
         void addTiebreakSystem(wxCommandEvent &event);
-        void selectTiebreakSystem(wxGridEvent &event);
+        void removeTiebreakSystem(wxCommandEvent &event);
+        void selectTiebreakToAdd(wxGridEvent &event);
+        void selectTiebreakToRemove(wxGridEvent &event);
 
     protected:
 

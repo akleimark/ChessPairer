@@ -6,3 +6,12 @@ TiebreakModel::TiebreakModel(const wxString &pID):
 
 }
 
+bool TiebreakModel::operator==(const TiebreakModel &tiebreakModel)
+{
+    if(id == tiebreakModel.getID())
+    {
+        return true;
+    }
+
+    return false;
+}

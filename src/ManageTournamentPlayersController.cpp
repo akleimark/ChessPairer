@@ -10,7 +10,7 @@ void ManageTournamentPlayersController::changeTournament(wxCommandEvent &event)
     unsigned int index = event.GetSelection();
 
     TournamentModel *tournament = viewModel->getTournaments()->get(index);
-    viewModel->tournament(tournament);
+    viewModel->setTournament(tournament);
 
     try
     {
@@ -33,7 +33,7 @@ void ManageTournamentPlayersController::selectPlayer(wxGridEvent &event)
     ChessplayerModel *chessplayer = viewModel->getChessplayerList()->get(event.GetRow());
     TournamentPlayerModel *tournamentPlayer = TournamentPlayerModel::clone(chessplayer);
     tournamentPlayer->setTournamentID(viewModel->getTournamentModel()->getId());
-    viewModel->tournamentPlayer(tournamentPlayer);
+    viewModel->setTournamentPlayer(tournamentPlayer);
 }
 
 void ManageTournamentPlayersController::selectTournamentPlayer(wxGridEvent &event)
@@ -46,7 +46,7 @@ void ManageTournamentPlayersController::selectTournamentPlayer(wxGridEvent &even
     }
 
     TournamentPlayerModel *tournamentPlayer = viewModel->getTournamentModel()->atIndex(ROW_INDEX);
-    viewModel->tournamentPlayer(tournamentPlayer);
+    viewModel->setTournamentPlayer(tournamentPlayer);
 }
 
 

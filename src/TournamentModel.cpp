@@ -18,6 +18,16 @@ TournamentModel::TournamentModel():
 {
 
 }
+/**
+    I destruktorn rensas turneringsspelarna och särskiljningssystemen. Dessa finns lagrade i containrarna
+    'tournaments', respektive 'tiebreaks'.
+*/
+TournamentModel:: ~TournamentModel()
+{
+    this->clearTournamentPlayers();
+    this->clearTournamentTiebreaks();
+    std::cout << "Destructor TournamentModel::~TournamentModel() called." << std::endl;
+}
 
 bool TournamentModel::validate() const
 {
@@ -145,6 +155,9 @@ void TournamentModel::getAllTournamentPlayers()
     }
 }
 
+/**
+    Den här funktionen tar fram alla turneringens särskiljningssystem ur databasen.
+*/
 void TournamentModel::getAllTiebreaks()
 {
     clearTournamentTiebreaks();
@@ -207,6 +220,11 @@ void TournamentModel::addTournamentPlayer(TournamentPlayerModel *player)
     tournamentPlayers.insert(player);
 }
 
+/**
+    Den här funktionen tar bort en viss turneringsspelare från turneringen.
+    Spelaren tas först bort ur containern, där turneringsspelarna lagras ('tournamentPlayers'),
+    för att sedermera raderas ur databasen.
+*/
 void TournamentModel::removeTournamentPlayer(TournamentPlayerModel *player)
 {
     tournamentPlayers.erase(player);
@@ -251,12 +269,17 @@ void TournamentModel::generatePlayerNumbers()
     }
 }
 
+/**
+    Den här funktionen lägger till ett särskiljningssystem till turneringen.
+    Särskiljningssystemet läggs sist i listan. Om särskiljningssystemet redan finns i listan
+    händer ingenting.
+*/
 void TournamentModel::addTiebreakSystem(TiebreakModel *tiebreakModel)
 {
     bool exists = false;
     for(unsigned int index = 0; index < tiebreaks.size(); index++)
     {
-        if(tiebreaks[index] == tiebreakModel)
+        if(*tiebreaks[index] == *tiebreakModel)
         {
             exists = true;
             return;
@@ -264,9 +287,85 @@ void TournamentModel::addTiebreakSystem(TiebreakModel *tiebreakModel)
     }
 
     tiebreaks.push_back(tiebreakModel);
+
+    try
+    {
+        std::stringstream ss;
+        ss << "insert into tournament_tiebreaks(tournament_id, tiebreak_id, tiebreak_order)"
+            << " values('" << id << "', '" << tiebreakModel->getID() << "', " << tiebreaks.size()
+            << ")";
+        Database *database = Database::getInstance();
+        database->executeSql(ss.str());
+    }
+    catch(DatabaseErrorException &)
+    {
+        throw;
+    }
 }
 
+/**
+    Den här funktionen tar bort ett visst särskiljningssystem från turneringen.
+*/
+void TournamentModel::removeTiebreakSystem(TiebreakModel *tiebreakModel)
+{
+    unsigned int index;
+    for(index = 0; index < tiebreaks.size(); index++)
+    {
+        if(tiebreakModel == tiebreaks[index])
+        {
+            break;
+        }
+    }
+    tiebreaks.erase(tiebreaks.begin() + index);
 
+    try
+    {
+        Database *database = Database::getInstance();
+        std::stringstream deleteSQLSS;
+        deleteSQLSS << "delete from tournament_tiebreaks where tournament_id='"
+            << this->id.c_str() << "' and tiebreak_id='" << tiebreakModel->getID()
+            << "'";
+        database->executeSql(deleteSQLSS.str());
+        resetTiebreaksOrder();
+
+    }
+    catch(Exception &error)
+    {
+        throw;
+    }
+
+}
+
+/**
+    Den här funktionen återställer ordningen på turneringens särskiljningssystem.
+    Den kan med fördel användas, när ett särskiljningssystem har tagits bort ur containern 'tiebreaks',
+    eftersom ordningsnumret i databasen inte längre stämmer.
+*/
+void TournamentModel::resetTiebreaksOrder() const
+{
+    try
+    {
+        Database *database = Database::getInstance();
+        for(unsigned int index = 0; index < tiebreaks.size(); index++)
+        {
+            const unsigned int ORDER_NUMBER = index + 1;
+            std::stringstream ss;
+            ss << "update tournament_tiebreaks set tiebreak_order=" << ORDER_NUMBER
+                << " where tournament_id='" << id << "' and tiebreak_id='" << tiebreaks[index]
+                << "'";
+            database->executeSql(ss.str());
+        }
+    }
+    catch(DatabaseErrorException &)
+    {
+        throw;
+    }
+}
+
+/**
+    Den här funktionen returnerar det särskiljningssystem som finns på plats 'index' i listan över
+    turneringens särskiljningssystem.
+*/
 TiebreakModel* TournamentModel::getTiebreak(const unsigned int &index) const
 {
     return tiebreaks[index];
@@ -313,7 +412,6 @@ void TournamentPlayerModel::save() const
 
 void TournamentPlayerModel::addToDatabase() const
 {
-    Database *database = Database::getInstance();
     std::stringstream ss;
     ss << "insert into tournament_players(tournament_id, chessplayer_id, player_number) values('";
     ss << tournamentID << "', " << chessplayerID << ", " << playerNumber << ")";

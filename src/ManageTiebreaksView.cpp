@@ -2,7 +2,6 @@
 #include "ViewModel.h"
 #include "ManageTiebreaksController.h"
 
-
 ManageTiebreaksView::ManageTiebreaksView(wxWindow *p_parent):
     View(p_parent, L"Hantera s\u00E4rskiljning")
 {
@@ -35,7 +34,6 @@ ManageTiebreaksView::ManageTiebreaksView(wxWindow *p_parent):
     bottomSizer->Add(rightSizer, 0, wxALL, 10);
 
     this->Add(bottomSizer, View::MARGIN, wxALL, 0);
-
 }
 
 ManageTiebreaksView::~ManageTiebreaksView()
@@ -63,8 +61,10 @@ void ManageTiebreaksView::update(Model *model)
     updateTiebreaks(viewModel->getTiebreaks());
 
     TournamentModel *tournament = viewModel->getTournament();
+
     if(tournament != nullptr)
     {
+        selectedTiebreaksTable->ClearGrid();
         selectedTiebreaksTable->setRowCount(tournament->getNumberOfTiebreaks());
         for(unsigned int index = 0; index < tournament->getNumberOfTiebreaks(); index++)
         {
@@ -79,9 +79,10 @@ void ManageTiebreaksView::setController(Controller *_controller)
 {
     ManageTiebreaksController *mController = (ManageTiebreaksController*) _controller;
     tournamentComboBox->Bind(wxEVT_COMBOBOX, &ManageTiebreaksController::changeTournament, mController);
-    tiebreaksTable->Bind(wxEVT_GRID_SELECT_CELL, &ManageTiebreaksController::selectTiebreakSystem, mController);
+    tiebreaksTable->Bind(wxEVT_GRID_SELECT_CELL, &ManageTiebreaksController::selectTiebreakToAdd, mController);
+    selectedTiebreaksTable->Bind(wxEVT_GRID_SELECT_CELL, &ManageTiebreaksController::selectTiebreakToRemove, mController);
     addButton->Bind(wxEVT_BUTTON, &ManageTiebreaksController::addTiebreakSystem, mController);
-
+    removeButton->Bind(wxEVT_BUTTON, &ManageTiebreaksController::removeTiebreakSystem, mController);
 }
 
 void ManageTiebreaksView::updateTiebreaks(ListModel<TiebreakModel*> *model)
@@ -107,6 +108,4 @@ void ManageTiebreaksView::updateTiebreaks(ListModel<TiebreakModel*> *model)
     tiebreaksTable->Fit();
 
 }
-
-
 

@@ -9,6 +9,7 @@ class TiebreakModel : public Model
         TiebreakModel(const wxString &pID);
         virtual ~TiebreakModel() {}
         wxString getID() const { return id; }
+        bool operator==(const TiebreakModel &tiebreakModel);
 
     protected:
 

@@ -84,6 +84,48 @@ void ChessPairerFrame::destroy()
         delete chessplayerListModel;
         chessplayerListModel = nullptr;
     }
+    if(tournamentListModel != nullptr)
+    {
+        delete tournamentListModel;
+        tournamentListModel = nullptr;
+    }
+    if(tournamentModel != nullptr)
+    {
+        delete tournamentModel;
+        tournamentModel = nullptr;
+    }
+
+    if(tournamentPlayerModel != nullptr)
+    {
+        delete tournamentPlayerModel;
+        tournamentPlayerModel = nullptr;
+    }
+    if(manageTournamentPlayersViewModel != nullptr)
+    {
+        delete manageTournamentPlayersViewModel;
+        manageTournamentPlayersViewModel = nullptr;
+    }
+    if(tiebreaksListModel != nullptr)
+    {
+        delete tiebreaksListModel;
+        tiebreaksListModel = nullptr;
+    }
+    if(tiebreakModels[0] != nullptr)
+    {
+        delete tiebreakModels[0];
+        tiebreakModels[0] = nullptr;
+    }
+    if(tiebreakModels[1] != nullptr)
+    {
+        delete tiebreakModels[1];
+        tiebreakModels[1] = nullptr;
+    }
+
+    if(manageTiebreaksViewModel != nullptr)
+    {
+        delete manageTiebreaksViewModel;
+        manageTiebreaksViewModel = nullptr;
+    }
 }
 
 /**
@@ -144,10 +186,11 @@ void ChessPairerFrame::createModels()
     tournamentListModel = new ListModel<TournamentModel*>;
     tournamentModel = nullptr;
     tournamentPlayerModel = nullptr;
-    tiebreakModel = nullptr;
+    tiebreakModels[0] = nullptr;
+    tiebreakModels[1] = nullptr;
     tiebreaksListModel = new ListModel<TiebreakModel*>;
     manageTournamentPlayersViewModel = new ManageTournamentPlayersViewModel(tournamentListModel, chessplayerListModel, tournamentModel, tournamentPlayerModel);
-    manageTiebreaksViewModel = new ManageTiebreaksViewModel(tournamentListModel, tiebreaksListModel, tournamentModel, tiebreakModel);
+    manageTiebreaksViewModel = new ManageTiebreaksViewModel(tournamentListModel, tiebreaksListModel, tournamentModel, tiebreakModels[0], tiebreakModels[1]);
 }
 
 /**

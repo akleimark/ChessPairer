@@ -35,3 +35,9 @@ wxString IOErrorException::what() const noexcept
     return errorString;
 }
 
+wxString NullpointerException::what() const noexcept
+{
+    wxString errorString;
+    errorString << "Pekaren är 'null': " << errorMessage;
+    return errorString;
+}

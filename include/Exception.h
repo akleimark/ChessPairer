@@ -79,5 +79,22 @@ class IOErrorException : public Exception
     private:
 };
 
+/**
+    Den här klassen av typen 'Exception' hanterar fel som uppstår när en pekare är 'null', när den behöver användas.
+*/
+class NullpointerException : public Exception
+{
+    public:
+        NullpointerException(const wxString &whatArg):
+            Exception(whatArg) {}
+        virtual ~NullpointerException() {}
+        /// Den här funktionen returnerar strängen 'I/O-fel:', följt av en mer precis förklaring av vad som gick fel.
+        virtual wxString what() const noexcept;
+
+    protected:
+
+    private:
+};
+
 
 #endif // EXCEPTION_H

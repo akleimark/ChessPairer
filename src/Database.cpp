@@ -80,6 +80,7 @@ void Database::open()
 
 /**
     Den här funktionen körs endast om det inte redan finns en databas.
+    Syftet med den är att skapa de tabeller, som databasen behöver.
 
 **/
 void Database::createTables()
@@ -158,6 +159,7 @@ void Database::resetDatabase()
 
 /**
     Den här funktionen används för att göra slagningar i databasen.
+    @param sql Den sql-fråga, som skall användas.
 */
 void Database::executeSql(const std::string &sql)
 {
@@ -192,6 +194,8 @@ int Database::callback(void *data, int argc, char **argv, char **azColName)
 
 /**
     Med hjälp av den här funktionen får man tag på det som har hämtats ur databasen.
+    @param i Rad i
+    @param j Kolumn j
 */
 wxString Database::atIndex(const unsigned int &i, const unsigned int &j) const
 {

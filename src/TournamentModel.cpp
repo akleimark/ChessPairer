@@ -276,12 +276,10 @@ void TournamentModel::generatePlayerNumbers()
 */
 void TournamentModel::addTiebreakSystem(TiebreakModel *tiebreakModel)
 {
-    bool exists = false;
     for(unsigned int index = 0; index < tiebreaks.size(); index++)
     {
         if(*tiebreaks[index] == *tiebreakModel)
         {
-            exists = true;
             return;
         }
     }
@@ -429,11 +427,9 @@ void TournamentPlayerModel::addToDatabase() const
 
 void TournamentPlayerModel::removeFromDatabase() const
 {
-    Database *database = Database::getInstance();
     std::stringstream ss;
     ss << "delete from tournament_players where tournament_id='" << tournamentID << "' and "
         << "chessplayer_id='" << chessplayerID << "'";
-
     try
     {
         Database *database = Database::getInstance();

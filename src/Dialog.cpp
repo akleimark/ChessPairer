@@ -23,11 +23,18 @@ Dialog::Dialog(const wxString &title):
 
 }
 
+/**
+    Den här funktionen körs innan funktionen 'create', som implementeras av alla klasser som
+    ärver 'Dialog'.
+*/
 void Dialog::preCreate()
 {
     verticalBox = new wxBoxSizer(wxVERTICAL);
 }
 
+/**
+    Den här funktionen körs efter 'create'. Den ställer in den 'sizer' som används och kör 'Centre'.
+*/
 void Dialog::postCreate()
 {
     SetSizer(verticalBox);
@@ -35,7 +42,7 @@ void Dialog::postCreate()
 }
 
 /**
-    I den här konstruktorn körs de tre funktionerna 'preCreate', 'create' och 'postCreate'.
+    I den här konstruktorn körs de fyra funktionerna 'preCreate', 'create', 'postCreate' och 'addBinds'.
 */
 AddChessplayerDialog::AddChessplayerDialog(const wxString &title):
     Dialog(title)
@@ -46,11 +53,9 @@ AddChessplayerDialog::AddChessplayerDialog(const wxString &title):
     addBinds();
 }
 
-AddChessplayerDialog::~AddChessplayerDialog()
-{
-
-}
-
+/**
+    I den här funktionen skapas alla objekt som är specifika för klassen 'AddChessplayerDialog'.
+*/
 void AddChessplayerDialog::create()
 {
     idBox = new wxBoxSizer(wxHORIZONTAL);
@@ -128,6 +133,11 @@ void AddChessplayerDialog::addBinds()
     closeButton->Bind(wxEVT_BUTTON, &AddChessplayerDialog::closeDialog, this);
 }
 
+/**
+    Den här händelsestyrda funktionen körs när användaren har tryckt på "Lägg till", för att skapa den schackspelare,
+    som han har lagt in data om. Funktionen kontrollerar, huruvida alla data är korrekt. Schackspelaren kommer
+    endast att läggas in i databasen, om schackspelarens data är korrekt.
+*/
 void AddChessplayerDialog::addChessplayer(wxCommandEvent &event)
 {
     chessplayer.setID(wxAtoi(idField->GetValue()));
@@ -163,7 +173,10 @@ void AddChessplayerDialog::addChessplayer(wxCommandEvent &event)
         wxMessageBox(FORM_ERROR, GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
     }
 }
-
+/**
+    Den här händelsestyrda funktionen körs endast om användaren har valt att trycka på knappen "Återställ".
+    Alla data som användaren har fyllt i kommer att tas bort och de ursprungliga värdena kommer att visas.
+*/
 void AddChessplayerDialog::resetForm(wxCommandEvent &event)
 {
     idField->SetValue("");
@@ -175,13 +188,16 @@ void AddChessplayerDialog::resetForm(wxCommandEvent &event)
     clubField->SetValue("");
 }
 
+/**
+    Den här händelsestyrda funktionen körs om användaren har klickat på "Stäng".
+*/
 void AddChessplayerDialog::closeDialog(wxCommandEvent &event)
 {
     this->EndModal(true);
 }
 
 /**
-    I den här konstruktorn körs de tre funktionerna 'preCreate', 'create' och 'postCreate'.
+     I den här konstruktorn körs de fyra funktionerna 'preCreate', 'create', 'postCreate' och 'addBinds'.
 */
 AddTournamentDialog::AddTournamentDialog(const wxString &title):
     Dialog(title)
@@ -191,12 +207,10 @@ AddTournamentDialog::AddTournamentDialog(const wxString &title):
     postCreate();
     addBinds();
 }
-
-AddTournamentDialog::~AddTournamentDialog()
-{
-
-}
-
+/**
+    I den här funktionen, skapas alla objekt som är specifika för klassen
+    'AddTournamentDialog'.
+*/
 void AddTournamentDialog::create()
 {
     idBox = new wxBoxSizer(wxHORIZONTAL);
@@ -259,6 +273,10 @@ void AddTournamentDialog::addBinds()
     closeButton->Bind(wxEVT_BUTTON, &AddTournamentDialog::closeDialog, this);
 }
 
+/**
+    Den här händelsestyrda funktionen körs när användaren har fyllt i alla turneringens data och klickat på
+    "Lägg till". Turneringen kommer endast att skapas, om alla data är korrekt.
+*/
 void AddTournamentDialog::addTournament(wxCommandEvent &event)
 {
     tournamentModel.setID(idField->GetValue());
@@ -287,13 +305,21 @@ void AddTournamentDialog::addTournament(wxCommandEvent &event)
     }
 }
 
+/**
+    Den här händelsestyrda funktionen körs endast om användaren har valt att trycka på knappen "Återställ".
+    Alla data som användaren har fyllt i kommer att tas bort och de ursprungliga värdena kommer att visas.
+*/
 void AddTournamentDialog::resetForm(wxCommandEvent &event)
 {
     idField->SetValue("");
     numberOfRoundsField->SetValue("");
     pairingSystemComboBox->SetValue("");
+    startDateField->SetValue("");
+    endDateField->SetValue("");
 }
-
+/**
+    Den här händelsestyrda funktionen körs om användaren har klickat på "Stäng".
+*/
 void AddTournamentDialog::closeDialog(wxCommandEvent &event)
 {
     this->EndModal(true);

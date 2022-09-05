@@ -43,7 +43,7 @@ ListTournamentsView::~ListTournamentsView()
 **/
 void ListTournamentsView::update(Model *model)
 {
-    ListModel<TournamentModel*> *m = (ListModel<TournamentModel*>*) model;
+    ListModel<TournamentModel*> *m = dynamic_cast<ListModel<TournamentModel*>*> (model);
     table->ClearGrid();
 
     try
@@ -71,7 +71,7 @@ void ListTournamentsView::update(Model *model)
 
 void ListTournamentsView::setController(Controller *_controller)
 {
-    ListTournamentsController *controller = (ListTournamentsController*) _controller;
+    ListTournamentsController *controller = dynamic_cast<ListTournamentsController*>(_controller);
 
     addButton->Bind(wxEVT_BUTTON, &ListTournamentsController::addTournament, controller);
     removeButton->Bind(wxEVT_BUTTON, &ListTournamentsController::removeTournament, controller);

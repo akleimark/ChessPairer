@@ -37,7 +37,7 @@ ListChessplayersView::ListChessplayersView(wxWindow *p_parent):
 **/
 void ListChessplayersView::update(Model *model)
 {
-    ListModel<ChessplayerModel*> *m = (ListModel<ChessplayerModel*>*) model;
+    ListModel<ChessplayerModel*> *m = dynamic_cast<ListModel<ChessplayerModel*>*> (model);
     table->ClearGrid();
 
     try
@@ -67,7 +67,7 @@ void ListChessplayersView::update(Model *model)
 
 void ListChessplayersView::setController(Controller *_controller)
 {
-    ListChessplayersController *controller = (ListChessplayersController*) _controller;
+    ListChessplayersController *controller = dynamic_cast<ListChessplayersController*> (_controller);
 
     addButton->Bind(wxEVT_BUTTON, &ListChessplayersController::addChessplayer, controller);
     removeButton->Bind(wxEVT_BUTTON, &ListChessplayersController::removeChessplayer, controller);

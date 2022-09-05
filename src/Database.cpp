@@ -143,7 +143,7 @@ void Database::resetDatabase()
     {
         this->close();
     }
-    catch(DatabaseErrorException &)
+    catch(const DatabaseErrorException &)
     {
         throw;
     }

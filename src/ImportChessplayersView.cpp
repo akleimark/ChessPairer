@@ -38,7 +38,7 @@ ImportChessplayersView::ImportChessplayersView(wxWindow *parent):
 
 void ImportChessplayersView::setController(Controller *_controller)
 {
-    ImportChessplayersController *controller = (ImportChessplayersController*) _controller;
+    ImportChessplayersController *controller = dynamic_cast<ImportChessplayersController*> (_controller);
 
     xmlButton->Bind(wxEVT_RADIOBUTTON, &ImportChessplayersController::setFileType, controller);
     textFileButton->Bind(wxEVT_RADIOBUTTON, &ImportChessplayersController::setFileType, controller);

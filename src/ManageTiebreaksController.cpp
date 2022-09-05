@@ -8,7 +8,7 @@ ManageTiebreaksController::~ManageTiebreaksController()
 
 void ManageTiebreaksController::changeTournament(wxCommandEvent &event)
 {
-    ManageTiebreaksViewModel *viewModel = (ManageTiebreaksViewModel*) model;
+    ManageTiebreaksViewModel *viewModel = dynamic_cast<ManageTiebreaksViewModel*> (model);
     unsigned int index = event.GetSelection();
 
     TournamentModel *tournament = viewModel->getTournaments()->get(index);
@@ -31,7 +31,7 @@ void ManageTiebreaksController::changeTournament(wxCommandEvent &event)
 
 void ManageTiebreaksController::selectTiebreakToAdd(wxGridEvent &event)
 {
-    ManageTiebreaksViewModel *viewModel = (ManageTiebreaksViewModel*) model;
+    ManageTiebreaksViewModel *viewModel = dynamic_cast<ManageTiebreaksViewModel*> (model);
     TournamentModel *tournament = viewModel->getTournament();
 
     if(tournament == nullptr)
@@ -47,7 +47,7 @@ void ManageTiebreaksController::selectTiebreakToAdd(wxGridEvent &event)
 
 void ManageTiebreaksController::selectTiebreakToRemove(wxGridEvent &event)
 {
-    ManageTiebreaksViewModel *viewModel = (ManageTiebreaksViewModel*) model;
+    ManageTiebreaksViewModel *viewModel = dynamic_cast<ManageTiebreaksViewModel*> (model);
     TournamentModel *tournament = viewModel->getTournament();
 
     if(tournament == nullptr)
@@ -64,7 +64,7 @@ void ManageTiebreaksController::selectTiebreakToRemove(wxGridEvent &event)
 
 void ManageTiebreaksController::addTiebreakSystem(wxCommandEvent &event)
 {
-    ManageTiebreaksViewModel *viewModel = (ManageTiebreaksViewModel*) model;
+    ManageTiebreaksViewModel *viewModel = dynamic_cast<ManageTiebreaksViewModel*> (model);
     TournamentModel *tournament = viewModel->getTournament();
 
     if(tournament == nullptr || viewModel->getFirstTiebreakModel() == nullptr)
@@ -87,7 +87,7 @@ void ManageTiebreaksController::addTiebreakSystem(wxCommandEvent &event)
 
 void ManageTiebreaksController::removeTiebreakSystem(wxCommandEvent &event)
 {
-    ManageTiebreaksViewModel *viewModel = (ManageTiebreaksViewModel*) model;
+    ManageTiebreaksViewModel *viewModel = dynamic_cast<ManageTiebreaksViewModel*> (model);
     TournamentModel *tournament = viewModel->getTournament();
 
     if(tournament == nullptr || viewModel->getSecondTiebreakModel() == nullptr)

@@ -38,8 +38,8 @@ void ListTournamentsController::addTournament(wxCommandEvent &event)
 
 void ListTournamentsController::removeTournament(wxCommandEvent &event)
 {
-    ListModel<TournamentModel*> *listModel = (ListModel<TournamentModel*>*) model;
-    ListTournamentsView *lView = (ListTournamentsView*) view;
+    ListModel<TournamentModel*> *listModel = dynamic_cast<ListModel<TournamentModel*>*> (model);
+    ListTournamentsView *lView = dynamic_cast<ListTournamentsView*> (view);
     wxArrayInt rowNumbers = lView->getTable()->GetSelectedRows();
 
     if(rowNumbers.size() == 0)

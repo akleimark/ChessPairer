@@ -6,7 +6,7 @@
 
 void ManageTournamentPlayersController::changeTournament(wxCommandEvent &event)
 {
-    ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+    ManageTournamentPlayersViewModel *viewModel = dynamic_cast<ManageTournamentPlayersViewModel*> (model);
     unsigned int index = event.GetSelection();
 
     TournamentModel *tournament = viewModel->getTournaments()->get(index);
@@ -25,7 +25,7 @@ void ManageTournamentPlayersController::changeTournament(wxCommandEvent &event)
 }
 void ManageTournamentPlayersController::selectPlayer(wxGridEvent &event)
 {
-    ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+    ManageTournamentPlayersViewModel *viewModel = dynamic_cast<ManageTournamentPlayersViewModel*> (model);
     if(viewModel->getTournamentModel() == nullptr)
     {
         return;
@@ -39,7 +39,7 @@ void ManageTournamentPlayersController::selectPlayer(wxGridEvent &event)
 void ManageTournamentPlayersController::selectTournamentPlayer(wxGridEvent &event)
 {
     const unsigned int ROW_INDEX = event.GetRow();
-    ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+    ManageTournamentPlayersViewModel *viewModel = dynamic_cast<ManageTournamentPlayersViewModel*> (model);
     if(viewModel->getTournamentModel() == nullptr)
     {
         return;
@@ -55,7 +55,7 @@ void ManageTournamentPlayersController::addPlayer(wxCommandEvent &event)
 {
     try
     {
-        ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+        ManageTournamentPlayersViewModel *viewModel = dynamic_cast<ManageTournamentPlayersViewModel*> (model);
         TournamentPlayerModel *player = viewModel->getTournamentPlayerModel();
         TournamentModel *tournament = viewModel->getTournamentModel();
         if(tournament == nullptr || player == nullptr)
@@ -78,7 +78,7 @@ void ManageTournamentPlayersController::removePlayer(wxCommandEvent &event)
 {
     try
     {
-        ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+        ManageTournamentPlayersViewModel *viewModel = dynamic_cast<ManageTournamentPlayersViewModel*> (model);
         TournamentPlayerModel *tournamentPlayer = viewModel->getTournamentPlayerModel();
         viewModel->getTournamentModel()->removeTournamentPlayer(tournamentPlayer);
         viewModel->notifyView(view);
@@ -91,7 +91,7 @@ void ManageTournamentPlayersController::removePlayer(wxCommandEvent &event)
 
 void ManageTournamentPlayersController::generatePlayerNumbers(wxCommandEvent &event)
 {
-    ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+    ManageTournamentPlayersViewModel *viewModel = dynamic_cast<ManageTournamentPlayersViewModel*> (model);
     TournamentModel *tournament = viewModel->getTournamentModel();
     if(tournament == nullptr)
     {

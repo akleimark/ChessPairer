@@ -37,8 +37,8 @@ void ListChessplayersController::addChessplayer(wxCommandEvent &event)
 
 void ListChessplayersController::removeChessplayer(wxCommandEvent &event)
 {
-    ListModel<ChessplayerModel*> *listModel = (ListModel<ChessplayerModel*>*) model;
-    ListChessplayersView *lView = (ListChessplayersView*) view;
+    ListModel<ChessplayerModel*> *listModel = dynamic_cast<ListModel<ChessplayerModel*>*> (model);
+    ListChessplayersView *lView = dynamic_cast<ListChessplayersView*> (view);
     wxArrayInt rowNumbers = lView->getTable()->GetSelectedRows();
 
     if(rowNumbers.size() == 0)

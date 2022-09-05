@@ -20,6 +20,8 @@ const unsigned int TEXTFILE_BUTTON_ID = 1;
 const unsigned int MINIMUM_LENGTH = 2;
 const unsigned int DEFAULT_FRAME_WIDTH = 700;
 const unsigned int DEFAULT_FRAME_HEIGHT = 700;
+const unsigned int COMBOBOX_MIN_WIDTH = 200;
+const unsigned int COMBOBOX_MIN_HEIGHT = 40;
 
 // Textkonstanter
 const wxString QUIT_MESSAGE = "Avsluta";

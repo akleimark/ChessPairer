@@ -16,7 +16,7 @@
 ImportChessplayersController::ImportChessplayersController(Model *_model, View *_view):
     Controller(_model, _view)
 {
-     ImportChessplayersModel *iModel = (ImportChessplayersModel*) model;
+     ImportChessplayersModel *iModel = dynamic_cast<ImportChessplayersModel*> (model);
      strategy = new ReadXMLFile(iModel);
 }
 
@@ -27,7 +27,7 @@ ImportChessplayersController::~ImportChessplayersController()
 
 void ImportChessplayersController::setFileType(wxCommandEvent &event)
 {
-    ImportChessplayersModel *iModel = (ImportChessplayersModel*) model;
+    ImportChessplayersModel *iModel = dynamic_cast<ImportChessplayersModel*> (model);
 
     if(strategy != nullptr)
     {
@@ -48,13 +48,13 @@ void ImportChessplayersController::setFileType(wxCommandEvent &event)
 
 void ImportChessplayersController::setFile(wxCommandEvent &event)
 {
-    ImportChessplayersModel *iModel = (ImportChessplayersModel*) model;
+    ImportChessplayersModel *iModel = dynamic_cast<ImportChessplayersModel*> (model);
     iModel->setFile(event.GetString().ToStdString());
 }
 
 void ImportChessplayersController::startImport(wxCommandEvent &event)
 {
-    ImportChessplayersModel *iModel = (ImportChessplayersModel*) model;
+    ImportChessplayersModel *iModel = dynamic_cast<ImportChessplayersModel*> (model);
     std::cout << iModel->getFile() << std::endl;
 
     try
@@ -90,7 +90,7 @@ void ReadFileStrategy::postImport() const
 void ReadXMLFile::execute()
 {
     importedChessplayers = 0;
-    ImportChessplayersModel *iModel = (ImportChessplayersModel*) model;
+    ImportChessplayersModel *iModel = dynamic_cast<ImportChessplayersModel*> (model);
     if(!misc::fileExists(iModel->getFile().c_str()))
     {
         throw IOErrorException("Filen existerar inte.");
@@ -197,7 +197,7 @@ void ReadTextFile::execute()
 {
     std::cout << "here" << std::endl;
     importedChessplayers = 0;
-    ImportChessplayersModel *iModel = (ImportChessplayersModel*) model;
+    ImportChessplayersModel *iModel = dynamic_cast<ImportChessplayersModel*> (model);
     if(!misc::fileExists(iModel->getFile().c_str()))
     {
         throw IOErrorException("Filen existerar inte.");

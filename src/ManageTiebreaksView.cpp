@@ -1,13 +1,17 @@
 #include "ManageTiebreaksView.h"
 #include "ViewModel.h"
 #include "ManageTiebreaksController.h"
+#include "Defs.h"
 
+/**
+
+*/
 ManageTiebreaksView::ManageTiebreaksView(wxWindow *p_parent):
     View(p_parent, L"Hantera s\u00E4rskiljning")
 {
     tournamentBox = new wxBoxSizer(wxHORIZONTAL);
     tournamentComboBox = new wxComboBox(parent, -1);
-    tournamentComboBox->SetMinSize(wxSize(200, 40));
+    tournamentComboBox->SetMinSize(wxSize(COMBOBOX_MIN_WIDTH, COMBOBOX_MIN_HEIGHT));
     tournamentBox->Add(tournamentComboBox, 0, wxALL, 10);
     this->Add(tournamentBox, View::MARGIN, wxALL, 0);
 
@@ -36,14 +40,10 @@ ManageTiebreaksView::ManageTiebreaksView(wxWindow *p_parent):
     this->Add(bottomSizer, View::MARGIN, wxALL, 0);
 }
 
-ManageTiebreaksView::~ManageTiebreaksView()
-{
-
-}
 
 void ManageTiebreaksView::update(Model *model)
 {
-    ManageTiebreaksViewModel *viewModel = (ManageTiebreaksViewModel*) model;
+    ManageTiebreaksViewModel *viewModel = dynamic_cast<ManageTiebreaksViewModel*> (model);
 
     ListModel<TournamentModel*> *tournaments = viewModel->getTournaments();
 
@@ -77,7 +77,7 @@ void ManageTiebreaksView::update(Model *model)
 
 void ManageTiebreaksView::setController(Controller *_controller)
 {
-    ManageTiebreaksController *mController = (ManageTiebreaksController*) _controller;
+    ManageTiebreaksController *mController = dynamic_cast<ManageTiebreaksController*> (_controller);
     tournamentComboBox->Bind(wxEVT_COMBOBOX, &ManageTiebreaksController::changeTournament, mController);
     tiebreaksTable->Bind(wxEVT_GRID_SELECT_CELL, &ManageTiebreaksController::selectTiebreakToAdd, mController);
     selectedTiebreaksTable->Bind(wxEVT_GRID_SELECT_CELL, &ManageTiebreaksController::selectTiebreakToRemove, mController);

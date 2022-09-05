@@ -76,7 +76,7 @@ void ManageTournamentPlayersView::update(Model *model)
 
 void ManageTournamentPlayersView::setController(Controller *_controller)
 {
-    ManageTournamentPlayersController *mController = (ManageTournamentPlayersController*) _controller;
+    ManageTournamentPlayersController *mController = dynamic_cast<ManageTournamentPlayersController*> (_controller);
 
     tournamentComboBox->Bind(wxEVT_COMBOBOX, &ManageTournamentPlayersController::changeTournament, mController);
     chessplayerPool->Bind(wxEVT_GRID_SELECT_CELL, &ManageTournamentPlayersController::selectPlayer, mController);

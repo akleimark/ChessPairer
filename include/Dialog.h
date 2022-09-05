@@ -41,6 +41,7 @@ class Dialog : public wxDialog
         wxBoxSizer *verticalBox;
         /// Den här klasskonstanten anger hur stor marginalen från vänsterkanten är.
         const static unsigned int LEFT_MARGIN;
+        const static wxSize BIG_SIZE;
 
     private:
 };

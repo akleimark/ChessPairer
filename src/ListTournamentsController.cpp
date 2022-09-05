@@ -7,13 +7,13 @@
 #include "ListTournamentsView.h"
 #include "Defs.h"
 
+/**
+    Den här konstruktorn kör endast superklassens konstruktor
+    @param _model En pekare till den modell som används.
+    @param _view En pekare till den vy som används.
+*/
 ListTournamentsController::ListTournamentsController(Model *_model, View *_view):
     Controller(_model, _view)
-{
-
-}
-
-ListTournamentsController::~ListTournamentsController()
 {
 
 }
@@ -36,6 +36,9 @@ void ListTournamentsController::addTournament(wxCommandEvent &event)
     dialog->Destroy();
 }
 
+/**
+    Den här händelsestyrda funktionen körs, när användaren vill ta bort en turnering via vyn.
+*/
 void ListTournamentsController::removeTournament(wxCommandEvent &event)
 {
     ListModel<TournamentModel*> *listModel = dynamic_cast<ListModel<TournamentModel*>*> (model);

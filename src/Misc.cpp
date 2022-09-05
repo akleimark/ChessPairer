@@ -28,6 +28,7 @@ Date::Date(const unsigned int &_year, const unsigned int &_month, const unsigned
 
 }
 
+
 /**
     Den här funktionen returnerar ett heltal med det nuvarande året.
 */

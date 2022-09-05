@@ -5,6 +5,10 @@
 #include "TournamentModel.h"
 #include "TiebreakModel.h"
 
+/**
+Den här vymodellen (en modellklass med flera modeller som datamedlemmar), hanterar
+data som krävs för att hantera deltagare i olika schackturneringar.
+*/
 class ManageTournamentPlayersViewModel : public Model
 {
     public:

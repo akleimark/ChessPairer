@@ -8,10 +8,11 @@
 #include "Defs.h"
 
 const unsigned int Dialog::LEFT_MARGIN = 5;
-const unsigned int Dialog::SPACE = 10;
+const unsigned int Dialog::SPACE = 20;
 const unsigned int Dialog::DEFAULT_WIDTH = 700;
 const unsigned int Dialog::DEFAULT_HEIGHT = 700;
 const wxFont Dialog::LABEL_FONT = wxFont(11, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+const wxSize Dialog::BIG_SIZE = wxSize(200, 20);
 
 /**
     I den här konstruktorn initieras klassens variabler. Superklassens konstruktor körs, samtidigt som
@@ -37,6 +38,7 @@ void Dialog::preCreate()
 */
 void Dialog::postCreate()
 {
+    //verticalBox->SetSizeHints(this);
     SetSizer(verticalBox);
     Centre();
 }
@@ -70,16 +72,16 @@ void AddChessplayerDialog::create()
     firstnameLabel = new wxStaticText(this, -1, L"F\u00F6rnamn: ");
     firstnameField = new wxTextCtrl(this, -1);
     firstnameLabel->SetFont(LABEL_FONT);
-    firstnameBox->Add(firstnameLabel, 0, wxALL, AddChessplayerDialog::SPACE);
-    firstnameBox->Add(firstnameField, 0, wxALL, AddChessplayerDialog::SPACE);
+    firstnameBox->Add(firstnameLabel, 1, wxALL, AddChessplayerDialog::SPACE);
+    firstnameBox->Add(firstnameField, 2, wxALL, AddChessplayerDialog::SPACE);
     verticalBox->Add(firstnameBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     lastnameBox = new wxBoxSizer(wxHORIZONTAL);
     lastnameLabel = new wxStaticText(this, -1, "Efternamn: ");
     lastnameField = new wxTextCtrl(this, -1);
     lastnameLabel->SetFont(LABEL_FONT);
-    lastnameBox->Add(lastnameLabel, 0, wxALL, AddChessplayerDialog::SPACE);
-    lastnameBox->Add(lastnameField, 0, wxALL, AddChessplayerDialog::SPACE);
+    lastnameBox->Add(lastnameLabel, 1, wxALL, AddChessplayerDialog::SPACE);
+    lastnameBox->Add(lastnameField, 2, wxALL, AddChessplayerDialog::SPACE);
     verticalBox->Add(lastnameBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     biologicalSexBox = new wxBoxSizer(wxHORIZONTAL);
@@ -96,24 +98,24 @@ void AddChessplayerDialog::create()
     birthdateLabel = new wxStaticText(this, -1, L"F\u00F6delsedatum: ");
     birthdateField = new wxTextCtrl(this, -1);
     birthdateLabel->SetFont(LABEL_FONT);
-    birthdateBox->Add(birthdateLabel, 0, wxALL, AddChessplayerDialog::SPACE);
-    birthdateBox->Add(birthdateField, 0, wxALL, AddChessplayerDialog::SPACE);
+    birthdateBox->Add(birthdateLabel, 9, wxALL, AddChessplayerDialog::SPACE);
+    birthdateBox->Add(birthdateField, 8, wxALL, AddChessplayerDialog::SPACE);
     verticalBox->Add(birthdateBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     federationBox = new wxBoxSizer(wxHORIZONTAL);
     federationLabel = new wxStaticText(this, -1, "Nation: ");
     federationField = new wxTextCtrl(this, -1);
     federationLabel->SetFont(LABEL_FONT);
-    federationBox->Add(federationLabel, 0, wxALL, AddChessplayerDialog::SPACE);
-    federationBox->Add(federationField, 0, wxALL, AddChessplayerDialog::SPACE);
+    federationBox->Add(federationLabel, 2, wxALL, AddChessplayerDialog::SPACE);
+    federationBox->Add(federationField, 4, wxALL, AddChessplayerDialog::SPACE);
     verticalBox->Add(federationBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     clubBox = new wxBoxSizer(wxHORIZONTAL);
     clubLabel = new wxStaticText(this, -1, "Klubb: ");
     clubField = new wxTextCtrl(this, -1);
     clubLabel->SetFont(LABEL_FONT);
-    clubBox->Add(clubLabel, 0, wxALL, AddChessplayerDialog::SPACE);
-    clubBox->Add(clubField, 0, wxALL, AddChessplayerDialog::SPACE);
+    clubBox->Add(clubLabel, 2, wxALL, AddChessplayerDialog::SPACE);
+    clubBox->Add(clubField, 4, wxALL, AddChessplayerDialog::SPACE);
     verticalBox->Add(clubBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     buttonBox = new wxBoxSizer(wxHORIZONTAL);
@@ -217,32 +219,32 @@ void AddTournamentDialog::create()
     idLabel = new wxStaticText(this, -1, "Id: ");
     idField = new wxTextCtrl(this, -1);
     idLabel->SetFont(LABEL_FONT);
-    idBox->Add(idLabel, 0, wxALL, Dialog::SPACE);
-    idBox->Add(idField, 0, wxALL, Dialog::SPACE);
+    idBox->Add(idLabel, 1, wxALL, Dialog::SPACE);
+    idBox->Add(idField, 3, wxALL, Dialog::SPACE);
     verticalBox->Add(idBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     startDateBox = new wxBoxSizer(wxHORIZONTAL);
     startDateLabel = new wxStaticText(this, -1, "Startdatum: ");
     startDateField = new wxTextCtrl(this, -1);
     startDateLabel->SetFont(LABEL_FONT);
-    startDateBox->Add(startDateLabel, 0, wxALL, Dialog::SPACE);
-    startDateBox->Add(startDateField, 0, wxALL, Dialog::SPACE);
+    startDateBox->Add(startDateLabel, 9, wxALL, Dialog::SPACE);
+    startDateBox->Add(startDateField, 9, wxALL, Dialog::SPACE);
     verticalBox->Add(startDateBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     endDateBox = new wxBoxSizer(wxHORIZONTAL);
     endDateLabel = new wxStaticText(this, -1, "Slutdatum: ");
     endDateField = new wxTextCtrl(this, -1);
     endDateLabel->SetFont(LABEL_FONT);
-    endDateBox->Add(endDateLabel, 0, wxALL, Dialog::SPACE);
-    endDateBox->Add(endDateField, 0, wxALL, Dialog::SPACE);
+    endDateBox->Add(endDateLabel, 9, wxALL, Dialog::SPACE);
+    endDateBox->Add(endDateField, 9, wxALL, Dialog::SPACE);
     verticalBox->Add(endDateBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     numberOfRoundsBox = new wxBoxSizer(wxHORIZONTAL);
     numberOfRoundsLabel = new wxStaticText(this, -1, "Antal ronder: ");
     numberOfRoundsField = new wxTextCtrl(this, -1);
     numberOfRoundsLabel->SetFont(LABEL_FONT);
-    numberOfRoundsBox->Add(numberOfRoundsLabel, 0, wxALL, Dialog::SPACE);
-    numberOfRoundsBox->Add(numberOfRoundsField, 0, wxALL, Dialog::SPACE);
+    numberOfRoundsBox->Add(numberOfRoundsLabel, 1, wxALL, Dialog::SPACE);
+    numberOfRoundsBox->Add(numberOfRoundsField, 1, wxALL, Dialog::SPACE);
     verticalBox->Add(numberOfRoundsBox, Dialog::LEFT_MARGIN, wxALL, 0);
 
     pairingSystemBox = new wxBoxSizer(wxHORIZONTAL);

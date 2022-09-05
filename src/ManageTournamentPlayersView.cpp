@@ -52,7 +52,7 @@ ManageTournamentPlayersView::~ManageTournamentPlayersView()
 
 void ManageTournamentPlayersView::update(Model *model)
 {
-    ManageTournamentPlayersViewModel *viewModel = (ManageTournamentPlayersViewModel*) model;
+    ManageTournamentPlayersViewModel *viewModel = dynamic_cast<ManageTournamentPlayersViewModel*> (model);
 
     ListModel<TournamentModel*> *tournaments = viewModel->getTournaments();
     ListModel<ChessplayerModel*> *chessplayers = viewModel->getChessplayerList();

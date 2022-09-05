@@ -114,7 +114,6 @@ void Database::createTables()
     if(errors == true)
     {
         throw DatabaseErrorException("It was not possible to create the tables. The program will exit.");
-        exit(-1);
     }
 
     std::cout << "The tables were successfully created. " << std::endl;

@@ -16,7 +16,8 @@ const std::vector<wxString> TournamentModel::PAIRING_SYSTEMS = {"Monrad", "Berge
 TournamentModel::TournamentModel():
     id(""), numberOfRounds(0), pairingSystem("")
 {
-
+    startDate.reset();
+    endDate.reset();
 }
 /**
     I destruktorn rensas turneringsspelarna och särskiljningssystemen. Dessa finns lagrade i containrarna
@@ -149,7 +150,7 @@ void TournamentModel::getAllTournamentPlayers()
             tournamentPlayers.insert(tournamentPlayerModel);
         }
     }
-    catch(DatabaseErrorException &error)
+    catch(const DatabaseErrorException &)
     {
         throw;
     }
@@ -176,7 +177,7 @@ void TournamentModel::getAllTiebreaks()
             tiebreaks.push_back(tiebreak);
         }
     }
-    catch(DatabaseErrorException &error)
+    catch(const DatabaseErrorException &)
     {
         throw;
     }
@@ -232,7 +233,7 @@ void TournamentModel::removeTournamentPlayer(TournamentPlayerModel *player)
     {
         player->removeFromDatabase();
     }
-    catch(Exception &error)
+    catch(const Exception &)
     {
         throw;
     }
@@ -243,30 +244,7 @@ void TournamentModel::removeTournamentPlayer(TournamentPlayerModel *player)
 
 void TournamentModel::generatePlayerNumbers()
 {
-    std::set<TournamentPlayerModel*>::const_iterator it;
-    std::vector<bool> takenNumbers;
-    takenNumbers.reserve(tournamentPlayers.size());
-    for(it = tournamentPlayers.cbegin(); it != tournamentPlayers.cend(); ++it)
-    {
-        (*it)->setPlayerNumber(0);
-    }
 
-    boost::random::mt19937 gen;
-    gen.seed();
-    int playerNumber = 0;
-
-    for(it = tournamentPlayers.cbegin(); it != tournamentPlayers.cend(); ++it)
-    {
-        //do
-        {
-            boost::random::uniform_int_distribution<> dist(0, tournamentPlayers.size() - 1);
-            playerNumber = dist(gen);
-        }
-        //while(takenNumbers[playerNumber] == true);
-
-        takenNumbers[playerNumber] = true;
-        (*it)->setPlayerNumber(playerNumber);
-    }
 }
 
 /**
@@ -327,11 +305,10 @@ void TournamentModel::removeTiebreakSystem(TiebreakModel *tiebreakModel)
         resetTiebreaksOrder();
 
     }
-    catch(Exception &error)
+    catch(const Exception &)
     {
         throw;
     }
-
 }
 
 /**
@@ -354,7 +331,7 @@ void TournamentModel::resetTiebreaksOrder() const
             database->executeSql(ss.str());
         }
     }
-    catch(DatabaseErrorException &)
+    catch(const DatabaseErrorException &)
     {
         throw;
     }
@@ -419,7 +396,7 @@ void TournamentPlayerModel::addToDatabase() const
         Database *database = Database::getInstance();
         database->executeSql(ss.str());
     }
-    catch(DatabaseErrorException &)
+    catch(const DatabaseErrorException &)
     {
         throw;
     }
@@ -435,7 +412,7 @@ void TournamentPlayerModel::removeFromDatabase() const
         Database *database = Database::getInstance();
         database->executeSql(ss.str());
     }
-    catch(DatabaseErrorException &)
+    catch(const DatabaseErrorException &)
     {
         throw;
     }

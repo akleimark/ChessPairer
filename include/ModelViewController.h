@@ -22,6 +22,7 @@ class Model
         void notifyAllViews();
 
     protected:
+        /// I den här containern lagras alla de vyer, som modellen har ansvar för att uppdatera.
         std::set<View*> views;
 
     private:
@@ -40,8 +41,6 @@ class View : public wxBoxSizer
         wxWindow *parent;
         /// Den här variabeln används av klassen för att visa en rubrik.
         wxStaticText *label;
-        /// Den här variabeln används för att välja ett vissa typsnitt, som i det här fallet används i rubriken.
-        wxFont *font;
         const static unsigned int MARGIN;
         const static wxFont LABEL_FONT;
         const static wxFont H3_FONT;

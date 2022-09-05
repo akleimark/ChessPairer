@@ -10,18 +10,23 @@ View::View(wxWindow *p_parent, const wxString &labelString):
     label = new wxStaticText(parent, -1, labelString);
     this->Add(label, 0, wxALIGN_CENTER, 0);
 
-    font = new wxFont;
-    font->SetFaceName("Georgia");
-    font->SetPointSize(16);
-    label->SetFont(*font);
+    wxFont font(16, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
+    label->SetFont(font);
     this->Show(false);
 }
 
+/**
+    Den här funktionen lägger till en vy till containern 'views'.
+    @param view En pekare till den vy, som skall läggas till.
+*/
 void Model::addView(View *view)
 {
     views.insert(view);
 }
 
+/**
+
+*/
 void Model::notifyView(View *view)
 {
     for(View *cView : views)

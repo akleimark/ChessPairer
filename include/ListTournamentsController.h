@@ -3,11 +3,17 @@
 
 #include "ModelViewController.h"
 
+/**
+    Den här klassen ärver klassen 'Controller'. Den ingår i MVC-strukturen.
+    Klassen använder sig av en vy (ListTournamentsView) och en modell(ManageTournamentPlayersViewModel).
+*/
+
 class ListTournamentsController : public Controller
 {
     public:
         ListTournamentsController(Model *_model, View *_view);
-        virtual ~ListTournamentsController();
+        /// Klassen skapar inga egna objekt med 'new', varpå destruktorn är tom.
+        virtual ~ListTournamentsController() {}
         void addTournament(wxCommandEvent &event);
         void removeTournament(wxCommandEvent &event);
 

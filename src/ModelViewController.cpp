@@ -4,6 +4,10 @@ const unsigned int View::MARGIN = 20;
 const wxFont View::LABEL_FONT = wxFont(11, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
 const wxFont View::H3_FONT = wxFont(9, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD);
 
+/**
+    I den här konstruktorn läggs rubriken till vyn. Alla klasser som ärver den här klassen
+    kommer alltså att ha en rubrik, vars text skickas med via underklassernas konstruktorer.
+*/
 View::View(wxWindow *p_parent, const wxString &labelString):
     wxBoxSizer(wxVERTICAL), parent(p_parent)
 {
@@ -25,7 +29,8 @@ void Model::addView(View *view)
 }
 
 /**
-
+    Den här funktionen uppdaterar en specifik vy.
+    @param view En pekare till den vy som skall uppdateras.
 */
 void Model::notifyView(View *view)
 {
@@ -39,6 +44,9 @@ void Model::notifyView(View *view)
     }
 }
 
+/**
+    Den här funktionen uppdaterar alla vyer som finns i containern 'views'.
+*/
 void Model::notifyAllViews()
 {
     for(View *view : views)
@@ -47,6 +55,12 @@ void Model::notifyAllViews()
     }
 }
 
+/**
+    Den här konstruktorn sätter bara värdet på modellklassen och vyklassen via
+    argumenten.
+    @param _model En pekare till den 'Model', som klassen använder
+    @param _view En pekare till den 'View', som klassen använder.
+*/
 Controller::Controller(Model *_model, View *_view):
     model(_model), view(_view)
 {

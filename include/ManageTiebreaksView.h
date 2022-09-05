@@ -51,7 +51,10 @@ class ManageTiebreaksView : public View
         wxButton *addButton;
         /// Med hjälp av den här knappen tar man bort ett särskiljningssystem från den valda turneringen.
         wxButton *removeButton;
-        void updateTiebreaks(ListModel<TiebreakModel*> *model);
+        /// Den här funktionen ansvarar för att uppdatera tabellen med de tillgängliga särskiljningssystemen.
+        void updateAvailableTiebreaks(ListModel<TiebreakModel*> *model);
+        /// Den här funktionen ansvarar för att uppdatera tabellen med turneringens valda särskiljningssystem.
+        void updateSelectedTiebreaks(TournamentModel *tournament);
 };
 
 #endif // MANAGETIEBREAKSVIEW_H

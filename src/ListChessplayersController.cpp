@@ -51,9 +51,24 @@ void ListChessplayersController::removeChessplayer(wxCommandEvent &event)
         {
             continue;
         }
-
         ChessplayerModel *chessplayer = listModel->get(rowNumbers[index]);
-        chessplayer->print();
+
+        try
+        {
+            if(chessplayer->getNumberOfTournaments() > 0)
+            {
+                wxString message;
+                message << "Schackspelaren med id = ";
+                message << chessplayer->getId() << L" g\u00E5r inte att radera, eftersom denne \u00E4r deltagare i "
+                    << "en eller flera turneringar.";
+                wxMessageBox(message, GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
+                continue;
+            }
+        }
+        catch(const DatabaseErrorException &error)
+        {
+            error.showDialog();
+        }
 
         wxString message;
         message << CONFIRM_MESSAGE << "radera schackspelaren med id = " << chessplayer->getId() << "?";

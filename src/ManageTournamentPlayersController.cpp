@@ -4,6 +4,10 @@
 #include "Defs.h"
 #include <wx/msgdlg.h>
 
+/**
+    Den här funktionen körs, när användaren har valt att ändra på vilken turnering som han eller hon vill
+    jobba med för tillfället.
+*/
 void ManageTournamentPlayersController::changeTournament(wxCommandEvent &event)
 {
     ManageTournamentPlayersViewModel *viewModel = dynamic_cast<ManageTournamentPlayersViewModel*> (model);
@@ -20,9 +24,13 @@ void ManageTournamentPlayersController::changeTournament(wxCommandEvent &event)
     {
         std::cout << error.what() << std::endl;
     }
-
     viewModel->notifyView(view);
 }
+
+/**
+    Den här funktionen ändrar vilken spelare som för tillfället är vald. Den spelaren kan
+    användaren senare lägga till.
+*/
 void ManageTournamentPlayersController::selectPlayer(wxGridEvent &event)
 {
     ManageTournamentPlayersViewModel *viewModel = dynamic_cast<ManageTournamentPlayersViewModel*> (model);
@@ -36,6 +44,12 @@ void ManageTournamentPlayersController::selectPlayer(wxGridEvent &event)
     viewModel->setTournamentPlayer(tournamentPlayer);
 }
 
+/**
+
+    Den här funktionen ändrar vilken turneringsspelare som för tillfället är vald. Den spelaren kan
+    användaren senare välja att ta bort från turneringen.
+*/
+
 void ManageTournamentPlayersController::selectTournamentPlayer(wxGridEvent &event)
 {
     const unsigned int ROW_INDEX = event.GetRow();
@@ -48,9 +62,10 @@ void ManageTournamentPlayersController::selectTournamentPlayer(wxGridEvent &even
     TournamentPlayerModel *tournamentPlayer = viewModel->getTournamentModel()->atIndex(ROW_INDEX);
     viewModel->setTournamentPlayer(tournamentPlayer);
 }
-
-
-
+/**
+    Den här funktionen används för att lägga till den spelare som för tillfället är vald till
+    den valda turneringen.
+*/
 void ManageTournamentPlayersController::addPlayer(wxCommandEvent &event)
 {
     try
@@ -73,7 +88,10 @@ void ManageTournamentPlayersController::addPlayer(wxCommandEvent &event)
                  GENERAL_ERROR_MESSAGE, wxOK | wxICON_INFORMATION);
     }
 }
-
+/**
+    Den här funktionen används för att ta bort vald turneringsspelare ur den turnering, som för tillfället
+    är vald.
+*/
 void ManageTournamentPlayersController::removePlayer(wxCommandEvent &event)
 {
     try
@@ -89,6 +107,9 @@ void ManageTournamentPlayersController::removePlayer(wxCommandEvent &event)
     }
 }
 
+/**
+    Den här funktionen används för att generera nya inlottningsnummer till turneringsdeltagarna.
+*/
 void ManageTournamentPlayersController::generatePlayerNumbers(wxCommandEvent &event)
 {
     ManageTournamentPlayersViewModel *viewModel = dynamic_cast<ManageTournamentPlayersViewModel*> (model);
@@ -101,4 +122,3 @@ void ManageTournamentPlayersController::generatePlayerNumbers(wxCommandEvent &ev
     tournament->generatePlayerNumbers();
     viewModel->notifyView(view);
 }
-

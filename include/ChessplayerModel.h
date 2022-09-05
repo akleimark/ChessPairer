@@ -48,9 +48,11 @@ class ChessplayerModel : public Model, public Validate, public Print, public Dat
         wxString getFederation() const { return federation; }
         /// Den här funktionen returnerar schackspelarens klubbtillhörighet.
         wxString getChessclub() const { return chessclub; }
-
+        /// Den här funktionen returneras schackspelarens födelseår.
         unsigned int getBirthYear() const;
-
+        /// Den här funktionen returnerar hur många turneringar schackspelaren är deltagare i.
+        /// En schackspelare kan endast raderas, om denne inte är deltagare i någon turnering.
+        unsigned int getNumberOfTournaments() const;
         // Operatoröverlagringar
         bool operator==(const ChessplayerModel &chessplayer);
         bool operator<(const ChessplayerModel &chessplayer) const;

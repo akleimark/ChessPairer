@@ -7,7 +7,6 @@
 #include "Exception.h"
 
 const unsigned int ChessplayerModel::MINIMUM_FIDE_ID = 100000;
-
 /**
     I den här konstruktorn initieras de privata variablerna.
 */
@@ -72,7 +71,6 @@ bool ChessplayerModel::validate() const
     }
     Date date(wxAtoi(vector_split[0]), wxAtoi(vector_split[1]), wxAtoi(vector_split[2]));
     return (date.validate());
-
 }
 
 /**
@@ -110,7 +108,6 @@ bool ChessplayerModel::operator==(const ChessplayerModel &chessplayer)
     }
 
     return false;
-
 }
 
 /**
@@ -168,8 +165,6 @@ void ChessplayerModel::addToDatabase() const
     ss << id << ", '" << firstname << "','" << lastname << "', '" << biologicalSex << "', '" << birthDate << "', '" << federation << "', '" << chessclub << "')";
 
     std::cout << "Value: " << ss.str() << std::endl;
-
-
     try
     {
         Database *database = Database::getInstance();
@@ -188,7 +183,6 @@ void ChessplayerModel::removeFromDatabase() const
 {
     std::stringstream ss;
     ss << "delete from chessplayers where id=" << id;
-
     try
     {
         Database *database = Database::getInstance();
@@ -207,7 +201,6 @@ void ChessplayerModel::save() const
 {
 
 }
-
 
 /**
     Den här funktionen återställer alla schackspelarens datamedlemmar till de värden som gällde från början.
@@ -229,11 +222,9 @@ ChessplayerModel* ChessplayerModel::findById(const unsigned int &playerID)
     Database *database = Database::getInstance();
     std::stringstream ss;
     ss << "select * from chessplayers where id=" << playerID;
-
     try
     {
         database->executeSql(ss.str());
-
         if(database->getSize() == 1)
         {
             chessplayer = new ChessplayerModel;
@@ -245,13 +236,28 @@ ChessplayerModel* ChessplayerModel::findById(const unsigned int &playerID)
             chessplayer->setFederation(database->atIndex(0, 5));
             chessplayer->setChessclub(database->atIndex(0, 6));
         }
-
     }
     catch(DatabaseErrorException &)
     {
         throw;
     }
-
     return chessplayer;
-
 }
+
+unsigned int ChessplayerModel::getNumberOfTournaments() const
+{
+    try
+    {
+        Database *database = Database::getInstance();
+        std::stringstream ss;
+        ss << "select * from tournament_players where chessplayer_id=" << id;
+        std::cout << "SQL: " << ss.str() << std::endl;
+        database->executeSql(ss.str());
+        return database->getSize();
+    }
+    catch(const DatabaseErrorException &)
+    {
+        throw;
+    }
+}
+

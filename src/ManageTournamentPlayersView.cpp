@@ -4,6 +4,9 @@
 #include "Defs.h"
 #include <wx/msgdlg.h>
 
+/**
+    I konstruktorn skapas alla objekt och läggs in i vyn.
+*/
 ManageTournamentPlayersView::ManageTournamentPlayersView(wxWindow *p_parent):
     View(p_parent, "Hantera turneringsspelare")
 {
@@ -11,7 +14,7 @@ ManageTournamentPlayersView::ManageTournamentPlayersView(wxWindow *p_parent):
     tournamentComboBox = new wxComboBox(parent, -1);
     tournamentComboBox->SetMinSize(wxSize(200, 40));
     tournamentBox->Add(tournamentComboBox, 0, wxALL, 10);
-    this->Add(tournamentBox, View::MARGIN, wxALL, 0);
+    this->Add(tournamentBox, 1, wxALL, 0);
 
     bottomSizer = new wxBoxSizer(wxHORIZONTAL);
     leftSizer = new wxBoxSizer(wxVERTICAL);
@@ -22,8 +25,6 @@ ManageTournamentPlayersView::ManageTournamentPlayersView(wxWindow *p_parent):
     leftSizer->Add(playerPoolHeader, 0, wxALL, 10);
     leftSizer->Add(chessplayerPool, 0, wxALL, 10);
     leftSizer->Add(addButton, 0, wxALL, 10);
-
-
     bottomSizer->Add(leftSizer, 1, wxALL, 10);
 
     rightSizer = new wxBoxSizer(wxVERTICAL);
@@ -41,13 +42,7 @@ ManageTournamentPlayersView::ManageTournamentPlayersView(wxWindow *p_parent):
     rightSizer->Add(rightButtonPanel, 0, wxALL, 10);
     bottomSizer->Add(rightSizer, 1, wxALL, 10);
 
-    this->Add(bottomSizer, View::MARGIN, wxALL | wxEXPAND, 0);
-
-
-}
-ManageTournamentPlayersView::~ManageTournamentPlayersView()
-{
-
+    this->Add(bottomSizer, 4, wxALL | wxEXPAND, 0);
 }
 
 void ManageTournamentPlayersView::update(Model *model)
@@ -56,7 +51,6 @@ void ManageTournamentPlayersView::update(Model *model)
 
     ListModel<TournamentModel*> *tournaments = viewModel->getTournaments();
     ListModel<ChessplayerModel*> *chessplayers = viewModel->getChessplayerList();
-
 
     if(tournamentComboBox->GetCount() == 0)
     {
@@ -72,6 +66,7 @@ void ManageTournamentPlayersView::update(Model *model)
     updatePlayerPool(chessplayers);
     updateTournamentPlayers(viewModel->getTournamentModel());
     addButton->Enable(chessplayers->getSize() != 0 && viewModel->getTournamentModel() != nullptr);
+    this->Layout();
 }
 
 void ManageTournamentPlayersView::setController(Controller *_controller)
@@ -86,6 +81,9 @@ void ManageTournamentPlayersView::setController(Controller *_controller)
     generateButton->Bind(wxEVT_BUTTON, &ManageTournamentPlayersController::generatePlayerNumbers, mController);
 }
 
+/**
+    Den här funktionen uppdaterar tabellen med turneringsspelarna.
+*/
 void ManageTournamentPlayersView::updateTournamentPlayers(TournamentModel *model)
 {
     if(model == nullptr)
@@ -94,7 +92,6 @@ void ManageTournamentPlayersView::updateTournamentPlayers(TournamentModel *model
     }
 
     tournamentPlayers->ClearGrid();
-
     try
     {
         tournamentPlayers->setRowCount(model->getNumberOfPlayers());
@@ -119,6 +116,9 @@ void ManageTournamentPlayersView::updateTournamentPlayers(TournamentModel *model
     tournamentPlayers->Fit();
 }
 
+/**
+    Den här funktionen uppdaterar tabellen med tillgängliga spelare att välja bland.
+*/
 void ManageTournamentPlayersView::updatePlayerPool(ListModel<ChessplayerModel*> *model)
 {
     chessplayerPool->ClearGrid();

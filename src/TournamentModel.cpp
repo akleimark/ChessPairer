@@ -244,6 +244,38 @@ void TournamentModel::removeTournamentPlayer(TournamentPlayerModel *player)
 
 void TournamentModel::generatePlayerNumbers()
 {
+    bool taken[tournamentPlayers.size()];
+    std::set<TournamentPlayerModel*>::iterator it;
+    unsigned int index = 0;
+
+    for(it = tournamentPlayers.begin(); it !=tournamentPlayers.end(); ++it)
+    {
+        taken[index++] = false;
+        (*it)->setPlayerNumber(0);
+    }
+
+    std::srand (time (nullptr));
+    for(it = tournamentPlayers.begin(); it !=tournamentPlayers.end(); ++it)
+    {
+        do
+        {
+            unsigned int number = rand() % tournamentPlayers.size();
+            if(taken[number] == false)
+            {
+                (*it)->setPlayerNumber(number);
+                taken[number] = true;
+                break;
+            }
+        }
+        while(true);
+    }
+
+    index = 0;
+    for(it = tournamentPlayers.begin(); it !=tournamentPlayers.end(); ++it)
+    {
+        unsigned int number = (*it)->getPlayerNumber() + 1;
+        (*it)->setPlayerNumber(number);
+    }
 
 }
 

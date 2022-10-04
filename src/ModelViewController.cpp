@@ -34,14 +34,11 @@ void Model::addView(View *view)
 */
 void Model::notifyView(View *view)
 {
-    for(View *cView : views)
+    if(std::any_of(views.begin(), views.end(), [view](View *c){return c == view; }))
     {
-        if(view == cView)
-        {
-            view->update(this);
-            break;
-        }
+        view->update(this);
     }
+
 }
 
 /**

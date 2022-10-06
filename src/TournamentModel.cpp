@@ -195,6 +195,7 @@ void TournamentModel::clearTournamentPlayers()
     }
 
     tournamentPlayers.clear();
+
 }
 
 void TournamentModel::clearTournamentTiebreaks()
@@ -270,11 +271,34 @@ void TournamentModel::generatePlayerNumbers()
         while(true);
     }
 
+    Database *database = Database::getInstance();
+    std::stringstream ss;
+    ss << "delete from tournament_players where tournament_id='"
+        << id << "'";
+
+    try
+    {
+        database->executeSql(ss.str());
+    }
+    catch(DatabaseErrorException &error)
+    {
+        throw;
+    }
+
     index = 0;
     for(it = tournamentPlayers.begin(); it !=tournamentPlayers.end(); ++it)
     {
         unsigned int number = (*it)->getPlayerNumber() + 1;
         (*it)->setPlayerNumber(number);
+        try
+        {
+            (*it)->addToDatabase();
+        }
+        catch(DatabaseErrorException &error)
+        {
+            throw;
+        }
+
     }
 
 }
@@ -414,6 +438,20 @@ void TournamentPlayerModel::print() const
 
 void TournamentPlayerModel::save() const
 {
+    std::stringstream ss;
+    ss << "update tournament_players set tournament_id='" << tournamentID << "', chessplayer_id="
+        << chessplayerID << ", player_number=" << playerNumber;
+
+    try
+    {
+        Database *database = Database::getInstance();
+        database->executeSql(ss.str());
+    }
+    catch(const DatabaseErrorException &)
+    {
+        throw;
+    }
+
 
 }
 

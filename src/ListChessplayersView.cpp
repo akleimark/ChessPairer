@@ -18,7 +18,7 @@ ListChessplayersView::ListChessplayersView(wxWindow *p_parent):
 {
     std::vector<wxString> columns = {"Id", "Namn", L"F\u00F6delsedatum", "Klubb"};
     table = new Table(parent, columns);
-    this->Add(table, 10, wxALL, View::MARGIN);
+    this->Add(table, 3, wxALL, View::MARGIN);
 
     buttonBox = new wxBoxSizer(wxHORIZONTAL);
     addButton = new wxButton(parent, -1, ADD_STRING);

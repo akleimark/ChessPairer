@@ -68,7 +68,7 @@ class ChessplayerModel : public Model, public Validate, public Print, public Dat
 
     private:
         /// Den här klasskonstanten anger det minsta värdet på spelarens ID.
-        const static unsigned int MINIMUM_FIDE_ID;
+        const static unsigned int MINIMUM_ID;
         /// Den här variabeln håller reda på schackspelarens id.
         unsigned int id;
         /// I den här variabeln lagras schackspelarens förnamn.

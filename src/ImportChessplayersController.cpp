@@ -129,6 +129,7 @@ void ReadXMLFile::execute()
             else
             {
                 chessplayerList.insert(*chessplayerModel);
+                chessplayerModel = nullptr;
             }
         }
         else if(lineNumber > 1 && line.find("<id>") != std::string::npos && line.find("</id>") != std::string::npos)

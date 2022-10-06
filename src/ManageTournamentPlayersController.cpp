@@ -119,6 +119,14 @@ void ManageTournamentPlayersController::generatePlayerNumbers(wxCommandEvent &ev
         return;
     }
 
-    tournament->generatePlayerNumbers();
-    viewModel->notifyView(view);
+    try
+    {
+        tournament->generatePlayerNumbers();
+        viewModel->notifyView(view);
+    }
+    catch(Exception &error)
+    {
+        error.showDialog();
+    }
+
 }

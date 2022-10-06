@@ -6,7 +6,7 @@
 #include "ChessplayerModel.h"
 #include "Exception.h"
 
-const unsigned int ChessplayerModel::MINIMUM_FIDE_ID = 100000;
+const unsigned int ChessplayerModel::MINIMUM_ID = 360000;
 /**
     I den här konstruktorn initieras de privata variablerna.
 */
@@ -32,7 +32,7 @@ ChessplayerModel::ChessplayerModel(const unsigned int &p_id, const wxString &p_f
 */
 bool ChessplayerModel::validate() const
 {
-    if(id < MINIMUM_FIDE_ID)
+    if(id < MINIMUM_ID)
     {
         return false;
     }

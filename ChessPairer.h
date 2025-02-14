@@ -30,7 +30,6 @@ class ChessPairer : public QMainWindow
         void createUI();
         void loadPlayersFromDatabase();
 
-
     private slots:
         void showAllPlayers();
 

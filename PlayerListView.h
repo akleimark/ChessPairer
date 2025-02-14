@@ -7,19 +7,52 @@
 #include <QPushButton>
 #include "PlayerModel.h"
 
+/**
+ * @class PlayerListView
+ * @brief Representerar GUI-komponenten som visar listan av spelare.
+ *
+ * PlayerListView hanterar visningen av spelarlistan och tillhörande interaktioner.
+ */
 class PlayerListView : public View
 {
-    public:
-        PlayerListView(PlayerModel *model);
-        virtual void updateView() const override;
-        virtual void addListeners() override;
-        virtual void resizeEvent(QResizeEvent *event) override;
+public:
+    /**
+     * @brief Skapar en PlayerListView-instans.
+     *
+     * @param model Pekare till spelarmodellen.
+     */
+    PlayerListView(PlayerModel *model);
 
-    private:
-        QTableWidget *tableWidget;
-        void createUI();
-        QWidget *buttonWidget; // Widget som innehåller knappar
-        QPushButton *addPlayerButton; // Knapp för att lägga till en spelare
+    /**
+     * @brief Uppdaterar vyn med data från modellen.
+     *
+     * Anropas när modellen notifierar att data har förändrats.
+     */
+    virtual void updateView() const override;
+
+    /**
+     * @brief Lägger till eventlyssnare för användarinteraktion.
+     */
+    virtual void addListeners() override;
+
+protected:
+    /**
+     * @brief Hanterar fönsterstorleksändringar.
+     *
+     * Justerar tabellens kolumnbredder dynamiskt.
+     * @param event Fönsterstorlekshändelsen.
+     */
+    virtual void resizeEvent(QResizeEvent *event) override;
+
+private:
+    /**
+     * @brief Skapar och konfigurerar UI-komponenterna.
+     */
+    void createUI();
+
+    QTableWidget *tableWidget; ///< Tabell som visar spelarna.
+    QWidget *buttonWidget; ///< Widget som innehåller knappar.
+    QPushButton *addPlayerButton; ///< Knapp för att lägga till en spelare.
 };
 
 #endif // PLAYERLISTVIEW_H

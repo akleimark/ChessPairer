@@ -1,7 +1,7 @@
 #ifndef CHESSPAIRER_H
 #define CHESSPAIRER_H
 #include <QStackedWidget>
-#include "PlayerController.h"
+#include "PlayerListController.h"
 #include "PlayerListView.h"
 #include <QMainWindow>
 #include "PlayerModel.h"
@@ -16,7 +16,7 @@ class ChessPairer : public QMainWindow
 
     private:
 
-        PlayerController *playerController;
+        PlayerListController *playerListController;
         PlayerListView *playerListView;
         PlayerModel *playerModel;
 
@@ -28,6 +28,7 @@ class ChessPairer : public QMainWindow
 
         void createMenu(); // Skapar menyfältet
         void createUI();
+        void loadPlayersFromDatabase();
 
 
     private slots:

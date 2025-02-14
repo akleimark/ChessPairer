@@ -1,18 +1,22 @@
-#ifndef PLAYERCONTROLLER_H
-#define PLAYERCONTROLLER_H
+#ifndef PLAYERLISTCONTROLLER_H
+#define PLAYERLISTCONTROLLER_H
 
 #include "MVC.h"
 #include "PlayerModel.h"
 #include "PlayerListView.h"
 
-class PlayerController : public Controller {
+class PlayerListController : public Controller {
+
     public:
-        PlayerController(PlayerModel *model, PlayerListView *view);
-        void addPlayer(const QString &name, int rating, int fideId);
+        PlayerListController(PlayerModel *model, PlayerListView *view);
+
+
+    public slots:
+        void onAddPlayerClicked();
 
     private:
         PlayerModel *playerModel;
         PlayerListView *playerView;
 };
 
-#endif // PLAYERCONTROLLER_H
+#endif // PLAYERLISTCONTROLLER_H

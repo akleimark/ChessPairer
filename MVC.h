@@ -15,7 +15,7 @@ class Controller : public QObject
     public:
         Controller(Model *model, View *view);
 
-    private:
+    protected:
         Model *model;
         View *view;
 };
@@ -29,7 +29,7 @@ class Model
         void notifyView(View *view);
         void notifyAllViews();
 
-    private:
+    protected:
         std::vector<View*> views;
 };
 
@@ -42,8 +42,10 @@ class View : public QWidget
     public:
         View() : controller(nullptr) {}
         View(Model *model): controller(nullptr), model(model) {}
-        virtual void updateView() = 0;
+        virtual void updateView() const = 0;
+        virtual void addListeners() = 0;
         void setController(Controller *controller) {this->controller = controller; }
+
 };
 
 #endif // MVC_H

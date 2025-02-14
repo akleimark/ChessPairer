@@ -24,12 +24,8 @@ class Player
 class PlayerModel : public Model
 {
     public:
-        void addPlayer(const Player &player)
-        {
-            players.push_back(player);
-            notifyAllViews();
-        }
-
+        void addPlayerToContainer(const Player &player);
+        void addPlayerToDatabase(const Player &player);
         const std::vector<Player>& getPlayers() const { return players; }
 
         private:

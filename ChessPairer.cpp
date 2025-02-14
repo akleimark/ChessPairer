@@ -1,33 +1,42 @@
 #include "ChessPairer.h"
 #include <QMenuBar>
 #include <QApplication>
-#include "PlayerController.h"
+#include <qsqlquery.h>
+#include "PlayerListController.h"
+#include "Database.h"
 
 ChessPairer::ChessPairer(QWidget *parent)
     : QMainWindow(parent), window_width(700), window_height(500)
 {
-    this->resize(window_width, window_height);    
+    this->resize(window_width, window_height);
 
-    //Initiera MVC
+    // Initiera MVC
     playerModel = new PlayerModel;
     playerListView = new PlayerListView(playerModel);
-    playerController = new PlayerController(playerModel, playerListView);
-
-    // Lägg till exempelspelare
-    playerController->addPlayer("Magnus Carlsen", 2847, 1503014);
-    playerController->addPlayer("Hikaru Nakamura", 2785, 2016192);
-
-    setCentralWidget(playerListView);
-    playerModel->notifyAllViews();
+    playerListController = new PlayerListController(playerModel, playerListView);
+    playerListView->addListeners();
 
     createUI();
 }
 
 ChessPairer::~ChessPairer()
 {
-    delete playerController;
+    delete playerListController;
     delete playerListView;
     delete playerModel;
+}
+
+void ChessPairer::loadPlayersFromDatabase()
+{
+    QSqlQuery query = Database::getInstance()->selectQuery("SELECT name, rating, fide_id FROM players");
+
+    while (query.next())
+    {
+        QString name = query.value(0).toString();
+        int rating = query.value(1).toInt();
+        int fideId = query.value(2).toInt();
+        playerModel->addPlayerToContainer(Player(name, rating, fideId));  // Lägg till spelare i MVC
+    }
 }
 
 void ChessPairer::createUI()
@@ -74,6 +83,7 @@ void ChessPairer::createMenu()
 
 void ChessPairer::showAllPlayers()
 {
+    loadPlayersFromDatabase();  // Hämta spelare från databasen
     stackedWidget->setCurrentWidget(playerListView);
     playerModel->notifyAllViews();
 }

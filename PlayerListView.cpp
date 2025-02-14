@@ -1,4 +1,5 @@
 #include "PlayerListView.h"
+#include "PlayerListController.h"
 #include "PlayerModel.h"
 
 PlayerListView::PlayerListView(PlayerModel *model):
@@ -10,15 +11,36 @@ PlayerListView::PlayerListView(PlayerModel *model):
 void PlayerListView::createUI()
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
+
+    // Skapar tabellen och dess design
     tableWidget = new QTableWidget(this);
     layout->addWidget(tableWidget);
     setLayout(layout);
 
     tableWidget->setColumnCount(3);
     tableWidget->setHorizontalHeaderLabels({"Namn", "Rating", "FIDE-ID"});
+
+    // Skapa en separat widget för knappen
+    buttonWidget = new QWidget(this);
+    QHBoxLayout *buttonLayout = new QHBoxLayout(buttonWidget);
+
+    // Skapa knapparna
+    addPlayerButton = new QPushButton("Lägg till spelare", buttonWidget);
+
+    buttonLayout->addWidget(addPlayerButton);
+    buttonLayout->addStretch(); // Skapar utrymme efter knappen för att hålla den vänsterjusterad
+    buttonWidget->setLayout(buttonLayout);
+
+    layout->addWidget(buttonWidget); // Lägg till widgeten ovanför tabellen
 }
 
-void PlayerListView::updateView()
+void PlayerListView::addListeners()
+{
+    PlayerListController* playerListController = dynamic_cast<PlayerListController*>(controller); // Ta bort 'const'
+    connect(addPlayerButton, &QPushButton::clicked, playerListController, &PlayerListController::onAddPlayerClicked);
+}
+
+void PlayerListView::updateView() const
 {
     PlayerModel &playerModel = *static_cast<PlayerModel*>(model);
     const auto &players = playerModel.getPlayers();

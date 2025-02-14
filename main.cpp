@@ -1,4 +1,4 @@
-#include "chesspairer.h"
+#include "ChessPairer.h"
 
 #include <QApplication>
 

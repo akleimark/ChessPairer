@@ -14,14 +14,19 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
-        chesspairer.cpp
-        chesspairer.h
+        ChessPairer.cpp
+        ChessPairer.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(ChessPairer
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        MVC.h
+        MVC.cpp
+        PlayerModel.h
+        PlayerListView.h PlayerListView.cpp
+        PlayerController.h PlayerController.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ChessPairer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

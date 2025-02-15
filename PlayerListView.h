@@ -15,6 +15,7 @@
  */
 class PlayerListView : public View
 {
+    Q_OBJECT
 public:
     /**
      * @brief Skapar en PlayerListView-instans.
@@ -53,6 +54,25 @@ private:
     QTableWidget *tableWidget; ///< Tabell som visar spelarna.
     QWidget *buttonWidget; ///< Widget som innehåller knappar.
     QPushButton *addPlayerButton; ///< Knapp för att lägga till en spelare.
+
+signals:
+    /**
+     * @brief Signal som skickas när en cell ändras.
+     *
+     * @param row Raden som ändrades.
+     * @param column Kolumnen som ändrades.
+     * @param newValue Det nya värdet i cellen.
+     */
+    void cellChanged(int row, int column, const QString &newValue);
+
+private slots:
+    /**
+     * @brief Slot som hanterar celländringar i tabellen.
+     *
+     * @param row Raden som ändrades.
+     * @param column Kolumnen som ändrades.
+     */
+    void onCellChanged(int row, int column);
 };
 
 #endif // PLAYERLISTVIEW_H

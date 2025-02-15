@@ -31,10 +31,9 @@ void Database::createTables()
     QSqlQuery query;
     // Skapa tabellen players om den inte finns.
     query.exec("CREATE TABLE IF NOT EXISTS players ("
-               "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+               "fide_id INTEGER PRIMARY KEY, "
                "name TEXT NOT NULL, "
-               "rating INTEGER, "
-               "fide_id INTEGER UNIQUE)");
+               "rating INTEGER NOT NULL)");
     // Skapa tabellen settings om den inte finns.
     query.exec("CREATE TABLE IF NOT EXISTS settings("
                 "type TEXT PRIMARY KEY, "

@@ -20,3 +20,19 @@ void PlayerListModel::addPlayerToDatabase(const Player &player)
                         .arg(player.getFideId());
     db->executeQuery(query);  // Kör SQL-frågan för att lägga till spelaren i databasen
 }
+
+void PlayerListModel::updatePlayerInDatabase(const Player &player)
+{
+    Database* db = Database::getInstance();
+    QSqlQuery query(db->getDatabase());
+
+    query.prepare("UPDATE players SET name = ?, rating = ? WHERE fide_id = ?");
+    query.addBindValue(player.getName());
+    query.addBindValue(player.getRating());
+    query.addBindValue(player.getFideId());
+
+    if (!query.exec())
+    {
+        qWarning() << "Misslyckades att uppdatera spelare i databasen:" << query.lastError().text();
+    }
+}

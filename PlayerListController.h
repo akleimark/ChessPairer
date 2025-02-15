@@ -29,6 +29,14 @@ public slots:
      * När knappen klickas öppnas en dialogruta där användaren kan ange en ny spelares information.
      */
     void onAddPlayerClicked();
+    /**
+     * @brief Hanterar ändringar i tabellen och uppdaterar modellen.
+     *
+     * @param row Raden som ändrades.
+     * @param column Kolumnen som ändrades.
+     * @param newValue Det nya värdet.
+     */
+    void onCellChanged(int row, int column, const QString &newValue);
 
 private:
     PlayerListModel *playerListModel;    ///< Pekare till modellen som hanterar spelarlistan.

@@ -36,8 +36,10 @@ void PlayerListView::createUI()
 
 void PlayerListView::addListeners()
 {
-    PlayerListController* playerListController = dynamic_cast<PlayerListController*>(controller); // Ta bort 'const'
+    PlayerListController* playerListController = dynamic_cast<PlayerListController*>(controller);
     connect(addPlayerButton, &QPushButton::clicked, playerListController, &PlayerListController::onAddPlayerClicked);
+    // Kopplar QTableWidget:s inbyggda cellChanged till vår onCellChanged
+    connect(tableWidget, &QTableWidget::cellChanged, this, &PlayerListView::onCellChanged);
 }
 
 void PlayerListView::updateView() const
@@ -70,3 +72,14 @@ void PlayerListView::resizeEvent(QResizeEvent *event)
     updateView();
     QWidget::resizeEvent(event);
 }
+
+void PlayerListView::onCellChanged(int row, int column)
+{
+    QTableWidgetItem *item = tableWidget->item(row, column);
+    if (item)
+    {
+        emit cellChanged(row, column, item->text());
+    }
+}
+
+

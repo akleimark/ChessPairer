@@ -39,6 +39,10 @@ class Player
      */
     int getFideId() const { return fideId; }
 
+    void setName(const QString &newName) {name = newName; }
+    void setRating(const unsigned int &newRating) {rating = newRating; }
+    void setFideId(const unsigned int &newFideId) {fideId = newFideId; }
+
     private:
     QString name; ///< Spelarens namn.
     int rating;   ///< Spelarens rating.
@@ -71,6 +75,8 @@ class PlayerListModel : public Model
      *
      * @return En konstant referens till en vektor av spelare.
      */
+    void updatePlayerInDatabase(const Player &player);
+
     const std::vector<Player>& getPlayers() const { return players; }
     const SettingsModel* getSettingsModel() { return settingsModel; }
     virtual void reset() override {players.clear(); }

@@ -4,7 +4,8 @@
 PlayerListController::PlayerListController(PlayerListModel *model, PlayerListView *view)
     : Controller(model, view), playerListModel(model), playerView(view)
 {
-
+    // Koppla signalen från vyn till kontrollerns slot
+    connect(view, &PlayerListView::cellChanged, this, &PlayerListController::onCellChanged);
 }
 
 void PlayerListController::onAddPlayerClicked()
@@ -25,4 +26,32 @@ void PlayerListController::onAddPlayerClicked()
 
     model->notifyAllViews();
 }
+
+void PlayerListController::onCellChanged(int row, int column, const QString &newValue)
+{
+    PlayerListModel *playerListModel = static_cast<PlayerListModel*>(model);
+    auto &players = playerListModel->getPlayers();
+
+    if (row >= 0 && row < static_cast<int>(players.size()))
+    {
+        Player player = players[row];
+
+        switch (column)
+        {
+        case 0:
+            player.setName(newValue);
+            break;
+        case 1:
+            player.setRating(newValue.toInt());
+            break;
+        case 2:
+            player.setFideId(newValue.toInt());
+            break;
+        }
+
+        // Uppdatera databasen via modellen
+        playerListModel->updatePlayerInDatabase(player);
+    }
+}
+
 

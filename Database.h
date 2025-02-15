@@ -1,6 +1,7 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
+#include "PlayerListModel.h"
 #include <QString>
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -38,11 +39,30 @@ class Database
      */
     QSqlQuery selectQuery(const QString& queryStr);
 
+    /**
+ * @brief Hämtar databasinstansen.
+ *
+ * @return Referens till den öppna databasen.
+ */
     QSqlDatabase& getDatabase()
     {
         return db;
     }
 
+    /**
+ * @brief Laddar spelare från databasen och fyller en modell.
+ *
+ * @param model Pekare till PlayerListModel där spelarna ska laddas in.
+ * @param orderList (Valfritt) Anger hur spelarna ska sorteras, standardvärdet är "name".
+ */
+    void loadPlayersFromDatabase(PlayerListModel *model, const QString &orderList = "name");
+
+    /**
+ * @brief Laddar inställningar från databasen och fyller en modell.
+ *
+ * @param model Pekare till SettingsModel där inställningarna ska laddas in.
+ */
+    void loadSettingsFromDatabase(SettingsModel* model);
     private:
     /**
      * @brief Privat konstruktor för att förhindra direkt instansiering (singleton-mönster).

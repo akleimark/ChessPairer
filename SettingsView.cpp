@@ -10,7 +10,6 @@ SettingsView::SettingsView(SettingsModel *model):
 
 void SettingsView::updateView() const
 {
-    qDebug() << model->getSettingByType("font");
     fontComboBox->setCurrentFont(QFont(model->getSettingByType("font")));
 }
 

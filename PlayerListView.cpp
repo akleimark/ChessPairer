@@ -43,7 +43,6 @@ void PlayerListView::addListeners()
 void PlayerListView::updateView() const
 {
     PlayerListModel &playerListModel = *static_cast<PlayerListModel*>(model);
-    qDebug() << "Font:" << playerListModel.getSettingsModel()->getSettingByType("font");
     const auto &players = playerListModel.getPlayers();
 
     tableWidget->setFont(QFont(playerListModel.getSettingsModel()->getSettingByType("font"), 12, 400));
@@ -64,12 +63,10 @@ void PlayerListView::updateView() const
         tableWidget->setItem(i, 1, new QTableWidgetItem(QString::number(players[i].getRating())));
         tableWidget->setItem(i, 2, new QTableWidgetItem(QString::number(players[i].getFideId())));
     }
-
 }
 
 void PlayerListView::resizeEvent(QResizeEvent *event)
 {
     updateView();
-    QWidget::resizeEvent(event);  // Don't forget to call the base class implementation
-
+    QWidget::resizeEvent(event);
 }

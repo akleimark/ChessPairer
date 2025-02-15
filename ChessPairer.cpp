@@ -5,25 +5,15 @@
 #include "PlayerListController.h"
 #include "Database.h"
 
+const unsigned int ChessPairer::DEFAULT_WINDOW_WIDTH = 700;
+const unsigned int ChessPairer::DEFAULT_WINDOW_HEIGHT = 500;
+
 ChessPairer::ChessPairer(QWidget *parent)
-    : QMainWindow(parent), window_width(700), window_height(500)
+    : QMainWindow(parent)
 {
-    this->resize(window_width, window_height);
-
-    // Initiera MVC
-
-    settingsModel = new SettingsModel;
-    settingsView = new SettingsView(settingsModel);
-    settingsController = new SettingsController(settingsModel, settingsView);
-    settingsView->addListeners();
-
-    playerListModel = new PlayerListModel(settingsModel);
-    playerListView = new PlayerListView(playerListModel);
-    playerListController = new PlayerListController(playerListModel, playerListView);
-    playerListView->addListeners();
-
-    loadSettingsFromDatabase();
-
+    this->resize(ChessPairer::DEFAULT_WINDOW_WIDTH, ChessPairer::DEFAULT_WINDOW_HEIGHT);
+    initMVC();
+    Database::getInstance()->loadSettingsFromDatabase(settingsModel); // Hämta inställningarna från databasen
     createUI();
 }
 
@@ -37,32 +27,21 @@ ChessPairer::~ChessPairer()
     delete settingsController;
 }
 
-void ChessPairer::loadPlayersFromDatabase()
+void ChessPairer::initMVC()
 {
-    playerListModel->reset();
-    QSqlQuery query = Database::getInstance()->selectQuery("SELECT name, rating, fide_id FROM players");
+    // Initiera MVC
 
-    while (query.next())
-    {
-        QString name = query.value(0).toString();
-        int rating = query.value(1).toInt();
-        int fideId = query.value(2).toInt();
-        playerListModel->addPlayerToContainer(Player(name, rating, fideId));  // Lägg till spelare i MVC
-    }
+    settingsModel = new SettingsModel;
+    settingsView = new SettingsView(settingsModel);
+    settingsController = new SettingsController(settingsModel, settingsView);
+    settingsView->addListeners();
+
+    playerListModel = new PlayerListModel(settingsModel);
+    playerListView = new PlayerListView(playerListModel);
+    playerListController = new PlayerListController(playerListModel, playerListView);
+    playerListView->addListeners();
 }
 
-void ChessPairer::loadSettingsFromDatabase()
-{
-    settingsModel->reset();
-    QSqlQuery query = Database::getInstance()->selectQuery("SELECT type, value FROM settings");
-
-    while (query.next())
-    {
-        QString type = query.value(0).toString();
-        QString value = query.value(1).toString();
-        settingsModel->addSettingToContainer(Setting(type, value));  // Lägg till inställning i MVC
-    }
-}
 
 void ChessPairer::createUI()
 {
@@ -76,7 +55,7 @@ void ChessPairer::createUI()
 
     // Exempel på en annan vy (kan vara en annan QWidget)
     QWidget *anotherView = new QWidget();
-    anotherView->setStyleSheet("background-color: lightgray;");
+    anotherView->setStyleSheet("background-color: lightblue;");
     stackedWidget->addWidget(anotherView); // Lägg till en extra vy
 
     stackedWidget->addWidget(settingsView);
@@ -116,15 +95,15 @@ void ChessPairer::createMenu()
 
 void ChessPairer::showAllPlayers()
 {
-    loadSettingsFromDatabase(); // Hämta inställningarna från databasen
-    loadPlayersFromDatabase();  // Hämta alla spelare från databasen
+    Database::getInstance()->loadSettingsFromDatabase(settingsModel); // Hämta inställningarna från databasen
+    Database::getInstance()->loadPlayersFromDatabase(playerListModel);  // Hämta alla spelare från databasen
     stackedWidget->setCurrentWidget(playerListView);
     playerListModel->notifyAllViews();
 }
 
 void ChessPairer::showSettingsView()
 {
-    loadSettingsFromDatabase(); // Hämta inställningarna från databasen
+    Database::getInstance()->loadSettingsFromDatabase(settingsModel); // Hämta inställningarna från databasen
     stackedWidget->setCurrentWidget(settingsView);
     settingsModel->notifyAllViews();
 }

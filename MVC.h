@@ -70,6 +70,16 @@ public:
      * @brief Informerar alla registrerade vyer om att modellen har uppdaterats.
      */
     void notifyAllViews();
+    /**
+ * @brief Återställer objektet till sitt ursprungliga tillstånd.
+ *
+ * Denna virtuella metod ska implementeras av underklasser för att definiera
+ * hur objektet återställs. Exempelvis kan det innebära att sätta alla
+ * inställningar eller variabler till deras initiala värden.
+ *
+ * @note Denna metod är ren virtuell och måste implementeras i alla konkreta
+ * klasser.
+ */
     virtual void reset() = 0;
 
 protected:
@@ -87,9 +97,30 @@ class View : public QWidget
 protected:
     Controller *controller;  ///< Pekare till den associerade controllern.
     Model *model;            ///< Pekare till den associerade modellen.
+    /**
+ * @brief Standardfonten som används för rubriker.
+ *
+ * Denna statiska `QFont` används för att definiera typsnittet för rubriker i
+ * användargränssnittet.
+ */
     const static QFont HEADER_FONT;
+
+    /**
+ * @brief Standardfonten som används för etiketter.
+ *
+ * Denna statiska `QFont` används för att definiera typsnittet för etiketter
+ * (labels) i användargränssnittet.
+ */
     const static QFont LABEL_FONT;
+
+    /**
+ * @brief Standardfonten som används för vanlig text.
+ *
+ * Denna statiska `QFont` används för att definiera typsnittet för vanlig text
+ * i användargränssnittet.
+ */
     const static QFont NORMAL_FONT;
+
 
 public:
     /**

@@ -1,8 +1,8 @@
 #include "PlayerListView.h"
 #include "PlayerListController.h"
-#include "PlayerModel.h"
+#include "PlayerListModel.h"
 
-PlayerListView::PlayerListView(PlayerModel *model):
+PlayerListView::PlayerListView(PlayerListModel *model):
     View(model)
 {
     createUI();
@@ -42,8 +42,11 @@ void PlayerListView::addListeners()
 
 void PlayerListView::updateView() const
 {
-    PlayerModel &playerModel = *static_cast<PlayerModel*>(model);
-    const auto &players = playerModel.getPlayers();
+    PlayerListModel &playerListModel = *static_cast<PlayerListModel*>(model);
+    qDebug() << "Font:" << playerListModel.getSettingsModel()->getSettingByType("font");
+    const auto &players = playerListModel.getPlayers();
+
+    tableWidget->setFont(QFont(playerListModel.getSettingsModel()->getSettingByType("font"), 12, 400));
 
     tableWidget->setRowCount(players.size());
 

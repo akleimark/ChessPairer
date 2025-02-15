@@ -5,7 +5,7 @@
 #include <QTableWidget>
 #include <QVBoxLayout>
 #include <QPushButton>
-#include "PlayerModel.h"
+#include "PlayerListModel.h"
 
 /**
  * @class PlayerListView
@@ -21,7 +21,7 @@ public:
      *
      * @param model Pekare till spelarmodellen.
      */
-    PlayerListView(PlayerModel *model);
+    PlayerListView(PlayerListModel *model);
 
     /**
      * @brief Uppdaterar vyn med data från modellen.

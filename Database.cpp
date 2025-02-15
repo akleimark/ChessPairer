@@ -28,13 +28,17 @@ Database::~Database()
 
 void Database::createTables()
 {
-    // Skapa tabellen om den inte finns
     QSqlQuery query;
+    // Skapa tabellen players om den inte finns.
     query.exec("CREATE TABLE IF NOT EXISTS players ("
                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                "name TEXT NOT NULL, "
                "rating INTEGER, "
                "fide_id INTEGER UNIQUE)");
+    // Skapa tabellen settings om den inte finns.
+    query.exec("CREATE TABLE IF NOT EXISTS settings("
+                "type TEXT PRIMARY KEY, "
+                "value TEXT NOT NULL)");
 }
 
 Database* Database::getInstance()

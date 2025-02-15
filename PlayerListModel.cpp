@@ -1,7 +1,7 @@
-#include "PlayerModel.h"
+#include "PlayerListModel.h"
 #include "Database.h"
 
-void PlayerModel::addPlayerToContainer(const Player &player)
+void PlayerListModel::addPlayerToContainer(const Player &player)
 {
     // Lägg till spelaren i den lokala listan
     players.push_back(player);
@@ -10,7 +10,7 @@ void PlayerModel::addPlayerToContainer(const Player &player)
     notifyAllViews();
 }
 
-void PlayerModel::addPlayerToDatabase(const Player &player)
+void PlayerListModel::addPlayerToDatabase(const Player &player)
 {
     // Lägg till spelaren i databasen
     Database* db = Database::getInstance();  // Hämta databasinstansen

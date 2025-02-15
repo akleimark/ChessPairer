@@ -2,7 +2,7 @@
 #define PLAYERLISTCONTROLLER_H
 
 #include "MVC.h"
-#include "PlayerModel.h"
+#include "PlayerListModel.h"
 #include "PlayerListView.h"
 
 /**
@@ -20,7 +20,7 @@ public:
      * @param model Pekare till spelarmodellen.
      * @param view Pekare till spelarlistans vy.
      */
-    PlayerListController(PlayerModel *model, PlayerListView *view);
+    PlayerListController(PlayerListModel *model, PlayerListView *view);
 
 public slots:
     /**
@@ -31,7 +31,7 @@ public slots:
     void onAddPlayerClicked();
 
 private:
-    PlayerModel *playerModel;    ///< Pekare till modellen som hanterar spelarlistan.
+    PlayerListModel *playerListModel;    ///< Pekare till modellen som hanterar spelarlistan.
     PlayerListView *playerView;  ///< Pekare till vyn som visar spelarlistan.
 };
 

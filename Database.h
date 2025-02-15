@@ -38,6 +38,11 @@ class Database
      */
     QSqlQuery selectQuery(const QString& queryStr);
 
+    QSqlDatabase& getDatabase()
+    {
+        return db;
+    }
+
     private:
     /**
      * @brief Privat konstruktor för att förhindra direkt instansiering (singleton-mönster).

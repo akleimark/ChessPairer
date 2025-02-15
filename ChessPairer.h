@@ -4,7 +4,9 @@
 #include "PlayerListController.h"
 #include "PlayerListView.h"
 #include <QMainWindow>
-#include "PlayerModel.h"
+#include "PlayerListModel.h"
+#include "SettingsView.h"
+#include "SettingsController.h"
 
 class ChessPairer : public QMainWindow
 {
@@ -18,7 +20,10 @@ class ChessPairer : public QMainWindow
 
         PlayerListController *playerListController;
         PlayerListView *playerListView;
-        PlayerModel *playerModel;
+        PlayerListModel *playerListModel;
+        SettingsView *settingsView;
+        SettingsModel *settingsModel;
+        SettingsController *settingsController;
 
         unsigned int window_width;
         unsigned int window_height;
@@ -29,9 +34,11 @@ class ChessPairer : public QMainWindow
         void createMenu(); // Skapar menyfältet
         void createUI();
         void loadPlayersFromDatabase();
+        void loadSettingsFromDatabase();
 
     private slots:
         void showAllPlayers();
+        void showSettingsView();
 
 };
 #endif // CHESSPAIRER_H

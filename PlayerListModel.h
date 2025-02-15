@@ -1,7 +1,8 @@
-#ifndef PLAYERMODEL_H
-#define PLAYERMODEL_H
+#ifndef PLAYERLISTMODEL_H
+#define PLAYERLISTMODEL_H
 
 #include "MVC.h"
+#include "SettingsModel.h"
 #include <vector>
 #include <QString>
 
@@ -45,12 +46,14 @@ class Player
 };
 
 /**
- * @class PlayerModel
+ * @class PlayerListModel
  * @brief Hanterar lagring och hantering av spelardata.
  */
-class PlayerModel : public Model
+class PlayerListModel : public Model
 {
     public:
+    explicit PlayerListModel(SettingsModel *settingsModel):
+            settingsModel(settingsModel) {}
     /**
      * @brief Lägger till en spelare i den interna listan (men inte i databasen).
      *
@@ -69,9 +72,12 @@ class PlayerModel : public Model
      * @return En konstant referens till en vektor av spelare.
      */
     const std::vector<Player>& getPlayers() const { return players; }
+    const SettingsModel* getSettingsModel() { return settingsModel; }
+    virtual void reset() override {players.clear(); }
 
     private:
+        SettingsModel *settingsModel;
         std::vector<Player> players; ///< Intern behållare för spelare.
 };
 
-#endif // PLAYERMODEL_H
+#endif // PLAYERLISTMODEL_H

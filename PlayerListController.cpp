@@ -1,8 +1,8 @@
 #include "PlayerListController.h"
 #include <QInputDialog>
 
-PlayerListController::PlayerListController(PlayerModel *model, PlayerListView *view)
-    : Controller(model, view), playerModel(model), playerView(view)
+PlayerListController::PlayerListController(PlayerListModel *model, PlayerListView *view)
+    : Controller(model, view), playerListModel(model), playerView(view)
 {
 
 }
@@ -19,7 +19,7 @@ void PlayerListController::onAddPlayerClicked()
     int fideId = QInputDialog::getInt(view, "Lägg till spelare", "FIDE-ID:", 1000000, 100000, 9999999, 1, &ok);
     if (!ok) return;
 
-    PlayerModel &playerModel = *static_cast<PlayerModel*>(model);
+    PlayerListModel &playerModel = *static_cast<PlayerListModel*>(model);
     playerModel.addPlayerToContainer(Player(name, rating, fideId));
     playerModel.addPlayerToDatabase(Player(name, rating, fideId));
 

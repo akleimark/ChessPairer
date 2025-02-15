@@ -50,7 +50,7 @@ public:
     /**
      * @brief Standarddestruktor.
      */
-    ~Model() {}
+    virtual ~Model() {}
 
     /**
      * @brief Lägger till en vy som ska uppdateras vid förändringar i modellen.
@@ -70,6 +70,7 @@ public:
      * @brief Informerar alla registrerade vyer om att modellen har uppdaterats.
      */
     void notifyAllViews();
+    virtual void reset() = 0;
 
 protected:
     std::vector<View*> views;  ///< Lista över registrerade vyer.
@@ -86,6 +87,9 @@ class View : public QWidget
 protected:
     Controller *controller;  ///< Pekare till den associerade controllern.
     Model *model;            ///< Pekare till den associerade modellen.
+    const static QFont HEADER_FONT;
+    const static QFont LABEL_FONT;
+    const static QFont NORMAL_FONT;
 
 public:
     /**

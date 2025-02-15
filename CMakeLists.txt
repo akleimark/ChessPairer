@@ -24,11 +24,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         MVC.h
         MVC.cpp
-        PlayerModel.h
+        PlayerListModel.h
         PlayerListView.h PlayerListView.cpp
         PlayerListController.h PlayerListController.cpp
         Database.h Database.cpp
-        PlayerModel.cpp
+        PlayerListModel.cpp
+        SettingsView.h SettingsView.cpp
+        SettingsModel.h SettingsModel.cpp
+        SettingsController.h SettingsController.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ChessPairer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

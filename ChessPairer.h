@@ -12,7 +12,7 @@
  * @class ChessPairer
  * @brief Huvudfönster för schackparningsprogrammet.
  *
- * Denna klass hanterar huvudfönstret och ansvarar för att initialisera och hantera
+ * Denna klass hanterar huvudfönstret och ansvarar för att initiera och hantera
  * de olika vyerna och deras respektive MVC-komponenter.
  */
 class ChessPairer : public QMainWindow

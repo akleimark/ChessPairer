@@ -53,11 +53,10 @@ void ChessPairer::createUI()
     stackedWidget = new QStackedWidget();
     stackedWidget->addWidget(playerListView); // Lägg till spelarfönstret
 
-    // Exempel på en annan vy (kan vara en annan QWidget)
-    QWidget *anotherView = new QWidget();
-    anotherView->setStyleSheet("background-color: lightblue;");
-    stackedWidget->addWidget(anotherView); // Lägg till en extra vy
-
+    // Vi initierar en startvy
+    QWidget *startView = new QWidget();
+    startView->setStyleSheet("background-color: lightblue;");
+    stackedWidget->addWidget(startView);
     stackedWidget->addWidget(settingsView);
 
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
@@ -65,7 +64,7 @@ void ChessPairer::createUI()
     centralWidget->setLayout(layout);
     setCentralWidget(centralWidget);
 
-    stackedWidget->setCurrentWidget(anotherView);
+    stackedWidget->setCurrentWidget(startView);
 }
 
 

@@ -1,8 +1,9 @@
 #include "PlayerListController.h"
 #include <QInputDialog>
+#include <QMessageBox>
 
 PlayerListController::PlayerListController(PlayerListModel *model, PlayerListView *view)
-    : Controller(model, view), playerListModel(model), playerView(view)
+    : Controller(model, view), playerListModel(model), playerListView(view)
 {
     // Koppla signalen från vyn till kontrollerns slot
     connect(view, &PlayerListView::cellChanged, this, &PlayerListController::onCellChanged);
@@ -24,17 +25,15 @@ void PlayerListController::onAddPlayerClicked()
     playerModel.addPlayerToContainer(Player(name, rating, fideId));
     playerModel.addPlayerToDatabase(Player(name, rating, fideId));
 
-    model->notifyAllViews();
+    playerListModel->doSort();
+    playerListModel->notifyAllViews();
 }
 
 void PlayerListController::onCellChanged(int row, int column, const QString &newValue)
-{
-    PlayerListModel *playerListModel = static_cast<PlayerListModel*>(model);
-    auto &players = playerListModel->getPlayers();
-
-    if (row >= 0 && row < static_cast<int>(players.size()))
+{   
+    if (row >= 0 && row < playerListModel->size())
     {
-        Player player = players[row];
+        Player &player = playerListModel->at(row);
 
         switch (column)
         {
@@ -53,5 +52,27 @@ void PlayerListController::onCellChanged(int row, int column, const QString &new
         playerListModel->updatePlayerInDatabase(player);
     }
 }
+
+void PlayerListController::onRemovePlayerRequested(const unsigned int &fideId)
+{
+    const QString message = QString("Bekräfta borttagning av %1").arg(fideId);
+    // Skapa en bekräftelsedialog
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(playerListView, message,
+                                  "Är du säker på att du vill ta bort denna spelare?",
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes)
+    {
+        // Ta bort spelaren från modellen och databasen
+        PlayerListModel *model = dynamic_cast<PlayerListModel*>(this->model);
+        if (model)
+        {
+            model->removePlayerById(fideId); // Ta bort spelaren från modellen och databasen
+        }
+    }
+}
+
+
 
 

@@ -25,13 +25,13 @@ void SettingsView::createUI()
     setLayout(layout);
 
     QLabel *header = new QLabel("Inställningar");
-    header->setFont(View::HEADER_FONT);
+    header->setFont(View::DEFAULT_HEADER_FONT);
     layout->addWidget(header);
     layout->addSpacing(20); // Lägg till 20 pixlar mellan header och typsnitt
 
     QGridLayout *settingsLayout = new QGridLayout;
     QLabel *label1 = new QLabel("Typsnitt: ");
-    label1->setFont(View::LABEL_FONT);
+    label1->setFont(View::DEFAULT_LABEL_FONT);
     settingsLayout->addWidget(label1, 0, 0);
 
     fontComboBox = new QFontComboBox(this);

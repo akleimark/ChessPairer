@@ -100,18 +100,18 @@ protected:
     /**
  * @brief Standardfonten som används för rubriker.
  *
- * Denna statiska `QFont` används för att definiera typsnittet för rubriker i
+ * Denna statiska `QFont` används för att definiera det förvalda typsnittet för rubriker i
  * användargränssnittet.
  */
-    const static QFont HEADER_FONT;
+    const static QFont DEFAULT_HEADER_FONT;
 
     /**
  * @brief Standardfonten som används för etiketter.
  *
- * Denna statiska `QFont` används för att definiera typsnittet för etiketter
+ * Denna statiska `QFont` används för att definiera det förvalda typsnittet för etiketter
  * (labels) i användargränssnittet.
  */
-    const static QFont LABEL_FONT;
+    const static QFont DEFAULT_LABEL_FONT;
 
     /**
  * @brief Standardfonten som används för vanlig text.
@@ -119,7 +119,7 @@ protected:
  * Denna statiska `QFont` används för att definiera typsnittet för vanlig text
  * i användargränssnittet.
  */
-    const static QFont NORMAL_FONT;
+    const static QFont DEFAULT_NORMAL_FONT;
 
 
 public:

@@ -1,9 +1,9 @@
 #ifndef PLAYERLISTMODEL_H
 #define PLAYERLISTMODEL_H
 
+#include "ListModel.h"
 #include "MVC.h"
 #include "SettingsModel.h"
-#include <vector>
 #include <QString>
 
 /**
@@ -97,7 +97,7 @@ private:
  * för att lägga till, ta bort och uppdatera spelare både i minnet och i databasen, samt funktioner för att hämta och
  * sortera spelare.
  */
-class PlayerListModel : public Model
+class PlayerListModel : public ListModel<Player>
 {
 public:
     /**
@@ -108,16 +108,8 @@ public:
      * @param settingsModel Pekare till instansen av SettingsModel som hanterar användarinställningar.
      */
     explicit PlayerListModel(SettingsModel *settingsModel)
-        : settingsModel(settingsModel) {}
-
-    /**
-     * @brief Lägger till en spelare i den interna listan (men inte i databasen).
-     *
-     * Denna metod lägger till en spelare i den interna behållaren för spelare, men uppdaterar inte databasen.
-     *
-     * @param player Spelaren som ska läggas till.
-     */
-    void addPlayerToContainer(const Player &player);
+        : ListModel<Player>(settingsModel) {}
+    virtual ~PlayerListModel() = default;
 
     /**
      * @brief Lägger till en spelare i databasen.
@@ -126,7 +118,7 @@ public:
      *
      * @param player Spelaren som ska sparas i databasen.
      */
-    void addPlayerToDatabase(const Player &player);
+    virtual void addToDatabase(const Player &player) override;
 
     /**
      * @brief Uppdaterar en spelare i databasen.
@@ -135,7 +127,7 @@ public:
      *
      * @param player Spelaren vars information ska uppdateras.
      */
-    void updatePlayerInDatabase(const Player &player);
+    virtual void updateDatabase(const Player &player) override;
 
     /**
      * @brief Tar bort en spelare från databasen och den interna listan.
@@ -147,22 +139,6 @@ public:
     void removePlayerById(const unsigned int &fideId);
 
     /**
-     * @brief Hämtar pekaren till instansen av SettingsModel.
-     *
-     * Returnerar pekaren till instansen av SettingsModel som hanterar användarens inställningar.
-     *
-     * @return SettingsModel* Pekare till instansen av SettingsModel.
-     */
-    SettingsModel* getSettingsModel() const { return settingsModel; }
-
-    /**
-     * @brief Återställer modellen genom att rensa listan av spelare.
-     *
-     * Denna metod rensar den interna listan med spelare.
-     */
-    virtual void reset() override { players.clear(); }
-
-    /**
      * @brief Sorterar spelarna baserat på de angivna kriterierna.
      *
      * Denna metod sorterar spelarna enligt de kriterier som skickas in. Standardkriteriet är "Name".
@@ -170,57 +146,6 @@ public:
      * @param sortCriteria En lista med strängar som representerar sorteringskriterier (t.ex. "Name", "Rating").
      */
     void doSort(const QStringList &sortCriteria = QStringList("Name"));
-
-    /**
-     * @brief Hämtar storleken på listan med spelare.
-     *
-     * Returnerar antalet spelare i listan.
-     *
-     * @return unsigned int Antalet spelare i listan.
-     */
-    unsigned int size() const { return players.size(); }
-
-    /**
-     * @brief Hämtar spelaren på ett specifikt index.
-     *
-     * Returnerar en konstant referens till spelaren på det angivna indexet.
-     *
-     * @param index Indexet för den spelare som ska hämtas.
-     * @return const Player& Den spelare som finns på det angivna indexet.
-     */
-    const Player& at(const unsigned int &index) const;
-
-    /**
-     * @brief Hämtar spelaren på ett specifikt index.
-     *
-     * Returnerar en referens till spelaren på det angivna indexet.
-     *
-     * @param index Indexet för den spelare som ska hämtas.
-     * @return Player& Den spelare som finns på det angivna indexet.
-     */
-    Player& at(const unsigned int &index);
-
-    /**
-     * @brief Hämtar en iterator till början av spelardatabasen.
-     *
-     * Returnerar en iterator som pekar på den första spelaren i den interna listan.
-     *
-     * @return std::vector<Player>::const_iterator Iterator som pekar på den första spelaren.
-     */
-    std::vector<Player>::const_iterator cbegin() const { return players.cbegin(); }
-
-    /**
-     * @brief Hämtar en iterator till slutet av spelardatabasen.
-     *
-     * Returnerar en iterator som pekar på platsen efter den sista spelaren i den interna listan.
-     *
-     * @return std::vector<Player>::const_iterator Iterator som pekar på slutet av spelardatabasen.
-     */
-    std::vector<Player>::const_iterator cend() const { return players.cend(); }
-
-private:
-    SettingsModel *settingsModel;    ///< Pekare till instansen av SettingsModel.
-    std::vector<Player> players; ///< Intern behållare för spelare.
 };
 
 #endif // PLAYERLISTMODEL_H

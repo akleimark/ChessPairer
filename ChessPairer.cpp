@@ -25,6 +25,7 @@ ChessPairer::~ChessPairer()
     delete settingsView;
     delete settingsModel;
     delete settingsController;
+    delete tournament;
 }
 
 void ChessPairer::initMVC()
@@ -41,7 +42,6 @@ void ChessPairer::initMVC()
     playerListController = new PlayerListController(playerListModel, playerListView);
     playerListView->addListeners();
 }
-
 
 void ChessPairer::createUI()
 {
@@ -85,6 +85,10 @@ void ChessPairer::createMenu()
     connect(showPlayersAction, &QAction::triggered, this, &ChessPairer::showAllPlayers);
     toolsMenu->addAction(showPlayersAction);
 
+    QAction *showTournamentsAction = new QAction("Visa alla turneringar", this);
+    connect(showTournamentsAction, &QAction::triggered, this, &ChessPairer::showAllTournaments);
+    toolsMenu->addAction(showTournamentsAction);
+
     // Menyn 'Övrigt'
     QMenu *miscMenu = menuBar->addMenu("Övrigt");
     QAction *showSettingsAction = new QAction("Inställningar", this);
@@ -99,6 +103,15 @@ void ChessPairer::showAllPlayers()
     stackedWidget->setCurrentWidget(playerListView);
     playerListModel->notifyAllViews();
 }
+
+void ChessPairer::showAllTournaments()
+{
+    Database::getInstance()->loadSettingsFromDatabase(settingsModel); // Hämta inställningarna från databasen
+    tournament = new Tournament(1);
+    tournament->print();
+}
+
+
 
 void ChessPairer::showSettingsView()
 {

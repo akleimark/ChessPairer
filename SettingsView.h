@@ -49,7 +49,7 @@ public:
 
 private:
     QVBoxLayout *layout;           /**< Layout som används för att arrangera GUI-komponenter. */
-    QFontComboBox *fontComboBox;   /**< Kombinationsruta för att välja font. */
+    QFontComboBox *fontComboBox;   /**< Kombinationsruta för att välja typsnitt. */
 
     /**
      * @brief Skapar användargränssnittet.

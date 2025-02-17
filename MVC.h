@@ -8,7 +8,7 @@
 // Forward-deklarationer
 class View;
 class Model;
-
+class SettingsModel;
 /**
  * @class Controller
  * @brief Hanterar kommunikationen mellan Model och View.
@@ -70,21 +70,11 @@ public:
      * @brief Informerar alla registrerade vyer om att modellen har uppdaterats.
      */
     void notifyAllViews();
-    /**
- * @brief Återställer objektet till sitt ursprungliga tillstånd.
- *
- * Denna virtuella metod ska implementeras av underklasser för att definiera
- * hur objektet återställs. Exempelvis kan det innebära att sätta alla
- * inställningar eller variabler till deras initiala värden.
- *
- * @note Denna metod är ren virtuell och måste implementeras i alla konkreta
- * klasser.
- */
-    virtual void reset() = 0;
 
 protected:
     std::vector<View*> views;  ///< Lista över registrerade vyer.
 };
+
 
 /**
  * @class View
@@ -120,7 +110,6 @@ protected:
  * i användargränssnittet.
  */
     const static QFont DEFAULT_NORMAL_FONT;
-
 
 public:
     /**

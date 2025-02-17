@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QList>
+#include "Interfaces.h"
 #include "MVC.h"
 
 /**
@@ -60,7 +61,7 @@ private:
  *
  * @inherits Model
  */
-class SettingsModel : public Model
+class SettingsModel : public Model, public ResetInterface
 {
 public:
     /**
@@ -105,13 +106,6 @@ public:
      * @return Värdet för inställningen som matchar den angivna typen.
      */
     QString getSettingByType(const QString &type) const;
-
-    /**
-     * @brief Återställer inställningarna.
-     *
-     * Denna metod återställer inställningarna genom att tömma containern som lagrar dem.
-     * Den används för att återställa inställningar till ett standardläge.
-     */
     virtual void reset() override { settingsContainer.clear(); }
 
 private:

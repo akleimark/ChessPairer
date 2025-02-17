@@ -29,15 +29,37 @@ Database::~Database()
 void Database::createTables()
 {
     QSqlQuery query;
-    // Skapa tabellen players om den inte finns.
-    query.exec("CREATE TABLE IF NOT EXISTS players ("
+    QStringList queries;
+    // Sql för tabellen med spelare.
+    queries << "CREATE TABLE IF NOT EXISTS players ("
                "fide_id INTEGER PRIMARY KEY, "
                "name TEXT NOT NULL, "
-               "rating INTEGER NOT NULL)");
-    // Skapa tabellen settings om den inte finns.
-    query.exec("CREATE TABLE IF NOT EXISTS settings("
+               "rating INTEGER NOT NULL)";
+
+    // Sql för inställningar.
+    queries << "CREATE TABLE IF NOT EXISTS settings("
                 "type TEXT PRIMARY KEY, "
-                "value TEXT NOT NULL)");
+                "value TEXT NOT NULL)";
+
+    // Sql för turneringar
+    queries << "CREATE TABLE IF NOT EXISTS tournaments("
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                "name TEXT NOT NULL, "
+                "start_date DATE NOT NULL, "
+                "end_date DATE NOT NULL, "
+                "number_of_rounds INTEGER NOT NULL, "
+                "pairing_system TEXT NOT NULL)"
+        ;
+
+    for (QStringList::const_iterator it = queries.cbegin(); it != queries.cend(); ++it)
+    {
+        const QString &cQuery = *it;
+        if (!query.exec(cQuery))
+        {
+            qWarning() << "Fråga misslyckades:" << cQuery;
+            qWarning() << "Error:" << query.lastError().text();
+        }
+    }
 }
 
 Database* Database::getInstance()
@@ -83,7 +105,7 @@ void Database::loadPlayersFromDatabase(PlayerListModel *model, const QString &or
         QString name = query.value(0).toString();
         int rating = query.value(1).toInt();
         int fideId = query.value(2).toInt();
-        model->addPlayerToContainer(Player(name, rating, fideId));  // Lägg till spelare i MVC
+        model->addToContainer(Player(name, rating, fideId));  // Lägg till spelare i MVC
     }
 }
 

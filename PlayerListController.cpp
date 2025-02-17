@@ -22,8 +22,8 @@ void PlayerListController::onAddPlayerClicked()
     if (!ok) return;
 
     PlayerListModel &playerModel = *static_cast<PlayerListModel*>(model);
-    playerModel.addPlayerToContainer(Player(name, rating, fideId));
-    playerModel.addPlayerToDatabase(Player(name, rating, fideId));
+    playerModel.addToContainer(Player(name, rating, fideId));
+    playerModel.addToDatabase(Player(name, rating, fideId));
 
     playerListModel->doSort();
     playerListModel->notifyAllViews();
@@ -49,7 +49,7 @@ void PlayerListController::onCellChanged(int row, int column, const QString &new
         }
 
         // Uppdatera databasen via modellen
-        playerListModel->updatePlayerInDatabase(player);
+        playerListModel->updateDatabase(player);
     }
 }
 

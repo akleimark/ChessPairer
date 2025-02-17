@@ -2,33 +2,7 @@
 #include "Database.h"
 #include <algorithm>
 
-
-const Player& PlayerListModel::at(const unsigned int &index) const
-{
-    if(index >= players.size())
-    {
-        throw std::runtime_error("Index out of bounds");
-    }
-    return players[index];
-}
-
-Player& PlayerListModel::at(const unsigned int &index)
-{
-    if(index >= players.size())
-    {
-        throw std::runtime_error("Index out of bounds");
-    }
-
-    return players[index];
-}
-
-void PlayerListModel::addPlayerToContainer(const Player &player)
-{
-    // Lägg till spelaren i den lokala listan
-    players.push_back(player);
-}
-
-void PlayerListModel::addPlayerToDatabase(const Player &player)
+void PlayerListModel::addToDatabase(const Player &player)
 {
     // Lägg till spelaren i databasen
     Database* db = Database::getInstance();  // Hämta databasinstansen
@@ -39,7 +13,7 @@ void PlayerListModel::addPlayerToDatabase(const Player &player)
     db->executeQuery(query);  // Kör SQL-frågan för att lägga till spelaren i databasen
 }
 
-void PlayerListModel::updatePlayerInDatabase(const Player &player)
+void PlayerListModel::updateDatabase(const Player &player)
 {
     Database* db = Database::getInstance();
     QSqlQuery query(db->getDatabase());
@@ -70,14 +44,14 @@ void PlayerListModel::removePlayerById(const unsigned int &fideId)
     }
 
     // Ta bort spelaren från vektorn
-    std::vector<Player>::const_iterator it = std::remove_if(players.begin(), players.end(), [&](const Player &p)
+    std::vector<Player>::const_iterator it = std::remove_if(container.begin(), container.end(), [&](const Player &p)
      {
          return p.getFideId() == fideId; // Matcha på FIDE-ID
      });
 
-    if (it != players.end())
+    if (it != container.end())
     {
-        players.erase(it, players.end()); // Faktiskt ta bort objektet från vektorn
+        container.erase(it, container.end()); // Faktiskt ta bort objektet från vektorn
     }
 
     // Notifiera UI om förändringen
@@ -86,7 +60,7 @@ void PlayerListModel::removePlayerById(const unsigned int &fideId)
 
 void PlayerListModel::doSort(const QStringList &sortCriteria)
 {
-    std::sort(players.begin(), players.end(), [&](const Player &a, const Player &b) {
+    std::sort(container.begin(), container.end(), [&](const Player &a, const Player &b) {
         for (const QString &criterion : sortCriteria)
         {
             if (criterion == "Name")

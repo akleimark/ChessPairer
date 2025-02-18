@@ -134,9 +134,9 @@ public:
      *
      * Denna metod tar bort en spelare från både databasen och den interna spelardatabasen baserat på FIDE-ID.
      *
-     * @param fideId Spelarens FIDE-ID.
+     * @param id Spelarens FIDE-ID.
      */
-    void removePlayerById(const unsigned int &fideId);
+    virtual void removeById(const unsigned int &id) override;
 
     /**
      * @brief Sorterar spelarna baserat på de angivna kriterierna.

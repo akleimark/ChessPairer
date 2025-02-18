@@ -45,14 +45,7 @@ public:
     virtual void addListeners() override;
 
 protected:
-    /**
-     * @brief Hanterar fönsterstorleksändringar.
-     *
-     * Denna metod justerar tabellens kolumnbredder dynamiskt beroende på fönsterstorlek.
-     *
-     * @param event Fönsterstorlekshändelsen som orsakar anropet.
-     */
-    virtual void resizeEvent(QResizeEvent *event) override;
+
 
 private:
     /**

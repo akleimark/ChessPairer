@@ -65,10 +65,10 @@ void PlayerListController::onRemovePlayerRequested(const unsigned int &fideId)
     if (reply == QMessageBox::Yes)
     {
         // Ta bort spelaren från modellen och databasen
-        PlayerListModel *model = dynamic_cast<PlayerListModel*>(this->model);
         if (model)
         {
-            model->removePlayerById(fideId); // Ta bort spelaren från modellen och databasen
+            playerListModel->removeById(fideId); // Ta bort spelaren från modellen och databasen
+            playerListModel->notifyAllViews();
         }
     }
 }

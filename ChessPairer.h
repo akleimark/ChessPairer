@@ -7,7 +7,9 @@
 #include "PlayerListModel.h"
 #include "SettingsView.h"
 #include "SettingsController.h"
+#include "TournamentListController.h"
 #include "TournamentListModel.h"
+#include "TournamentListView.h"
 
 /**
  * @class ChessPairer
@@ -35,19 +37,20 @@ public:
 private:
 
     // 'Models'
+    TournamentListModel *tournamentListModel; ///< Modell för turneringar.
     PlayerListModel *playerListModel; ///< Modell för spelare.
     SettingsModel *settingsModel; ///< Modell för inställningar.
 
     // 'Views'
+    TournamentListView *tournamentListView;///< Vy för turneringar.
     PlayerListView *playerListView; ///< Vy för spelare.
     SettingsView *settingsView; ///< Vy för inställningar.
 
     // 'Controllers'
-
+    TournamentListController *tournamentListController; ///< Controller för turneringar.
     PlayerListController *playerListController; ///< Controller för spelare.
     SettingsController *settingsController; ///< Controller för inställningar.
 
-    Tournament *tournament;
 
     static const unsigned int DEFAULT_WINDOW_WIDTH; ///< Standardbredd för fönstret.
     static const unsigned int DEFAULT_WINDOW_HEIGHT; ///< Standardhöjd för fönstret.

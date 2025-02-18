@@ -111,6 +111,12 @@ protected:
  */
     const static QFont DEFAULT_NORMAL_FONT;
 
+    virtual void resizeEvent(QResizeEvent *event) override
+    {
+        updateView();
+        QWidget::resizeEvent(event);
+    }
+
 public:
     /**
      * @brief Standardkonstruktor.

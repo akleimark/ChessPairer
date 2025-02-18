@@ -29,14 +29,14 @@ void PlayerListModel::updateDatabase(const Player &player)
     }
 }
 
-void PlayerListModel::removePlayerById(const unsigned int &fideId)
+void PlayerListModel::removeById(const unsigned int &id)
 {
     // Ta bort spelaren från databasen
     Database* db = Database::getInstance();
     QSqlQuery query(db->getDatabase());
 
     query.prepare("DELETE FROM players WHERE fide_id = ?");
-    query.addBindValue(fideId);
+    query.addBindValue(id);
 
     if (!query.exec())
     {
@@ -46,7 +46,7 @@ void PlayerListModel::removePlayerById(const unsigned int &fideId)
     // Ta bort spelaren från vektorn
     std::vector<Player>::const_iterator it = std::remove_if(container.begin(), container.end(), [&](const Player &p)
      {
-         return p.getFideId() == fideId; // Matcha på FIDE-ID
+         return p.getFideId() == id; // Matcha på FIDE-ID
      });
 
     if (it != container.end())
@@ -54,8 +54,6 @@ void PlayerListModel::removePlayerById(const unsigned int &fideId)
         container.erase(it, container.end()); // Faktiskt ta bort objektet från vektorn
     }
 
-    // Notifiera UI om förändringen
-    notifyAllViews();
 }
 
 void PlayerListModel::doSort(const QStringList &sortCriteria)

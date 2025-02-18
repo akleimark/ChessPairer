@@ -2,6 +2,7 @@
 #define DATABASE_H
 
 #include "PlayerListModel.h"
+#include "TournamentListModel.h"
 #include <QString>
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -48,6 +49,9 @@ class Database
     {
         return db;
     }
+
+    void loadTournamentsFromDatabase(TournamentListModel *model);
+
 
     /**
  * @brief Laddar spelare från databasen och fyller en modell.
@@ -103,6 +107,7 @@ class Database
      * @brief Namnet på databasen.
      */
     static const QString DATABASE_NAME;
+
 };
 
 #endif // DATABASE_H

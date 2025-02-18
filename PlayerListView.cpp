@@ -25,7 +25,7 @@ void PlayerListView::createUI()
     QHBoxLayout *buttonLayout = new QHBoxLayout(buttonWidget);
 
     // Skapa knapparna
-    addPlayerButton = new QPushButton("Lägg till spelare", buttonWidget);
+    addPlayerButton = new QPushButton("Lägg till en spelare", buttonWidget);
     removePlayerButton = new QPushButton("Ta bort spelaren", buttonWidget);
     removePlayerButton->setVisible(false);
     buttonLayout->addWidget(addPlayerButton);
@@ -90,11 +90,6 @@ void PlayerListView::updateView() const
     tableWidget->blockSignals(false); // Slå på signaler igen
 }
 
-void PlayerListView::resizeEvent(QResizeEvent *event)
-{
-    updateView();
-    QWidget::resizeEvent(event);
-}
 
 void PlayerListView::onCellChanged(int row, int column)
 {

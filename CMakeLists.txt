@@ -35,6 +35,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         TournamentListModel.h TournamentListModel.cpp
         Interfaces.h
         ListModel.h
+        TournamentListView.h TournamentListView.cpp
+        TournamentListController.h TournamentListController.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ChessPairer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

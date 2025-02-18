@@ -116,6 +116,23 @@ public:
      */
     typename std::vector<T>::const_iterator cend() const { return container.cend(); }
 
+    /**
+ * @brief Tar bort en turnering från modellen och databasen baserat på turnerings-ID.
+ *
+ * Denna metod är virtuell och måste implementeras i en konkret klass som hanterar
+ * turneringsdata. Den ansvarar för att ta bort turneringen från både den interna
+ * datamodellen (vektor) samt från databasen.
+ *
+ * @param index ID för den turnering som ska tas bort.
+ *
+ * @note Denna metod måste implementeras i en härledd klass som t.ex.
+ * TournamentListModel, där den exekverar SQL-frågan för att ta bort turneringen från
+ * databasen samt hanterar uppdatering av den interna vektorn.
+ *
+ * @see TournamentListModel::removeById
+ */
+    virtual void removeById(const unsigned int &index) = 0;
+
 protected:
     SettingsModel *settingsModel; ///< Pekare till instansen av SettingsModel.
     std::vector<T> container; ///< Intern behållare för objekt.

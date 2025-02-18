@@ -84,11 +84,56 @@ bool Database::executeQuery(const QString& queryStr)
 QSqlQuery Database::selectQuery(const QString& queryStr)
 {
     QSqlQuery query;
-    if (!query.exec(queryStr)) {
+    if (!query.exec(queryStr))
+    {
         qDebug() << "SQL Error:" << query.lastError().text();
     }
     return query;
 }
+
+void Database::loadTournamentsFromDatabase(TournamentListModel *model)
+{
+    if (!model)
+    {
+        qDebug() << "NULL";
+        return;
+    }
+
+    model->reset(); // Rensa modellen innan vi laddar om data
+
+    QSqlQuery query = Database::getInstance()->selectQuery(
+        "SELECT id, name, start_date, end_date, number_of_rounds, pairing_system FROM tournaments ORDER BY name"
+        );
+
+    if (query.lastError().isValid()) {
+        qWarning() << "Database error: " << query.lastError().text();
+        return;
+    }
+
+    while (query.next())
+    {
+        const unsigned int id = query.value(0).toUInt();
+        const QString name = query.value(1).toString();
+
+        // Säkerställ att datum konverteras korrekt
+        const QString startDateStr = query.value(2).toString();
+        const QString endDateStr = query.value(3).toString();
+        const QDate startDate = QDate::fromString(startDateStr, "yyyy-MM-dd");
+        const QDate endDate = QDate::fromString(endDateStr, "yyyy-MM-dd");
+
+        if (!startDate.isValid() || !endDate.isValid()) {
+            qWarning() << "Ogiltigt datum i databasen: " << startDateStr << ", " << endDateStr;
+            continue; // Hoppa över denna post
+        }
+
+        const unsigned int numberOfRounds = query.value(4).toUInt();
+        const QString pairingSystem = query.value(5).toString();
+
+        // Lägg till turneringen i modellen
+        model->addToContainer(Tournament(name, startDate, endDate, numberOfRounds, pairingSystem, id));
+    }
+}
+
 
 void Database::loadPlayersFromDatabase(PlayerListModel *model, const QString &orderList)
 {

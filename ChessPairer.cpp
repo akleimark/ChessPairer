@@ -25,7 +25,8 @@ ChessPairer::~ChessPairer()
     delete settingsView;
     delete settingsModel;
     delete settingsController;
-    delete tournament;
+    delete tournamentListView;
+    delete tournamentListModel;
 }
 
 void ChessPairer::initMVC()
@@ -41,6 +42,11 @@ void ChessPairer::initMVC()
     playerListView = new PlayerListView(playerListModel);
     playerListController = new PlayerListController(playerListModel, playerListView);
     playerListView->addListeners();
+
+    tournamentListModel = new TournamentListModel(settingsModel);
+    tournamentListView = new TournamentListView(tournamentListModel);
+    tournamentListController = new TournamentListController(tournamentListModel, tournamentListView);
+    tournamentListView->addListeners();
 }
 
 void ChessPairer::createUI()
@@ -51,13 +57,16 @@ void ChessPairer::createUI()
     // Skapa central widget och layout
     centralWidget = new QWidget(this);
     stackedWidget = new QStackedWidget();
-    stackedWidget->addWidget(playerListView); // Lägg till spelarfönstret
 
     // Vi initierar en startvy
     QWidget *startView = new QWidget();
     startView->setStyleSheet("background-color: lightblue;");
+
+    // Alla vyerna läggs till till layouten
     stackedWidget->addWidget(startView);
     stackedWidget->addWidget(settingsView);
+    stackedWidget->addWidget(playerListView);
+    stackedWidget->addWidget(tournamentListView);
 
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
     layout->addWidget(stackedWidget);
@@ -107,11 +116,11 @@ void ChessPairer::showAllPlayers()
 void ChessPairer::showAllTournaments()
 {
     Database::getInstance()->loadSettingsFromDatabase(settingsModel); // Hämta inställningarna från databasen
-    tournament = new Tournament(1);
-    tournament->print();
+    Database::getInstance()->loadTournamentsFromDatabase(tournamentListModel);  // Hämta alla turneringar från databasen
+    stackedWidget->setCurrentWidget(tournamentListView);
+    tournamentListModel->notifyAllViews();
+
 }
-
-
 
 void ChessPairer::showSettingsView()
 {

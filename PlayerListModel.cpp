@@ -1,91 +1,125 @@
 #include "PlayerListModel.h"
 #include "Database.h"
 #include <algorithm>
+#include "Logger.h"
 
 void PlayerListModel::addToDatabase(const Player &player)
 {
-    // Lägg till spelaren i databasen
-    Database* db = Database::getInstance();  // Hämta databasinstansen
-    QString query = QString("INSERT INTO players (name, rating, fide_id) VALUES ('%1', %2, %3)")
-                        .arg(player.getName())
-                        .arg(player.getRating())
-                        .arg(player.getFideId());
-    db->executeQuery(query);  // Kör SQL-frågan för att lägga till spelaren i databasen
+    try
+    {
+        // Få tag i databasinstansen
+        Database* db = Database::getInstance();
+
+        // Definiera den parametiserade SQL.
+        QString queryStr = "INSERT INTO players (name, rating, fide_id) VALUES (?, ?, ?)";
+
+        QVector<QVariant> bindValues = { player.getName(), player.getRating(), player.getFideId() };
+
+        // Kör SQL med korrekt parametisering.
+        db->executeQuery(queryStr, bindValues);
+
+        Logger::getInstance()->logInfo("Spelaren lades in i databasen utan problem.");
+    }
+    catch(const std::runtime_error &error)
+    {
+        Logger::getInstance()->logError(error.what());
+        std::exit(EXIT_FAILURE);
+    }
 }
 
 void PlayerListModel::updateDatabase(const Player &player)
 {
-    Database* db = Database::getInstance();
-    QSqlQuery query(db->getDatabase());
-
-    query.prepare("UPDATE players SET name = ?, rating = ? WHERE fide_id = ?");
-    query.addBindValue(player.getName());
-    query.addBindValue(player.getRating());
-    query.addBindValue(player.getFideId());
-
-    if (!query.exec())
+    try
     {
-        qWarning() << "Misslyckades att uppdatera spelare i databasen:" << query.lastError().text();
+        Database* db = Database::getInstance();
+        QString queryStr = "UPDATE players SET name = ?, rating = ? WHERE fide_id = ?";
+        QVector<QVariant> bindValues = { player.getName(), player.getRating(), player.getFideId() };
+
+        db->executeQuery(queryStr, bindValues);
+
+    }
+    catch(const std::runtime_error &error)
+    {
+       // Logga felet.
+        Logger::getInstance()->logError(error.what());
+        std::exit(EXIT_FAILURE);
     }
 }
 
 void PlayerListModel::removeById(const unsigned int &id)
 {
-    // Ta bort spelaren från databasen
-    Database* db = Database::getInstance();
-    QSqlQuery query(db->getDatabase());
-
-    query.prepare("DELETE FROM players WHERE fide_id = ?");
-    query.addBindValue(id);
-
-    if (!query.exec())
+    try
     {
-        qWarning() << "Misslyckades att ta bort spelare från databasen:" << query.lastError().text();
+        // Hämta databasinstansen
+        Database* db = Database::getInstance();
+
+        // Definiera den parameteriserade frågan för att ta bort spelaren
+        QString queryStr = "DELETE FROM players WHERE fide_id = ?";
+
+        // Skapa en vektor för bindvärdena (id)
+        QVector<QVariant> bindValues = { id };
+
+        // Utför frågan via executeQuery-metoden
+        db->executeQuery(queryStr, bindValues);
+
+        // Ta bort spelaren från vektorn
+        std::vector<Player>::const_iterator it = std::remove_if(container.begin(), container.end(), [&](const Player &p)
+        {
+            return p.getFideId() == id; // Matcha på FIDE-ID
+        });
+
+        // Om spelaren hittades i vektorn, ta bort den
+        if (it != container.end())
+        {
+            container.erase(it, container.end()); // Faktiskt ta bort objektet från vektorn
+        }
     }
-
-    // Ta bort spelaren från vektorn
-    std::vector<Player>::const_iterator it = std::remove_if(container.begin(), container.end(), [&](const Player &p)
-     {
-         return p.getFideId() == id; // Matcha på FIDE-ID
-     });
-
-    if (it != container.end())
+    catch (const std::runtime_error &error)
     {
-        container.erase(it, container.end()); // Faktiskt ta bort objektet från vektorn
+        // Logga fel om det inträffar
+        Logger::getInstance()->logError(error.what());
+        std::exit(EXIT_FAILURE);
     }
-
 }
 
 void PlayerListModel::doSort(const QStringList &sortCriteria)
 {
-    std::sort(container.begin(), container.end(), [&](const Player &a, const Player &b) {
-        for (const QString &criterion : sortCriteria)
-        {
-            if (criterion == "Name")
+    try
+    {
+        std::sort(container.begin(), container.end(), [&](const Player &a, const Player &b) {
+            for (const QString &criterion : sortCriteria)
             {
-                if (a.getName() != b.getName())
-                    return a.getName() < b.getName();
+                if (criterion == "Name")
+                {
+                    if (a.getName() != b.getName())
+                        return a.getName() < b.getName();
+                }
+                else if (criterion == "Rating")
+                {
+                    if (a.getRating() != b.getRating())
+                        return a.getRating() < b.getRating();
+                }
+                else if (criterion == "FideId")
+                {
+                    if (a.getFideId() != b.getFideId())
+                        return a.getFideId() < b.getFideId();
+                }
+                else
+                {
+                    throw std::runtime_error("Ogiltigt sorteringskriterium:" + criterion.toStdString());
+                }
             }
-            else if (criterion == "Rating")
-            {
-                if (a.getRating() != b.getRating())
-                    return a.getRating() < b.getRating();
-            }
-            else if (criterion == "FideId")
-            {
-                if (a.getFideId() != b.getFideId())
-                    return a.getFideId() < b.getFideId();
-            }
-            else
-            {
-                qWarning() << "Ogiltigt sorteringskriterium:" << criterion;
-            }
-        }
-        return false; // Behåll ordningen om alla kriterier är lika
-    });
+            return false; // Behåll ordningen om alla kriterier är lika
+        });
 
-    // Notifiera UI om förändringen
-    notifyAllViews();
+        // Notifiera UI om förändringen
+        notifyAllViews();
+    }
+    catch(std::runtime_error &error)
+    {
+        Logger::getInstance()->logError(error.what());
+        std::exit(EXIT_FAILURE);
+    }
 }
 
 

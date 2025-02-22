@@ -159,17 +159,4 @@ T& ListModel<T>::at(const unsigned int &index)
     return container[index];
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #endif // LISTMODEL_H

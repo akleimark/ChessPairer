@@ -1,6 +1,7 @@
 #ifndef CHESSPAIRER_H
 #define CHESSPAIRER_H
 #include <QStackedWidget>
+#include "Logger.h"
 #include "PlayerListController.h"
 #include "PlayerListView.h"
 #include <QMainWindow>
@@ -35,6 +36,8 @@ public:
     ~ChessPairer();
 
 private:
+
+    Logger *logger;///< Instans av 'Logger'
 
     // 'Models'
     TournamentListModel *tournamentListModel; ///< Modell för turneringar.

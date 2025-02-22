@@ -75,7 +75,6 @@ protected:
     std::vector<View*> views;  ///< Lista över registrerade vyer.
 };
 
-
 /**
  * @class View
  * @brief Representerar användargränssnittet och visar data från modellen.

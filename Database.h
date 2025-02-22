@@ -31,12 +31,14 @@ class Database
      * @param queryStr SQL-frågan som ska exekveras.
      * @return true om frågan exekverades framgångsrikt, annars false.
      */
-    bool executeQuery(const QString& queryStr);
+    void executeQuery(const QString& queryStr, const QVector<QVariant>& bindValues);
+
+    bool executeQueryWithResult(const QString& queryStr, const QVector<QVariant>& bindValues, QSqlQuery &query);
+
     /**
      * @brief Exekverar en SQL-fråga som returnerar resultat, t.ex. SELECT.
      *
      * @param queryStr SQL-frågan som ska exekveras.
-     * @return Ett QSqlQuery-objekt med resultaten från frågan.
      */
     QSqlQuery selectQuery(const QString& queryStr);
 

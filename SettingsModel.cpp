@@ -29,14 +29,14 @@ void SettingsModel::addSettingToDatabase(const Setting &setting)
 
 QString SettingsModel::getSettingByType(const QString &type) const
 {
-    QString value = "";
-    for(const Setting &aSetting: settingsContainer)
+    // Använd std::find_if för att hitta den första instansen av en inställning med rätt typ
+    auto it = std::find_if(settingsContainer.begin(), settingsContainer.end(),
+    [&type](const Setting &aSetting)
     {
-        if(aSetting.getType() == type)
-        {
-            return aSetting.getValue();
-        }
-    }
+       return aSetting.getType() == type;
+    });
 
-    return value;
+    // Returnera värdet om inställningen hittades, annars en tom QString
+    return (it != settingsContainer.end()) ? it->getValue() : "";
 }
+

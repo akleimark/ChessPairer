@@ -26,7 +26,7 @@ public:
      *
      * @param model Pekare till spelarmodellen som denna vy kommer att interagera med.
      */
-    PlayerListView(PlayerListModel *model);
+    explicit PlayerListView(PlayerListModel *model);
 
     /**
      * @brief Uppdaterar vyn med data från modellen.

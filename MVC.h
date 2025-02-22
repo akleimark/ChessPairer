@@ -122,7 +122,7 @@ public:
      *
      * Skapar en vy utan en tilldelad modell eller controller.
      */
-    View() : controller(nullptr) {}
+    View() : controller(nullptr), model(nullptr) {}
 
     /**
      * @brief Konstruktor som associerar en modell med vyn.

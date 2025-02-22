@@ -29,7 +29,7 @@ public:
      * @param model Pekare till en `SettingsModel`-instans som representerar
      *              inställningsdatan.
      */
-    SettingsView(SettingsModel *model);
+    explicit SettingsView(SettingsModel *settingsModel);
 
     /**
      * @brief Uppdaterar vyn baserat på de senaste inställningarna.
@@ -59,7 +59,7 @@ private:
      */
     void createUI();
 
-    SettingsModel *model; /**< Pekare till `SettingsModel` som lagrar och hanterar inställningarna. */
+    SettingsModel *settingsModel; /**< Pekare till `SettingsModel` som lagrar och hanterar inställningarna. */
 };
 
 

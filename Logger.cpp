@@ -23,7 +23,7 @@ Logger::~Logger()
     if (logFile.isOpen())
     {
         logFile.close();
-    }
+    }    
 }
 
 // Get the singleton instance

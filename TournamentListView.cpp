@@ -127,5 +127,5 @@ void TournamentListView::onRemoveTournamentClicked()
     unsigned int id = tableWidget->item(row, 0)->text().toUInt();
 
     // Skicka signalen till controllern
-    emit removeTournamentRequested(id);
+    emit this->removeTournamentRequested(id);
 }

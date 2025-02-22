@@ -106,15 +106,14 @@ void PlayerListView::onSelectionChanged()
     removePlayerButton->setVisible(hasSelection);
 }
 
-// Uppdaterad metod för att hantera borttagning
 void PlayerListView::onRemovePlayerClicked()
 {
     QList<QTableWidgetItem *> selectedItems = tableWidget->selectedItems();
     if (selectedItems.isEmpty()) return;
 
     int row = selectedItems.first()->row();
-    unsigned int fideId = tableWidget->item(row, 2)->text().toUInt();
+    const unsigned int PLAYER_ID = tableWidget->item(row, 2)->text().toUInt();
 
     // Skicka signalen till controllern
-    emit removePlayerRequested(fideId);
+    emit this->removePlayerRequested(PLAYER_ID);
 }

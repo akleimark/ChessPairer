@@ -13,16 +13,17 @@ Controller::Controller(Model *model, View *view):
 
 void Model::notifyView(View *view)
 {
-    for(View *cView : views)
+    // Använd std::any_of för att kontrollera om vyn finns i listan och uppdatera om så är fallet
+    if (std::any_of(views.begin(), views.end(), [view](const View *cView) { return cView == view; }))
     {
-        if(cView == view)
-        {
-            view->updateView();
-            return;
-        }
+        view->updateView();
+        return;
     }
+
+    // Om ingen matchande vy hittades, kasta ett undantag
     throw std::runtime_error("Ingen vy kunde uppdateras.");
 }
+
 void Model::notifyAllViews()
 {
     for(View *cView : views)

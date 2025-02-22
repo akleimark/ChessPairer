@@ -2,15 +2,15 @@
 #include <QLabel>
 #include "SettingsController.h"
 
-SettingsView::SettingsView(SettingsModel *model):
-    model(model)
+SettingsView::SettingsView(SettingsModel *settingsModel):
+    settingsModel(settingsModel)
 {
     createUI();
 }
 
 void SettingsView::updateView() const
 {
-    fontComboBox->setCurrentFont(QFont(model->getSettingByType("font")));
+    fontComboBox->setCurrentFont(QFont(settingsModel->getSettingByType("font")));
 }
 
 void SettingsView::addListeners()
@@ -21,13 +21,14 @@ void SettingsView::addListeners()
 
 void SettingsView::createUI()
 {
+    const unsigned int SPACE_VALUE = 20;
     layout = new QVBoxLayout;
     setLayout(layout);
 
     QLabel *header = new QLabel("Inställningar");
     header->setFont(View::DEFAULT_HEADER_FONT);
     layout->addWidget(header);
-    layout->addSpacing(20); // Lägg till 20 pixlar mellan header och typsnitt
+    layout->addSpacing(SPACE_VALUE);
 
     QGridLayout *settingsLayout = new QGridLayout;
     QLabel *label1 = new QLabel("Typsnitt: ");

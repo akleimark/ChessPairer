@@ -30,7 +30,7 @@ public:
      *
      * @param model Pekare till en instans av TournamentListModel som innehåller data om turneringar.
      */
-    TournamentListView(TournamentListModel *model);
+    explicit TournamentListView(TournamentListModel *model);
 
     /**
      * @brief Uppdaterar vyn med aktuell data från modellen.

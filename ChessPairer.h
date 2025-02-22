@@ -28,7 +28,7 @@ public:
          * @brief Konstruktor för ChessPairer.
          * @param parent Pekare till föräldrawidgeten (nullptr som standard).
          */
-    ChessPairer(QWidget *parent = nullptr);
+    explicit ChessPairer(QWidget *parent = nullptr);
 
     /**
          * @brief Destruktor för ChessPairer.

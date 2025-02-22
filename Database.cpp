@@ -5,9 +5,9 @@
 const QString Database::DATABASE_NAME = "chesspairing.db";
 Database* Database::instance = nullptr;
 
-Database::Database()
-{
-    db = QSqlDatabase::addDatabase("QSQLITE");
+Database::Database():
+    db(QSqlDatabase::addDatabase("QSQLITE"))
+{    
     db.setDatabaseName(Database::DATABASE_NAME);
 
     try
@@ -177,7 +177,7 @@ void Database::loadTournamentsFromDatabase(TournamentListModel *model)
     }
     catch(std::runtime_error &error)
     {
-        throw std::runtime_error(error);
+        Logger::getInstance()->logError(error.what());
         std::exit(EXIT_FAILURE);
     }
 }
@@ -232,5 +232,4 @@ void Database::loadSettingsFromDatabase(SettingsModel* model)
         Logger::getInstance()->logError(error.what());
         std::exit(EXIT_FAILURE);
     }
-
 }

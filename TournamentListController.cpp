@@ -2,6 +2,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include "Logger.h"
+#include "TournamentListModel.h"
 
 TournamentListController::TournamentListController(TournamentListModel *model, TournamentListView *view)
     : Controller(model, view), tournamentListModel(model), tournamentListView(view)
@@ -10,47 +11,74 @@ TournamentListController::TournamentListController(TournamentListModel *model, T
     connect(view, &TournamentListView::cellChanged, this, &TournamentListController::onCellChanged);
 }
 
-void TournamentListController::onAddTournamentClicked()
+bool TournamentListController::askForTournamentData(Tournament &tournament)
 {
-    Tournament tournament;
     const QString TITLE = "Lägg till en turnering";
     bool ok;
 
     const QString NAME = QInputDialog::getText(view, TITLE, "Namn:", QLineEdit::Normal, "", &ok);
     tournament.setName(NAME);
-    if (!ok || !tournament.checkName()) return;
+    if (!ok || !tournament.checkName())
+    {
+        return false;
+    }
 
     const QString STARTDATE_STR = QInputDialog::getText(view, TITLE, "Startdatum (YYYY-MM-DD):", QLineEdit::Normal, QDate::currentDate().toString("yyyy-MM-dd"), &ok);
-    if (!ok) return;
+    if (!ok)
+    {
+        return false;
+    }
     QDate startDate = QDate::fromString(STARTDATE_STR, "yyyy-MM-dd");
     tournament.setStartDate(startDate);
-    if (tournament.checkStartDate())
+    if (!tournament.checkStartDate())
     {
-        return;
+        return false;
     }
 
     const QString ENDDATE_STR = QInputDialog::getText(view, TITLE, "Slutdatum (YYYY-MM-DD):", QLineEdit::Normal, QDate::currentDate().toString("yyyy-MM-dd"), &ok);
-    if (!ok) return;
+    if (!ok)
+    {
+        return false;
+    }
     QDate endDate = QDate::fromString(ENDDATE_STR, "yyyy-MM-dd");
     tournament.setEndDate(endDate);
     if (!tournament.checkEndDate())
-    {      
-        return;
+    {
+        return false;
     }
 
     const unsigned int NUMBER_OF_ROUNDS = QInputDialog::getInt(view, TITLE, "Antal ronder:", Tournament::getDefaultNumberOfRounds(), Tournament::getMinimumNumberOfRounds(), Tournament::getMaximumNumberOfRounds(), 1, &ok);
     tournament.setNumberOfRounds(NUMBER_OF_ROUNDS);
-    if (!ok || !tournament.checkNumberOfRounds()) return;
+    if (!ok || !tournament.checkNumberOfRounds())
+    {
+        return false;
+    }
 
     const QString PAIRING_SYSTEM = QInputDialog::getText(view, TITLE, "Lottningssystem:", QLineEdit::Normal, "", &ok);
     tournament.setPairingSystem(PAIRING_SYSTEM);
-    if (!ok || !tournament.checkPairingSystem()) return;
+    if (!ok || !tournament.checkPairingSystem())
+    {
+        return false;
+    }
 
-    tournamentListModel->addToDatabase(tournament);
-    tournamentListModel->addToContainer(tournament);
-    tournamentListModel->notifyAllViews();
+    return true;
 }
 
+void TournamentListController::onAddTournamentClicked()
+{
+    Tournament tournament;
+    if(askForTournamentData(tournament))
+    {
+        const unsigned int TOURNAMENT_ID = tournamentListModel->addToDatabase(tournament);
+        tournament.setId(TOURNAMENT_ID);
+        tournamentListModel->addToContainer(tournament);
+        tournamentListModel->notifyAllViews();
+    }
+    else
+    {
+        Logger::getInstance()->logWarning("Turneringen kunde inte läggas till på grund av felaktigt angivna data.");
+    }
+}
 
 void TournamentListController::onCellChanged(int row, int column, const QString &newValue)
 {

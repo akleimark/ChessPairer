@@ -47,7 +47,7 @@ public:
      *
      * @param data Objektet som ska läggas till i databasen.
      */
-    virtual void addToDatabase(const T &data) = 0;
+    virtual unsigned int addToDatabase(const T &data) = 0;
 
     /**
      * @brief Uppdaterar ett objekt i databasen.

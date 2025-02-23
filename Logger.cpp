@@ -12,8 +12,7 @@ Logger::Logger()
     logFile.setFileName("application.log");
     if (!logFile.open(QIODevice::Append | QIODevice::Text))
     {
-        qCritical() << "Failed to open log file!";
-        std::exit(EXIT_FAILURE);
+        qCritical() << "Failed to open log file!";        
     }
 }
 

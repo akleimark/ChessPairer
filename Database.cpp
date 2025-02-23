@@ -183,7 +183,7 @@ void Database::loadPlayersFromDatabase(PlayerListModel *model, const QString &or
         QString name = query.value(0).toString();
         int rating = query.value(1).toInt();
         int fideId = query.value(2).toInt();
-        model->addToContainer(Player(name, rating, fideId));  // Lägg till spelare i MVC
+        model->addToContainer(Player(fideId, name, rating));  // Lägg till spelare i MVC
     }
 }
 

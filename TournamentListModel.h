@@ -7,6 +7,19 @@
 #include "ListModel.h"
 #include "MVC.h"
 #include "SettingsModel.h"
+#include "PlayerListModel.h"
+#include <set>
+
+class TournamentPlayer : public Player
+{
+public:
+    explicit TournamentPlayer(const unsigned int &fideId, const QString &name, const unsigned int &rating, const unsigned int &playerNumber);
+    bool operator<(const TournamentPlayer &player) const;
+    unsigned int getPlayerNumber() const {return playerNumber; }
+    void setPlayerNumber(const unsigned int &newPlayerNumber) {playerNumber = newPlayerNumber; }
+private:
+    unsigned int playerNumber;
+};
 
 /**
  * @class Tournament
@@ -34,7 +47,7 @@ public:
      * @param pairingSystem Systemet för paring av spelare (standard: "DEFAULT_PAIRING_SYSTEM").
      * @param id ID för turneringen (standard: "DEFAULT_TOURNAMENT_ID").
      */
-    Tournament(const QString &name = DEFAULT_TOURNAMENT_NAME,
+    explicit Tournament(const QString &name = DEFAULT_TOURNAMENT_NAME,
                         const QDate &startDate = Tournament::DEFAULT_START_DATE, const QDate &endDate = Tournament::DEFAULT_END_DATE,
                         const unsigned int &numberOfRounds = Tournament::DEFAULT_NUMBER_OF_ROUNDS, const QString &pairingSystem = Tournament::DEFAULT_PAIRING_SYSTEM, const unsigned int &id = Tournament::DEFAULT_TOURNAMENT_ID);
 
@@ -90,6 +103,8 @@ public:
      * @return Paringsystemet för turneringen.
      */
     QString getPairingSystem() const { return pairingSystem; }
+
+    void setId(const unsigned int &newId) { id = newId; }
 
     /**
      * @brief Sätter ett nytt namn för turneringen.
@@ -201,6 +216,10 @@ public:
  */
     static unsigned int getMaximumNumberOfRounds() { return Tournament::MAXIMUM_NUMBER_OF_ROUNDS; }
 
+    void addTournamentPlayer(TournamentPlayer *player) {players.insert(player);}
+
+    TournamentPlayer* at(const unsigned int &index) const;
+
 
 private:
     unsigned int id; /**< ID för turneringen. */
@@ -209,6 +228,7 @@ private:
     QDate endDate; /**< Slutdatum för turneringen. */
     unsigned int numberOfRounds; /**< Antal omgångar i turneringen. */
     QString pairingSystem; /**< System för paring av spelare. */
+    std::set<TournamentPlayer*> players;
 
     const static unsigned int DEFAULT_TOURNAMENT_ID; /**< Standardvärde för turnerings-ID. */
     const static unsigned int MINIMUM_NUMBER_OF_ROUNDS; /**< Minimalt antal ronder. */
@@ -256,7 +276,7 @@ public:
      *
      * @param tournament Den turnering som ska läggas till i databasen.
      */
-    virtual void addToDatabase(const Tournament &tournament) override;
+    virtual unsigned int addToDatabase(const Tournament &tournament) override;
 
     /**
      * @brief Uppdaterar en turnering i databasen.

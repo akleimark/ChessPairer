@@ -18,12 +18,6 @@ class Player : public ValidateInterface
 public:
 
 
-    Player():
-        name(""), rating(0), fideId(0)
-    {
-
-    }
-
     /**
      * @brief Skapar en ny spelare.
      *
@@ -33,7 +27,7 @@ public:
      * @param rating Spelarens rating.
      * @param fideId Spelarens unika FIDE-ID.
      */
-    Player(const QString &name, int rating, int fideId)
+    explicit Player(const unsigned int &fideId = 0, const QString &name = "", const unsigned int &rating = Player::MINIMUM_RATING)
         : name(name), rating(rating), fideId(fideId) {}
 
     /**
@@ -98,10 +92,10 @@ public:
     bool checkRating() const;
     bool checkFideId() const;
 
-private:
-    QString name; ///< Spelarens namn.
-    unsigned int rating; ///< Spelarens rating.
+protected:
     unsigned int fideId; ///< Spelarens FIDE-ID.
+    QString name; ///< Spelarens namn.
+    unsigned int rating; ///< Spelarens rating.    
     const static unsigned int MINIMUM_RATING;
     const static unsigned int MAXIMUM_RATING;
 };
@@ -136,7 +130,7 @@ public:
      *
      * @param player Spelaren som ska sparas i databasen.
      */
-    virtual void addToDatabase(const Player &player) override;
+    virtual unsigned int addToDatabase(const Player &player) override;
 
     /**
      * @brief Uppdaterar en spelare i databasen.

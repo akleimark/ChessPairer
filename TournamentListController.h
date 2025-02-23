@@ -65,6 +65,7 @@ public slots:
 private:
     TournamentListModel *tournamentListModel; /**< Pekare till modellen som hanterar turneringsdata. */
     TournamentListView *tournamentListView; /**< Pekare till vyn som visar turneringslistan. */
+    bool askForTournamentData(Tournament &tournament);
 };
 
 #endif // TOURNAMENTLISTCONTROLLER_H

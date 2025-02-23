@@ -49,19 +49,41 @@ bool Player::checkFideId() const
     return fideId >= 100000 && fideId <= 999999999;
 }
 
-void PlayerListModel::addToDatabase(const Player &player)
+unsigned int PlayerListModel::addToDatabase(const Player &player)
 {
-    // Få tag i databasinstansen
-    Database* db = Database::getInstance();
-
     // Definiera den parametiserade SQL.
     QString queryStr = "INSERT INTO players (name, rating, fide_id) VALUES (?, ?, ?)";
 
-    QVector<QVariant> bindValues = { player.getName(), player.getRating(), player.getFideId() };
+    // Skapa SQL-frågan
+    QSqlQuery query;
+    query.prepare(queryStr);
 
-    // Kör SQL med korrekt parametisering.
-    db->executeQuery(queryStr, bindValues);
+    // Binda värden till frågan
+    query.bindValue(0, player.getName());
+    query.bindValue(1, player.getRating());
+    query.bindValue(2, player.getFideId());
+
+    // Kör SQL-frågan och kontrollera om den lyckas
+    if (!query.exec())
+    {
+        Logger::getInstance()->logError("Misslyckades att lägga till spelaren i databasen: " + query.lastError().text());
+        std::exit(EXIT_FAILURE);
+    }
+
+    // Hämta det insatta fide_id:t (detta antas vara unikt och användas som primärnyckel)
+    QVariant lastId = query.lastInsertId();
+    if (!lastId.isValid() || !lastId.canConvert<unsigned int>())
+    {
+        Logger::getInstance()->logError("Misslyckades att hämta det insatta spelare-id:et.");
+        std::exit(EXIT_FAILURE);
+    }
+
+    unsigned int playerId = lastId.toUInt();
+    Logger::getInstance()->logInfo("Spelare tillagd i databasen med FIDE-ID: " + QString::number(playerId));
+
+    return playerId;
 }
+
 
 void PlayerListModel::updateDatabase(const Player &player)
 {
@@ -125,9 +147,6 @@ void PlayerListModel::doSort(const QStringList &sortCriteria)
         }
         return false; // Behåll ordningen om alla kriterier är lika
     });
-
-    // Notifiera UI om förändringen
-    notifyAllViews();
 }
 
 

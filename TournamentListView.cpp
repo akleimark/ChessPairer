@@ -95,7 +95,7 @@ void TournamentListView::updateView() const
         tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(QString::number(tournament.getNumberOfRounds())));
 
         // Lottningssystem (redigerbar)
-        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament.getPairingSystem()));
+        tableWidget->setItem(rowIndex++, columnNumber++, new QTableWidgetItem(tournament.getPairingSystem()));
     }
 
     tableWidget->blockSignals(false); // Slå på signaler igen

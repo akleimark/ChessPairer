@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include "Logger.h"
 #include "TournamentListModel.h"
+#include <QComboBox>
 
 TournamentListController::TournamentListController(TournamentListModel *model, TournamentListView *view)
     : Controller(model, view), tournamentListModel(model), tournamentListView(view)
@@ -16,6 +17,7 @@ bool TournamentListController::askForTournamentData(Tournament &tournament)
     const QString TITLE = "Lägg till en turnering";
     bool ok;
 
+    // Fråga om namn på turneringen
     const QString NAME = QInputDialog::getText(view, TITLE, "Namn:", QLineEdit::Normal, "", &ok);
     tournament.setName(NAME);
     if (!ok || !tournament.checkName())
@@ -23,6 +25,7 @@ bool TournamentListController::askForTournamentData(Tournament &tournament)
         return false;
     }
 
+    // Fråga om startdatum
     const QString STARTDATE_STR = QInputDialog::getText(view, TITLE, "Startdatum (YYYY-MM-DD):", QLineEdit::Normal, QDate::currentDate().toString("yyyy-MM-dd"), &ok);
     if (!ok)
     {
@@ -35,6 +38,7 @@ bool TournamentListController::askForTournamentData(Tournament &tournament)
         return false;
     }
 
+    // Fråga om slutdatum
     const QString ENDDATE_STR = QInputDialog::getText(view, TITLE, "Slutdatum (YYYY-MM-DD):", QLineEdit::Normal, QDate::currentDate().toString("yyyy-MM-dd"), &ok);
     if (!ok)
     {
@@ -47,6 +51,7 @@ bool TournamentListController::askForTournamentData(Tournament &tournament)
         return false;
     }
 
+    // Fråga om antal ronder
     const unsigned int NUMBER_OF_ROUNDS = QInputDialog::getInt(view, TITLE, "Antal ronder:", Tournament::getDefaultNumberOfRounds(), Tournament::getMinimumNumberOfRounds(), Tournament::getMaximumNumberOfRounds(), 1, &ok);
     tournament.setNumberOfRounds(NUMBER_OF_ROUNDS);
     if (!ok || !tournament.checkNumberOfRounds())
@@ -54,9 +59,35 @@ bool TournamentListController::askForTournamentData(Tournament &tournament)
         return false;
     }
 
-    const QString PAIRING_SYSTEM = QInputDialog::getText(view, TITLE, "Lottningssystem:", QLineEdit::Normal, "", &ok);
-    tournament.setPairingSystem(PAIRING_SYSTEM);
-    if (!ok || !tournament.checkPairingSystem())
+    // Skapa en combo-box för att välja lottningssystem
+    QComboBox* pairingSystemComboBox = new QComboBox(view);
+    pairingSystemComboBox->addItem("Monrad");
+    pairingSystemComboBox->addItem("Berger");
+    pairingSystemComboBox->setCurrentIndex(0);  // Förvalt till första alternativet
+
+    // Skapa en dialog för att visa combo-boxen
+    QDialog dialog(view);
+    dialog.setWindowTitle(TITLE);
+    QVBoxLayout* layout = new QVBoxLayout(&dialog);
+    layout->addWidget(pairingSystemComboBox);
+    QPushButton* okButton = new QPushButton("OK", &dialog);
+    layout->addWidget(okButton);
+    QObject::connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+
+    // Visa dialogen och vänta på användarens val
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        // Hämta valt system och sätt det på turneringen
+        QString selectedPairingSystem = pairingSystemComboBox->currentText();
+        tournament.setPairingSystem(selectedPairingSystem);
+
+        // Kontrollera om det valda lottningssystemet är korrekt
+        if (!tournament.checkPairingSystem())
+        {
+            return false;
+        }
+    }
+    else
     {
         return false;
     }
@@ -76,7 +107,7 @@ void TournamentListController::onAddTournamentClicked()
     }
     else
     {
-        Logger::getInstance()->logWarning("Turneringen kunde inte läggas till på grund av felaktigt angivna data.");
+        Logger::getInstance()->logWarning("Turneringen kunde inte läggas till på grund av felaktiga data.");
     }
 }
 

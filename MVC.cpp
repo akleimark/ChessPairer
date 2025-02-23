@@ -1,4 +1,5 @@
 #include "MVC.h"
+#include "Logger.h"
 
 const QFont View::DEFAULT_LABEL_FONT = QFont("Georgia", 14, 700);
 const QFont View::DEFAULT_NORMAL_FONT = QFont("Georgia", 14, 400);
@@ -20,8 +21,7 @@ void Model::notifyView(View *view)
         return;
     }
 
-    // Om ingen matchande vy hittades, kasta ett undantag
-    throw std::runtime_error("Ingen vy kunde uppdateras.");
+    Logger::getInstance()->logError("Ingen vy kunde uppdateras.");
 }
 
 void Model::notifyAllViews()

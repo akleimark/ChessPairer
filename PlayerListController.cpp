@@ -12,55 +12,56 @@ PlayerListController::PlayerListController(PlayerListModel *model, PlayerListVie
 
 void PlayerListController::onAddPlayerClicked()
 {
-    bool ok;
-    QString name = QInputDialog::getText(view, "Lägg till spelare", "Namn:", QLineEdit::Normal, "", &ok);
-    if (!ok || name.isEmpty()) return;
+    Player newPlayer;
 
-    int rating = QInputDialog::getInt(view, "Lägg till spelare", "Rating:", 1000, 100, 3000, 1, &ok);
-    if (!ok) return;
+    bool ok;
+    const QString NAME = QInputDialog::getText(view, "Lägg till spelare", "Namn:", QLineEdit::Normal, "", &ok);
+    newPlayer.setName(NAME);
+    if (!ok || !newPlayer.checkName()) return;
+
+    const unsigned int RATING = QInputDialog::getInt(view, "Lägg till spelare", "Rating:", 1000, Player::getMinimumRating(), Player::getMaximumRating(), 1, &ok);
+    newPlayer.setRating(RATING);
+    if (!ok || !newPlayer.checkRating()) return;
 
     int fideId = QInputDialog::getInt(view, "Lägg till spelare", "FIDE-ID:", 1000000, 100000, 9999999, 1, &ok);
-    if (!ok) return;
+    newPlayer.setFideId(fideId);
+    if (!ok || !newPlayer.checkFideId()) return;
 
-    playerListModel->addToContainer(Player(name, rating, fideId));
-    playerListModel->addToDatabase(Player(name, rating, fideId));
+    playerListModel->addToContainer(newPlayer);
+    playerListModel->addToDatabase(newPlayer);
 
     playerListModel->doSort();
     playerListModel->notifyAllViews();
+
 }
 
 void PlayerListController::onCellChanged(int row, int column, const QString &newValue)
 {
-    try
+    if (row >= 0 && row < playerListModel->size())
     {
-        if (row >= 0 && row < playerListModel->size())
+        Player &player = playerListModel->at(row);
+        const Player oldPlayer(player);
+        switch (column)
         {
-            Player &player = playerListModel->at(row);
+        case 0:
+            player.setName(newValue);
+            break;
+        case 1:
+            player.setRating(newValue.toUInt());
+            break;
+        }
 
-            switch (column)
-            {
-            case 0:
-                player.setName(newValue);
-                break;
-            case 1:
-                player.setRating(newValue.toInt());
-                break;
-            case 2:
-                player.setFideId(newValue.toInt());
-                break;
-            default:
-                throw std::runtime_error("PlayerListController::onCellChanged: Kolumnen existerar ej.");
-            }
-
+        if(!player.isValid())
+        {
+            player = oldPlayer;
+            Logger::getInstance()->logWarning("Felaktiga spelaruppgifter angivna.");
+            playerListModel->notifyView(view);
+        }
+        else
+        {
             // Uppdatera databasen via modellen
             playerListModel->updateDatabase(player);
         }
-
-    }
-    catch (std::runtime_error &error)
-    {
-        Logger::getInstance()->logError(error.what());
-        std::exit(EXIT_FAILURE);
     }
 }
 
@@ -70,8 +71,8 @@ void PlayerListController::onRemovePlayerRequested(const unsigned int &fideId)
     // Skapa en bekräftelsedialog
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(playerListView, message,
-                                  "Är du säker på att du vill ta bort denna spelare?",
-                                  QMessageBox::Yes | QMessageBox::No);
+          "Är du säker på att du vill ta bort denna spelare?",
+          QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes)
     {
@@ -83,7 +84,3 @@ void PlayerListController::onRemovePlayerRequested(const unsigned int &fideId)
         }
     }
 }
-
-
-
-

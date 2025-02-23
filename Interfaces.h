@@ -41,5 +41,13 @@ public:
     virtual void reset() = 0;
 };
 
+class ValidateInterface
+{
+public:
+
+    virtual ~ValidateInterface() = default;
+    virtual bool isValid() const = 0;
+};
+
 
 #endif // INTERFACES_H

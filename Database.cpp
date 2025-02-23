@@ -1,5 +1,4 @@
 #include "Database.h"
-#include <stdexcept>
 #include "Logger.h"
 
 const QString Database::DATABASE_NAME = "chesspairing.db";
@@ -10,21 +9,13 @@ Database::Database():
 {    
     db.setDatabaseName(Database::DATABASE_NAME);
 
-    try
+    if (!db.open())
     {
-        if (!db.open())
-        {
-            const QString ERROR_MESSAGE = "Det uppstod ett fel vid anslutning till databasen.";
-            Logger::getInstance()->logError(ERROR_MESSAGE);
-            throw std::runtime_error(ERROR_MESSAGE.toStdString());
-        }
-        createTables();
+        const QString ERROR_MESSAGE = "Det uppstod ett fel vid anslutning till databasen.";
+        Logger::getInstance()->logError(ERROR_MESSAGE);
+        std::exit(EXIT_FAILURE);
     }
-    catch(const std::runtime_error &error)
-    {
-        Logger::getInstance()->logError(error.what());
-        std::exit(EXIT_FAILURE); // Avsluta programmet med felstatus
-    }
+    createTables();
 }
 
 Database::~Database()
@@ -65,10 +56,10 @@ void Database::createTables()
         const QString &cQuery = *it;
         if (!query.exec(cQuery))
         {
-            throw std::runtime_error("SQl-frågan misslyckades (" + cQuery.toStdString() + ")" + query.lastError().text().toStdString());
+            Logger::getInstance()->logError(QString("SQL-frågan misslyckades (%1) %2").arg(cQuery, query.lastError().text()));
+            std::exit(EXIT_FAILURE);
         }
     }
-
 }
 
 Database* Database::getInstance()
@@ -84,22 +75,21 @@ void Database::executeQuery(const QString& queryStr, const QVector<QVariant>& bi
 {
     QSqlQuery query;
 
-    // Prepare the SQL query
     if (!query.prepare(queryStr))
     {
-        throw std::runtime_error("Failed to prepare SQL query: " + query.lastError().text().toStdString());
+        Logger::getInstance()->logError("Fel vid 'prepare': " + query.lastError().text());
+        std::exit(EXIT_FAILURE);
     }
 
-    // Bind all provided values securely
     for (const QVariant& value : bindValues)
     {
         query.addBindValue(value);
     }
 
-    // Execute the query and handle errors
     if (!query.exec())
     {
-        throw std::runtime_error("SQL error: " + query.lastError().text().toStdString());
+        Logger::getInstance()->logError("SQL error: " + query.lastError().text());
+        std::exit(EXIT_FAILURE);
     }
 }
 
@@ -108,7 +98,7 @@ bool Database::executeQueryWithResult(const QString& queryStr, const QVector<QVa
     // Förbered SQL-frågan
     if (!query.prepare(queryStr))
     {
-        throw std::runtime_error("Misslyckades med prepare: " + query.lastError().text().toStdString());
+        Logger::getInstance()->logError("Misslyckades med prepare: " + query.lastError().text());
     }
 
     // Bind alla värden till SQL-frågan
@@ -120,7 +110,7 @@ bool Database::executeQueryWithResult(const QString& queryStr, const QVector<QVa
     // Utför frågan
     if (!query.exec())
     {
-        throw std::runtime_error("SQL-fel: " + query.lastError().text().toStdString());
+        Logger::getInstance()->logError("SQL-fel: " + query.lastError().text());
     }
 
     // Kontrollera om frågan returnerar resultat (t.ex. SELECT)
@@ -132,104 +122,86 @@ QSqlQuery Database::selectQuery(const QString& queryStr)
     QSqlQuery query;
     if (!query.exec(queryStr))
     {
-        throw std::runtime_error("SQL-fel:" + query.lastError().text().toStdString());
+        Logger::getInstance()->logError("SQL-fel:" + query.lastError().text());
+        std::exit(EXIT_FAILURE);
     }
     return query;
 }
 
 void Database::loadTournamentsFromDatabase(TournamentListModel *model)
-{
-    try
+{   
+    if (!model)
     {
-        if (!model)
-        {
-            throw std::runtime_error("Ett okänt fel uppstod.");
-        }
-
-        model->reset(); // Rensa modellen innan vi laddar om data
-
-        QSqlQuery query = Database::getInstance()->selectQuery(
-            "SELECT id, name, start_date, end_date, number_of_rounds, pairing_system FROM tournaments ORDER BY name"
-            );
-        while (query.next())
-        {
-            const unsigned int id = query.value(0).toUInt();
-            const QString name = query.value(1).toString();
-
-            // Säkerställ att datum konverteras korrekt
-            const QString startDateStr = query.value(2).toString();
-            const QString endDateStr = query.value(3).toString();
-            const QDate startDate = QDate::fromString(startDateStr, "yyyy-MM-dd");
-            const QDate endDate = QDate::fromString(endDateStr, "yyyy-MM-dd");
-
-            if (!startDate.isValid() || !endDate.isValid())
-            {
-                qWarning() << "Ogiltigt datum i databasen: " << startDateStr << ", " << endDateStr;
-                continue; // Hoppa över denna post
-            }
-
-            const unsigned int numberOfRounds = query.value(4).toUInt();
-            const QString pairingSystem = query.value(5).toString();
-
-            // Lägg till turneringen i modellen
-            model->addToContainer(Tournament(name, startDate, endDate, numberOfRounds, pairingSystem, id));
-        }
-    }
-    catch(std::runtime_error &error)
-    {
-        Logger::getInstance()->logError(error.what());
+        Logger::getInstance()->logError("Ett okänt fel uppstod.");
         std::exit(EXIT_FAILURE);
+    }
+
+    model->reset(); // Rensa modellen innan vi laddar om data
+
+    QSqlQuery query = selectQuery(
+        "SELECT id, name, start_date, end_date, number_of_rounds, pairing_system FROM tournaments ORDER BY name"
+        );
+    while (query.next())
+    {
+        const unsigned int id = query.value(0).toUInt();
+        const QString name = query.value(1).toString();
+
+        // Säkerställ att datum konverteras korrekt
+        const QString startDateStr = query.value(2).toString();
+        const QString endDateStr = query.value(3).toString();
+        const QDate startDate = QDate::fromString(startDateStr, "yyyy-MM-dd");
+        const QDate endDate = QDate::fromString(endDateStr, "yyyy-MM-dd");
+
+        if (!startDate.isValid() || !endDate.isValid())
+        {
+            Logger::getInstance()->logWarning("Ogiltigt datum i databasen: " + startDateStr + ", " + endDateStr);
+            continue; // Hoppa över denna post
+        }
+
+        const unsigned int numberOfRounds = query.value(4).toUInt();
+        const QString pairingSystem = query.value(5).toString();
+
+        // Lägg till turneringen i modellen
+        model->addToContainer(Tournament(name, startDate, endDate, numberOfRounds, pairingSystem, id));
     }
 }
 
 void Database::loadPlayersFromDatabase(PlayerListModel *model, const QString &orderList)
 {
-    try
+    if(!model)
     {
-        if(!model)
-        {
-            throw std::runtime_error("Ett okänt fel uppstod.");
-        }
-        model->reset();
-        QSqlQuery query = Database::getInstance()->selectQuery("SELECT name, rating, fide_id FROM players ORDER BY " + orderList);
-
-        while (query.next())
-        {
-            QString name = query.value(0).toString();
-            int rating = query.value(1).toInt();
-            int fideId = query.value(2).toInt();
-            model->addToContainer(Player(name, rating, fideId));  // Lägg till spelare i MVC
-        }
-    }
-    catch(std::runtime_error &error)
-    {
-        Logger::getInstance()->logError(error.what());
+        Logger::getInstance()->logError("Ett okänt fel uppstod.");
         std::exit(EXIT_FAILURE);
+    }
+
+    model->reset();
+
+    QSqlQuery query = selectQuery("SELECT name, rating, fide_id FROM players ORDER BY " + orderList);
+
+    while (query.next())
+    {
+        QString name = query.value(0).toString();
+        int rating = query.value(1).toInt();
+        int fideId = query.value(2).toInt();
+        model->addToContainer(Player(name, rating, fideId));  // Lägg till spelare i MVC
     }
 }
 
 void Database::loadSettingsFromDatabase(SettingsModel* model)
-{
-    try
+{    
+    if(!model)
     {
-        if(!model)
-        {
-            throw std::runtime_error("Ett okänt fel uppstod.");
-        }
-
-        model->reset();
-        QSqlQuery query = Database::getInstance()->selectQuery("SELECT type, value FROM settings");
-
-        while (query.next())
-        {
-            QString type = query.value(0).toString();
-            QString value = query.value(1).toString();
-            model->addSettingToContainer(Setting(type, value));  // Lägg till inställning i MVC
-        }
-    }
-    catch(std::runtime_error &error)
-    {
-        Logger::getInstance()->logError(error.what());
+        Logger::getInstance()->logError("Ett okänt fel uppstod.");
         std::exit(EXIT_FAILURE);
+    }
+
+    model->reset();
+    QSqlQuery query = selectQuery("SELECT type, value FROM settings");
+
+    while (query.next())
+    {
+        QString type = query.value(0).toString();
+        QString value = query.value(1).toString();
+        model->addSettingToContainer(Setting(type, value));  // Lägg till inställning i MVC
     }
 }

@@ -131,9 +131,9 @@ void TournamentListModel::removeById(const unsigned int &id)
 
         // Ta bort turneringen från vektorn
         auto it = std::remove_if(container.begin(), container.end(), [&](const Tournament &t)
-                                 {
-                                     return t.getId() == id;
-                                 });
+        {
+           return t.getId() == id;
+        });
 
         if (it != container.end())
         {

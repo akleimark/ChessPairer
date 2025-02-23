@@ -1,5 +1,6 @@
 #include "SettingsModel.h"
 #include "Database.h"
+#include "Logger.h"
 
 void SettingsModel::addSettingToContainer(const Setting &setting)
 {
@@ -18,11 +19,7 @@ void SettingsModel::addSettingToDatabase(const Setting &setting)
 
     if (!query.exec())
     {
-        qDebug() << "Fel vid inmatning i databasen:" << query.lastError().text();
-    }
-    else
-    {
-        qDebug() << "Inställning sparad:" << setting.getType() << "=" << setting.getValue();
+        Logger::getInstance()->logWarning("Fel vid inmatning i databasen:" + query.lastError().text());
     }
 }
 

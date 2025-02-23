@@ -13,9 +13,17 @@
  * Klassen Player används för att lagra information om en schackspelare, inklusive spelarens namn,
  * rating och unika FIDE-ID. Den tillhandahåller getter- och setter-metoder för dessa attribut.
  */
-class Player
+class Player : public ValidateInterface
 {
 public:
+
+
+    Player():
+        name(""), rating(0), fideId(0)
+    {
+
+    }
+
     /**
      * @brief Skapar en ny spelare.
      *
@@ -82,10 +90,20 @@ public:
      */
     void setFideId(const unsigned int &newFideId) { fideId = newFideId; }
 
+    const static unsigned int getMinimumRating() {return Player::MINIMUM_RATING; }
+    const static unsigned int getMaximumRating() {return Player::MAXIMUM_RATING; }
+
+    virtual bool isValid() const override;
+    bool checkName() const;
+    bool checkRating() const;
+    bool checkFideId() const;
+
 private:
     QString name; ///< Spelarens namn.
     unsigned int rating; ///< Spelarens rating.
     unsigned int fideId; ///< Spelarens FIDE-ID.
+    const static unsigned int MINIMUM_RATING;
+    const static unsigned int MAXIMUM_RATING;
 };
 
 

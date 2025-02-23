@@ -69,4 +69,5 @@ void Logger::logWarning(const QString &message)
 void Logger::logError(const QString &message)
 {
     log(Logger::ERROR, message);
+    std::exit(EXIT_FAILURE);
 }

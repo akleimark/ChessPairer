@@ -8,7 +8,7 @@ const unsigned int Player::MAXIMUM_RATING = 4000;
 
 bool Player::isValid() const
 {
-    return (checkRating() && checkName());
+    return (checkRating() && checkName() && checkFideId());
 }
 
 bool Player::checkName() const

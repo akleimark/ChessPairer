@@ -8,12 +8,64 @@ const QString Tournament::DEFAULT_PAIRING_SYSTEM = "Monrad";
 const QString Tournament::DEFAULT_TOURNAMENT_NAME = "Ny turnering";
 const QDate Tournament::DEFAULT_START_DATE = QDate::currentDate();
 const QDate Tournament::DEFAULT_END_DATE = QDate::currentDate();
+const unsigned int Tournament::MINIMUM_NUMBER_OF_ROUNDS = 2;
+const unsigned int Tournament::MAXIMUM_NUMBER_OF_ROUNDS = 14;
 
 Tournament::Tournament(const QString &name, const QDate &startDate, const QDate &endDate,
            const unsigned int &numberOfRounds, const QString &pairingSystem, const unsigned int &id):
     name(name), startDate(startDate), endDate(endDate), numberOfRounds(numberOfRounds), pairingSystem(pairingSystem), id(id)
 {
 
+}
+
+bool Tournament::isValid() const
+{
+    return checkName() && checkStartDate() && checkEndDate() && checkPairingSystem() && checkNumberOfRounds();
+}
+
+bool Tournament::checkName() const
+{
+    const QString illegalChars = "!#¤%&/()=?\"'";
+
+    // Gå igenom varje del av namnet och kontrollera tecken
+    for (const QString &cName : name)
+    {
+        for (const QChar &ch : cName)
+        {
+            if (illegalChars.contains(ch))
+            {
+                return false; // Returnera false om ett olagligt tecken hittas
+            }
+        }
+    }
+
+    return true; // Alla kontroller klarade, namnet är giltigt
+}
+
+bool Tournament::checkStartDate() const
+{
+    return startDate.isValid();
+}
+bool Tournament::checkEndDate() const
+{
+    return (endDate.isValid() && endDate >= startDate);
+}
+bool Tournament::checkNumberOfRounds() const
+{
+    return (Tournament::MINIMUM_NUMBER_OF_ROUNDS <= numberOfRounds && numberOfRounds <= Tournament::MAXIMUM_NUMBER_OF_ROUNDS);
+}
+bool Tournament::checkPairingSystem() const
+{
+    const QStringList list({"Monrad", "Berger"});
+
+    for(const QString &p : list)
+    {
+        if(p == pairingSystem)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void Tournament::print() const
@@ -146,6 +198,3 @@ void TournamentListModel::removeById(const unsigned int &id)
         std::exit(EXIT_FAILURE);
     }
 }
-
-
-

@@ -18,15 +18,9 @@
  *
  * @see PrintInterface
  */
-class Tournament : public PrintInterface
+class Tournament : public PrintInterface, public ValidateInterface
 {
 public:
-    /**
-     * @brief Standardkonstruktor för Tournament.
-     *
-     * Skapar en turnering med standardvärden.
-     */
-    Tournament();
 
     /**
      * @brief Konstruktor för Tournament med anpassade värden.
@@ -40,9 +34,11 @@ public:
      * @param pairingSystem Systemet för paring av spelare (standard: "DEFAULT_PAIRING_SYSTEM").
      * @param id ID för turneringen (standard: "DEFAULT_TOURNAMENT_ID").
      */
-    explicit Tournament(const QString &name = DEFAULT_TOURNAMENT_NAME,
+    Tournament(const QString &name = DEFAULT_TOURNAMENT_NAME,
                         const QDate &startDate = Tournament::DEFAULT_START_DATE, const QDate &endDate = Tournament::DEFAULT_END_DATE,
                         const unsigned int &numberOfRounds = Tournament::DEFAULT_NUMBER_OF_ROUNDS, const QString &pairingSystem = Tournament::DEFAULT_PAIRING_SYSTEM, const unsigned int &id = Tournament::DEFAULT_TOURNAMENT_ID);
+
+    virtual ~Tournament() = default;
 
     /**
      * @brief Skriver ut turneringens information.
@@ -130,6 +126,82 @@ public:
      */
     void setPairingSystem(const QString &newPairingSystem) { pairingSystem = newPairingSystem; }
 
+    /**
+ * @brief Validerar turneringsobjektet.
+ *
+ * Utför en övergripande validering av turneringen baserat på alla dess attribut.
+ *
+ * @return true om turneringen är giltig, annars false.
+ */
+    virtual bool isValid() const override;
+
+    /**
+ * @brief Kontrollerar om turneringens namn är giltigt.
+ *
+ * Validerar att namnet inte är tomt och att det inte innehåller otillåtna tecken.
+ *
+ * @return true om namnet är giltigt, annars false.
+ */
+    bool checkName() const;
+
+    /**
+ * @brief Kontrollerar om startdatumet för turneringen är giltigt.
+ *
+ * Validerar att startdatumet är korrekt formaterat och ligger i framtiden eller nuet.
+ *
+ * @return true om startdatumet är giltigt, annars false.
+ */
+    bool checkStartDate() const;
+
+    /**
+ * @brief Kontrollerar om slutdatumet för turneringen är giltigt.
+ *
+ * Validerar att slutdatumet är korrekt formaterat och att det är senare än startdatumet.
+ *
+ * @return true om slutdatumet är giltigt, annars false.
+ */
+    bool checkEndDate() const;
+
+    /**
+ * @brief Kontrollerar om antalet ronder i turneringen är giltigt.
+ *
+ * Säkerställer att antalet ronder ligger inom det tillåtna intervallet.
+ *
+ * @return true om antalet ronder är giltigt, annars false.
+ */
+    bool checkNumberOfRounds() const;
+
+    /**
+ * @brief Kontrollerar om det valda lottningssystemet är giltigt.
+ *
+ * Validerar att lottningssystemet är ett av de stödda systemen (t.ex. Schweizer-systemet eller Berger-tabellen).
+ *
+ * @return true om lottningssystemet är giltigt, annars false.
+ */
+    bool checkPairingSystem() const;
+
+    /**
+ * @brief Hämtar standardvärdet för antal ronder.
+ *
+ * @return unsigned int Standardvärdet för antal ronder.
+ */
+    static unsigned int getDefaultNumberOfRounds() { return Tournament::DEFAULT_NUMBER_OF_ROUNDS; }
+
+    /**
+ * @brief Hämtar det minsta tillåtna antalet ronder.
+ *
+ * @return unsigned int Det minsta tillåtna antalet ronder för en turnering.
+ */
+    static unsigned int getMinimumNumberOfRounds() { return Tournament::MINIMUM_NUMBER_OF_ROUNDS; }
+
+    /**
+ * @brief Hämtar det maximala tillåtna antalet ronder.
+ *
+ * @return unsigned int Det maximala tillåtna antalet ronder för en turnering.
+ */
+    static unsigned int getMaximumNumberOfRounds() { return Tournament::MAXIMUM_NUMBER_OF_ROUNDS; }
+
+
 private:
     unsigned int id; /**< ID för turneringen. */
     QString name; /**< Namn på turneringen. */
@@ -139,7 +211,9 @@ private:
     QString pairingSystem; /**< System för paring av spelare. */
 
     const static unsigned int DEFAULT_TOURNAMENT_ID; /**< Standardvärde för turnerings-ID. */
-    const static unsigned int DEFAULT_NUMBER_OF_ROUNDS; /**< Standardvärde för antal omgångar. */
+    const static unsigned int MINIMUM_NUMBER_OF_ROUNDS; /**< Minimalt antal ronder. */
+    const static unsigned int MAXIMUM_NUMBER_OF_ROUNDS; /**< Maximalt antal ronder. */
+    const static unsigned int DEFAULT_NUMBER_OF_ROUNDS; /**< Standardvärde för antal ronder. */
     const static QString DEFAULT_PAIRING_SYSTEM; /**< Standardvärde för paringsystem. */
     const static QString DEFAULT_TOURNAMENT_NAME; /**< Standardvärde för turneringsnamn. */
     const static QDate DEFAULT_START_DATE; /**< Standardvärde för startdatum. */

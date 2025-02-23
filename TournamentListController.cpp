@@ -1,6 +1,7 @@
 #include "TournamentListController.h"
 #include <QInputDialog>
 #include <QMessageBox>
+#include "Logger.h"
 
 TournamentListController::TournamentListController(TournamentListModel *model, TournamentListView *view)
     : Controller(model, view), tournamentListModel(model), tournamentListView(view)
@@ -11,39 +12,42 @@ TournamentListController::TournamentListController(TournamentListModel *model, T
 
 void TournamentListController::onAddTournamentClicked()
 {
+    Tournament tournament;
     const QString TITLE = "Lägg till en turnering";
     bool ok;
 
-    const QString name = QInputDialog::getText(view, TITLE, "Namn:", QLineEdit::Normal, "", &ok);
-    if (!ok || name.isEmpty()) return;
+    const QString NAME = QInputDialog::getText(view, TITLE, "Namn:", QLineEdit::Normal, "", &ok);
+    tournament.setName(NAME);
+    if (!ok || !tournament.checkName()) return;
 
-    const QString startDateStr = QInputDialog::getText(view, TITLE, "Startdatum (YYYY-MM-DD):", QLineEdit::Normal, QDate::currentDate().toString("yyyy-MM-dd"), &ok);
+    const QString STARTDATE_STR = QInputDialog::getText(view, TITLE, "Startdatum (YYYY-MM-DD):", QLineEdit::Normal, QDate::currentDate().toString("yyyy-MM-dd"), &ok);
     if (!ok) return;
-    QDate startDate = QDate::fromString(startDateStr, "yyyy-MM-dd");
-    if (!startDate.isValid()) {
-        QMessageBox::warning(view, TITLE, "Ogiltigt startdatum. Ange formatet YYYY-MM-DD.");
-        return;
-    }
-
-    const QString endDateStr = QInputDialog::getText(view, TITLE, "Slutdatum (YYYY-MM-DD):", QLineEdit::Normal, QDate::currentDate().toString("yyyy-MM-dd"), &ok);
-    if (!ok) return;
-    QDate endDate = QDate::fromString(endDateStr, "yyyy-MM-dd");
-    if (!endDate.isValid())
+    QDate startDate = QDate::fromString(STARTDATE_STR, "yyyy-MM-dd");
+    tournament.setStartDate(startDate);
+    if (tournament.checkStartDate())
     {
-        QMessageBox::warning(view, TITLE, "Ogiltigt slutdatum. Ange formatet YYYY-MM-DD.");
         return;
     }
 
-    const unsigned int numberOfRounds = QInputDialog::getInt(view, TITLE, "Antal ronder:", 7, 3, 14, 1, &ok);
+    const QString ENDDATE_STR = QInputDialog::getText(view, TITLE, "Slutdatum (YYYY-MM-DD):", QLineEdit::Normal, QDate::currentDate().toString("yyyy-MM-dd"), &ok);
     if (!ok) return;
+    QDate endDate = QDate::fromString(ENDDATE_STR, "yyyy-MM-dd");
+    tournament.setEndDate(endDate);
+    if (!tournament.checkEndDate())
+    {      
+        return;
+    }
 
-    const QString pairingSystem = QInputDialog::getText(view, TITLE, "Lottningssystem:", QLineEdit::Normal, "", &ok);
-    if (!ok || pairingSystem.isEmpty()) return;
+    const unsigned int NUMBER_OF_ROUNDS = QInputDialog::getInt(view, TITLE, "Antal ronder:", Tournament::getDefaultNumberOfRounds(), Tournament::getMinimumNumberOfRounds(), Tournament::getMaximumNumberOfRounds(), 1, &ok);
+    tournament.setNumberOfRounds(NUMBER_OF_ROUNDS);
+    if (!ok || !tournament.checkNumberOfRounds()) return;
 
-    const Tournament TOURNAMENT(name, startDate, endDate, numberOfRounds, pairingSystem);
+    const QString PAIRING_SYSTEM = QInputDialog::getText(view, TITLE, "Lottningssystem:", QLineEdit::Normal, "", &ok);
+    tournament.setPairingSystem(PAIRING_SYSTEM);
+    if (!ok || !tournament.checkPairingSystem()) return;
 
-    tournamentListModel->addToDatabase(TOURNAMENT);
-    tournamentListModel->addToContainer(TOURNAMENT);
+    tournamentListModel->addToDatabase(tournament);
+    tournamentListModel->addToContainer(tournament);
     tournamentListModel->notifyAllViews();
 }
 
@@ -53,7 +57,7 @@ void TournamentListController::onCellChanged(int row, int column, const QString 
     if (row >= 0 && row < tournamentListModel->size())
     {
         Tournament &tournament = tournamentListModel->at(row);
-
+        const Tournament oldTournament = tournament;
         switch (column)
         {
         case 1: // Namn
@@ -76,10 +80,18 @@ void TournamentListController::onCellChanged(int row, int column, const QString 
         }
 
         // Uppdatera databasen via modellen
-        tournamentListModel->updateDatabase(tournament);
+        if(tournament.isValid())
+        {
+            tournamentListModel->updateDatabase(tournament);
+        }
+        else
+        {
+            tournament = oldTournament;
+            Logger::getInstance()->logWarning("Felaktiga turneringdata angivna.");
+            tournamentListModel->notifyView(view);
+        }
     }
 }
-
 
 void TournamentListController::onRemoveTournamentRequested(const unsigned int &id)
 {
@@ -100,8 +112,3 @@ void TournamentListController::onRemoveTournamentRequested(const unsigned int &i
         }
     }
 }
-
-
-
-
-

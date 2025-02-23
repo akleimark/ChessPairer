@@ -150,7 +150,7 @@ public:
      *
      * @param controller Pekare till controllern som ska användas av vyn.
      */
-    void setController(Controller *controller) { this->controller = controller; }
+    void setController(Controller *controller) { this->controller = controller; }    
 };
 
 #endif // MVC_H

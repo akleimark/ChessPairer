@@ -31,3 +31,4 @@ void Model::notifyAllViews()
         cView->updateView();
     }
 }
+

@@ -162,7 +162,7 @@ void Database::loadTournamentsFromDatabase(TournamentListModel *model)
         const QString pairingSystem = query.value(5).toString();
 
         // Lägg till turneringen i modellen
-        model->addToContainer(Tournament(name, startDate, endDate, numberOfRounds, pairingSystem, id));
+        model->addToContainer(new Tournament(name, startDate, endDate, numberOfRounds, pairingSystem, id));
     }
 }
 
@@ -183,7 +183,7 @@ void Database::loadPlayersFromDatabase(PlayerListModel *model, const QString &or
         QString name = query.value(0).toString();
         int rating = query.value(1).toInt();
         int fideId = query.value(2).toInt();
-        model->addToContainer(Player(fideId, name, rating));  // Lägg till spelare i MVC
+        model->addToContainer(new Player(fideId, name, rating));  // Lägg till spelare i MVC
     }
 }
 

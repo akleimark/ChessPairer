@@ -64,6 +64,7 @@ private:
     QWidget *buttonWidget; /**< Widget som håller knappar för att lägga till och ta bort turneringar. */
     QPushButton *addTournamentButton; /**< Knappar för att lägga till en turnering. */
     QPushButton *removeTournamentButton; /**< Knappar för att ta bort en turnering. */
+    QPushButton *selectTournamentButton;
     const TournamentListModel *tournamentListModel; /**< Pekare till modellen som håller turneringsdata. */
 
 signals:
@@ -87,6 +88,8 @@ signals:
      * @param tournamentId ID för den turnering som ska tas bort.
      */
     void removeTournamentRequested(const unsigned int &tournamentId);
+
+    void selectTournamentRequested(const unsigned int &tournamentId);
 
 private slots:
 
@@ -115,6 +118,8 @@ private slots:
      * skicka signalen om att en turnering ska tas bort.
      */
     void onRemoveTournamentClicked();
+
+    void onSelectTournamentClicked();
 };
 
 

@@ -130,7 +130,7 @@ public:
      *
      * @param player Spelaren som ska sparas i databasen.
      */
-    virtual unsigned int addToDatabase(const Player &player) override;
+    virtual unsigned int addToDatabase(const Player *player) override;
 
     /**
      * @brief Uppdaterar en spelare i databasen.
@@ -139,7 +139,7 @@ public:
      *
      * @param player Spelaren vars information ska uppdateras.
      */
-    virtual void updateDatabase(const Player &player) override;
+    virtual void updateDatabase(const Player *player) override;
 
     /**
      * @brief Tar bort en spelare från databasen och den interna listan.

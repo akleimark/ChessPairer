@@ -71,18 +71,18 @@ void PlayerListView::updateView() const
     tableWidget->setColumnWidth(2, TABLE_WIDTH * 0.3);  // 30% för FIDE-id
 
     // Fyll tabellen med data
-    for (std::vector<Player>::const_iterator it = playerListModel->cbegin(); it != playerListModel->cend(); ++it)
+    for (std::vector<Player*>::const_iterator it = playerListModel->cbegin(); it != playerListModel->cend(); ++it)
     {
-        const Player& player = *it;  // Referens till spelaren i vektorn
+        Player* player = *it;  // Referens till spelaren i vektorn
 
         // Namn (redigerbar)
-        tableWidget->setItem(std::distance(playerListModel->cbegin(), it), 0, new QTableWidgetItem(player.getName()));
+        tableWidget->setItem(std::distance(playerListModel->cbegin(), it), 0, new QTableWidgetItem(player->getName()));
 
         // Rating (redigerbar)
-        tableWidget->setItem(std::distance(playerListModel->cbegin(), it), 1, new QTableWidgetItem(QString::number(player.getRating())));
+        tableWidget->setItem(std::distance(playerListModel->cbegin(), it), 1, new QTableWidgetItem(QString::number(player->getRating())));
 
         // FIDE-ID (icke-redigerbar)
-        QTableWidgetItem *fideItem = new QTableWidgetItem(QString::number(player.getFideId()));
+        QTableWidgetItem *fideItem = new QTableWidgetItem(QString::number(player->getFideId()));
         fideItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled); // Inaktivera redigering
         tableWidget->setItem(std::distance(playerListModel->cbegin(), it), 2, fideItem);
     }

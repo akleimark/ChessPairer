@@ -260,7 +260,7 @@ public:
      *
      * @param settingsModel Pekare till en instans av SettingsModel som hanterar applikationens inställningar.
      */
-    explicit TournamentListModel(SettingsModel *settingsModel);
+    explicit TournamentListModel(Tournament * tournament, SettingsModel *settingsModel);
 
     /**
      * @brief Destruktör för TournamentListModel.
@@ -276,7 +276,7 @@ public:
      *
      * @param tournament Den turnering som ska läggas till i databasen.
      */
-    virtual unsigned int addToDatabase(const Tournament &tournament) override;
+    virtual unsigned int addToDatabase(const Tournament *tournament) override;
 
     /**
      * @brief Uppdaterar en turnering i databasen.
@@ -285,7 +285,7 @@ public:
      *
      * @param tournament Den turnering som ska uppdateras i databasen.
      */
-    virtual void updateDatabase(const Tournament &tournament) override;
+    virtual void updateDatabase(const Tournament *tournament) override;
 
     /**
      * @brief Tar bort en turnering från databasen baserat på dess ID.
@@ -295,6 +295,15 @@ public:
      * @param id ID för den turnering som ska tas bort från databasen.
      */
     virtual void removeById(const unsigned int &id) override;
+
+    Tournament* getTournament() const { return tournament; }
+
+    Tournament* findTournamentById(const unsigned int &id) const;
+
+    void setSelectedTournament(Tournament *selectedTournament) { tournament = selectedTournament; }
+
+private:
+    Tournament *tournament;
 };
 
 

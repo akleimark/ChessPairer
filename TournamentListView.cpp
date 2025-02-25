@@ -16,7 +16,7 @@ void TournamentListView::createUI()
     layout->addWidget(tableWidget);
     setLayout(layout);
 
-    tableWidget->setColumnCount(6);
+    tableWidget->setColumnCount(7);
     tableWidget->setHorizontalHeaderLabels({"Id", "Namn", "Startdatum", "Slutdatum", "Antal ronder", "Lottningssystem"});
 
     // Skapa en separat widget för knappen
@@ -26,9 +26,15 @@ void TournamentListView::createUI()
     // Skapa knapparna
     addTournamentButton = new QPushButton("Lägg till en turnering", buttonWidget);
     removeTournamentButton = new QPushButton("Ta bort turneringen", buttonWidget);
+    selectTournamentButton = new QPushButton("Välj den här turneringen", buttonWidget);
+
     removeTournamentButton->setVisible(false);
+    selectTournamentButton->setVisible(false);
+
     buttonLayout->addWidget(addTournamentButton);
     buttonLayout->addWidget(removeTournamentButton);
+    buttonLayout->addWidget(selectTournamentButton);
+
     buttonLayout->addStretch(); // Skapar utrymme efter knappen för att hålla den vänsterjusterad
     buttonWidget->setLayout(buttonLayout);
 
@@ -43,16 +49,24 @@ void TournamentListView::addListeners()
     // Kopplar QTableWidget:s inbyggda cellChanged till vår onCellChanged
     connect(tableWidget, &QTableWidget::cellChanged, this, &TournamentListView::onCellChanged);
 
-    // Kopplar borttagningsknappen till onRemovePlayerClicked
+    // Kopplar borttagningsknappen till onRemoveTournamentClicked
     connect(removeTournamentButton, &QPushButton::clicked,
             this, &TournamentListView::onRemoveTournamentClicked);
+
+    // Kopplar val av turnering till onSelectTournemntClicked
+    connect(selectTournamentButton, &QPushButton::clicked,
+            this, &TournamentListView::onSelectTournamentClicked);
 
     connect(tableWidget->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &TournamentListView::onSelectionChanged);
 
-    // Koppla signalen från PlayerListView till PlayerListController
+    // Koppla signalen från TournamentListView till TournamentListController för vilken turnering som skall tas bort
     connect(this, &TournamentListView::removeTournamentRequested,
             tournamentListController, &TournamentListController::onRemoveTournamentRequested);
+
+    // Koppla signalen från TournamentListView till TournamentListController för vilken turnering som skall väljas
+    connect(this, &TournamentListView::selectTournamentRequested,
+            tournamentListController, &TournamentListController::onSelectTournamentRequested);
 }
 
 void TournamentListView::updateView() const
@@ -72,30 +86,30 @@ void TournamentListView::updateView() const
 
     // Fyll tabellen med data
     int rowIndex = 0;
-    for (std::vector<Tournament>::const_iterator it = tournamentListModel->cbegin(); it != tournamentListModel->cend(); ++it)
+    for (std::vector<Tournament*>::const_iterator it = tournamentListModel->cbegin(); it != tournamentListModel->cend(); ++it)
     {
-        const Tournament& tournament = *it;  // Referens till turneringen i vektorn
+        const Tournament* tournament = *it;  // Referens till turneringen i vektorn
         int columnNumber = 0;
 
         // Id (Icke-redigerbar)
-        QTableWidgetItem *idItem = new QTableWidgetItem(QString::number(tournament.getId()));
+        QTableWidgetItem *idItem = new QTableWidgetItem(QString::number(tournament->getId()));
         idItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled); // Inaktivera redigering
         tableWidget->setItem(rowIndex, columnNumber++, idItem);
 
         // Namn (redigerbar)
-        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament.getName()));
+        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament->getName()));
 
         // Startdatum (redigerbar, konverterat till QString)
-        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament.getStartDate().toString("yyyy-MM-dd")));
+        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament->getStartDate().toString("yyyy-MM-dd")));
 
         // Slutdatum (redigerbar, konverterat till QString)
-        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament.getEndDate().toString("yyyy-MM-dd")));
+        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament->getEndDate().toString("yyyy-MM-dd")));
 
         // Antal ronder (redigerbar, konverterat till QString)
-        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(QString::number(tournament.getNumberOfRounds())));
+        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(QString::number(tournament->getNumberOfRounds())));
 
         // Lottningssystem (redigerbar)
-        tableWidget->setItem(rowIndex++, columnNumber++, new QTableWidgetItem(tournament.getPairingSystem()));
+        tableWidget->setItem(rowIndex++, columnNumber++, new QTableWidgetItem(tournament->getPairingSystem()));
     }
 
     tableWidget->blockSignals(false); // Slå på signaler igen
@@ -115,6 +129,7 @@ void TournamentListView::onSelectionChanged()
 {
     bool hasSelection = !tableWidget->selectedItems().isEmpty();
     removeTournamentButton->setVisible(hasSelection);
+    selectTournamentButton->setVisible(hasSelection);
 }
 
 // Uppdaterad metod för att hantera borttagning
@@ -128,4 +143,16 @@ void TournamentListView::onRemoveTournamentClicked()
 
     // Skicka signalen till controllern
     emit this->removeTournamentRequested(id);
+}
+
+void TournamentListView::onSelectTournamentClicked()
+{
+    QList<QTableWidgetItem *> selectedItems = tableWidget->selectedItems();
+    if (selectedItems.isEmpty()) return;
+
+    int row = selectedItems.first()->row();
+    unsigned int id = tableWidget->item(row, 0)->text().toUInt();
+
+    // Skicka signalen till controllern
+    emit this->selectTournamentRequested(id);
 }

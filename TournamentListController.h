@@ -62,10 +62,12 @@ public slots:
      */
     void onRemoveTournamentRequested(const unsigned int &id);
 
+    void onSelectTournamentRequested(const unsigned int &id);
+
 private:
     TournamentListModel *tournamentListModel; /**< Pekare till modellen som hanterar turneringsdata. */
     TournamentListView *tournamentListView; /**< Pekare till vyn som visar turneringslistan. */
-    bool askForTournamentData(Tournament &tournament);
+    bool askForTournamentData(Tournament *tournament);
 };
 
 #endif // TOURNAMENTLISTCONTROLLER_H

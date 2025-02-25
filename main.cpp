@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     {        
         logger->logWarning("CSS-filen hittades ej.");
     }
-    ChessPairer chessPairer;
-    chessPairer.show();
+
+    ChessPairer::getInstance()->show();
     return a.exec();
 }

@@ -23,19 +23,21 @@ class ChessPairer : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    /**
-         * @brief Konstruktor för ChessPairer.
-         * @param parent Pekare till föräldrawidgeten (nullptr som standard).
-         */
-    explicit ChessPairer(QWidget *parent = nullptr);
+public:    
 
     /**
          * @brief Destruktor för ChessPairer.
          */
     ~ChessPairer();
+    static ChessPairer* getInstance();
+    ChessPairer(const ChessPairer&) = delete;
+    ChessPairer& operator=(const ChessPairer&) = delete;
+    void populateMenu();
 
 private:
+
+    explicit ChessPairer();
+    static ChessPairer *instance;
 
     Logger *logger;///< Instans av 'Logger'
 
@@ -54,6 +56,15 @@ private:
     PlayerListController *playerListController; ///< Controller för spelare.
     SettingsController *settingsController; ///< Controller för inställningar.
 
+    // 'Misc'
+    Tournament *tournament;
+
+    // 'Actions'
+    QAction *exitAction;
+    QAction *showPlayersAction;
+    QAction *showTournamentsAction;
+    QAction *tournamentPlayersAction;
+    QAction *showSettingsAction;
 
     static const unsigned int DEFAULT_WINDOW_WIDTH; ///< Standardbredd för fönstret.
     static const unsigned int DEFAULT_WINDOW_HEIGHT; ///< Standardhöjd för fönstret.
@@ -76,6 +87,8 @@ private:
          */
     void initMVC();
 
+
+
 private slots:
     /**
          * @brief Visar vyn med alla spelare.
@@ -91,5 +104,7 @@ private slots:
          * @brief Visar inställningsvyn.
          */
     void showSettingsView();
+
+    void showTournamentPlayers();
 };
 #endif // CHESSPAIRER_H

@@ -12,20 +12,20 @@ PlayerListController::PlayerListController(PlayerListModel *model, PlayerListVie
 
 void PlayerListController::onAddPlayerClicked()
 {
-    Player newPlayer;
+    Player *newPlayer = new Player;
 
     bool ok;
     const QString NAME = QInputDialog::getText(view, "Lägg till spelare", "Namn:", QLineEdit::Normal, "", &ok);
-    newPlayer.setName(NAME);
-    if (!ok || !newPlayer.checkName()) return;
+    newPlayer->setName(NAME);
+    if (!ok || !newPlayer->checkName()) return;
 
     const unsigned int RATING = QInputDialog::getInt(view, "Lägg till spelare", "Rating:", 1000, Player::getMinimumRating(), Player::getMaximumRating(), 1, &ok);
-    newPlayer.setRating(RATING);
-    if (!ok || !newPlayer.checkRating()) return;
+    newPlayer->setRating(RATING);
+    if (!ok || !newPlayer->checkRating()) return;
 
     int fideId = QInputDialog::getInt(view, "Lägg till spelare", "FIDE-ID:", 1000000, 100000, 9999999, 1, &ok);
-    newPlayer.setFideId(fideId);
-    if (!ok || !newPlayer.checkFideId()) return;
+    newPlayer->setFideId(fideId);
+    if (!ok || !newPlayer->checkFideId()) return;
 
     playerListModel->addToContainer(newPlayer);
     playerListModel->addToDatabase(newPlayer);
@@ -39,21 +39,22 @@ void PlayerListController::onCellChanged(int row, int column, const QString &new
 {
     if (row >= 0 && row < playerListModel->size())
     {
-        Player &player = playerListModel->at(row);
-        const Player oldPlayer(player);
+        Player *player = playerListModel->at(row);
+        Player oldPlayer = *player; // Skapa en kopia av objektet
+
         switch (column)
         {
         case 0:
-            player.setName(newValue);
+            player->setName(newValue);
             break;
         case 1:
-            player.setRating(newValue.toUInt());
+            player->setRating(newValue.toUInt());
             break;
         }
 
-        if(!player.isValid())
+        if (!player->isValid())
         {
-            player = oldPlayer;
+            *player = oldPlayer; // Återställ originalet vid felaktig inmatning
             Logger::getInstance()->logWarning("Felaktiga spelaruppgifter angivna.");
             playerListModel->notifyView(view);
         }
@@ -64,6 +65,7 @@ void PlayerListController::onCellChanged(int row, int column, const QString &new
         }
     }
 }
+
 
 void PlayerListController::onRemovePlayerRequested(const unsigned int &fideId)
 {

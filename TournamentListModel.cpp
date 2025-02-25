@@ -115,13 +115,13 @@ void Tournament::print() const
     out << QString("Pairing System:").leftJustified(COLUMN_WIDTH) << pairingSystem << "\n";
 }
 
-TournamentListModel::TournamentListModel(SettingsModel *settingsModel):
-    ListModel<Tournament>(settingsModel)
+TournamentListModel::TournamentListModel(Tournament * tournament, SettingsModel *settingsModel):
+    tournament(tournament), ListModel<Tournament>(settingsModel)
 {
 
 }
 
-unsigned int TournamentListModel::addToDatabase(const Tournament &tournament)
+unsigned int TournamentListModel::addToDatabase(const Tournament *tournament)
 {
     // Förbered SQL-frågan
     QString queryStr = QString("INSERT INTO tournaments (name, start_date, end_date, number_of_rounds, pairing_system) "
@@ -130,11 +130,11 @@ unsigned int TournamentListModel::addToDatabase(const Tournament &tournament)
     // Skapa och förbered frågan med bind-värden
     QSqlQuery query;
     query.prepare(queryStr);
-    query.bindValue(":name", tournament.getName());
-    query.bindValue(":start_date", tournament.getStartDate().toString("yyyy-MM-dd"));
-    query.bindValue(":end_date", tournament.getEndDate().toString("yyyy-MM-dd"));
-    query.bindValue(":number_of_rounds", tournament.getNumberOfRounds());
-    query.bindValue(":pairing_system", tournament.getPairingSystem());
+    query.bindValue(":name", tournament->getName());
+    query.bindValue(":start_date", tournament->getStartDate().toString("yyyy-MM-dd"));
+    query.bindValue(":end_date", tournament->getEndDate().toString("yyyy-MM-dd"));
+    query.bindValue(":number_of_rounds", tournament->getNumberOfRounds());
+    query.bindValue(":pairing_system", tournament->getPairingSystem());
 
     // Utför frågan och kontrollera om den lyckas
     if (!query.exec())
@@ -158,7 +158,7 @@ unsigned int TournamentListModel::addToDatabase(const Tournament &tournament)
 }
 
 
-void TournamentListModel::updateDatabase(const Tournament &tournament)
+void TournamentListModel::updateDatabase(const Tournament *tournament)
 {
 
     // Förbered SQL-frågan
@@ -166,12 +166,12 @@ void TournamentListModel::updateDatabase(const Tournament &tournament)
 
     // Samla bindvärdena
     QVector<QVariant> bindValues;
-    bindValues.append(tournament.getName());
-    bindValues.append(tournament.getStartDate().toString("yyyy-MM-dd"));
-    bindValues.append(tournament.getEndDate().toString("yyyy-MM-dd"));
-    bindValues.append(tournament.getNumberOfRounds());
-    bindValues.append(tournament.getPairingSystem());
-    bindValues.append(tournament.getId());
+    bindValues.append(tournament->getName());
+    bindValues.append(tournament->getStartDate().toString("yyyy-MM-dd"));
+    bindValues.append(tournament->getEndDate().toString("yyyy-MM-dd"));
+    bindValues.append(tournament->getNumberOfRounds());
+    bindValues.append(tournament->getPairingSystem());
+    bindValues.append(tournament->getId());
 
     // Anropa Database::executeQuery för att exekvera frågan
     Database::getInstance()->executeQuery(queryStr, bindValues);
@@ -223,13 +223,35 @@ void TournamentListModel::removeById(const unsigned int &id)
 
     Logger::getInstance()->logInfo("Turneringen med id: " + QString::number(id) + " har tagits bort från databasen.");
 
-    // Ta bort turneringen från containern
+    // Ta bort turneringen från containern och frigör minnet korrekt
     container.erase(
         std::remove_if(container.begin(), container.end(),
-                       [&](const Tournament &t) { return t.getId() == id; }),
+                       [&](Tournament *tournament)
+                       {
+                           if (tournament->getId() == id)
+                           {
+                               Logger::getInstance()->logInfo("Frigör minnet för turneringen med id: " + QString::number(id));
+                               delete tournament; // Frigör minnet
+                               return true; // Markera för borttagning från containern
+                           }
+                           return false;
+                       }),
         container.end()
         );
 
-    Logger::getInstance()->logInfo("Turneringen med id: " + QString::number(id) + " har tagits bort från containern.");
+    Logger::getInstance()->logInfo("Turneringen med id: " + QString::number(id) + " har tagits bort från containern och minnet har frigjorts.");
 }
 
+
+Tournament* TournamentListModel::findTournamentById(const unsigned int &id) const
+{
+    for(Tournament *tournament : container)
+    {
+        if(tournament->getId() == id)
+        {
+            return tournament;
+        }
+    }
+
+    return nullptr;
+}

@@ -49,7 +49,7 @@ bool Player::checkFideId() const
     return fideId >= 100000 && fideId <= 999999999;
 }
 
-unsigned int PlayerListModel::addToDatabase(const Player &player)
+unsigned int PlayerListModel::addToDatabase(const Player *player)
 {
     // Definiera den parametiserade SQL.
     QString queryStr = "INSERT INTO players (name, rating, fide_id) VALUES (?, ?, ?)";
@@ -59,9 +59,9 @@ unsigned int PlayerListModel::addToDatabase(const Player &player)
     query.prepare(queryStr);
 
     // Binda värden till frågan
-    query.bindValue(0, player.getName());
-    query.bindValue(1, player.getRating());
-    query.bindValue(2, player.getFideId());
+    query.bindValue(0, player->getName());
+    query.bindValue(1, player->getRating());
+    query.bindValue(2, player->getFideId());
 
     // Kör SQL-frågan och kontrollera om den lyckas
     if (!query.exec())
@@ -85,11 +85,11 @@ unsigned int PlayerListModel::addToDatabase(const Player &player)
 }
 
 
-void PlayerListModel::updateDatabase(const Player &player)
+void PlayerListModel::updateDatabase(const Player *player)
 {
     Database* db = Database::getInstance();
     QString queryStr = "UPDATE players SET name = ?, rating = ? WHERE fide_id = ?";
-    QVector<QVariant> bindValues = { player.getName(), player.getRating(), player.getFideId() };
+    QVector<QVariant> bindValues = { player->getName(), player->getRating(), player->getFideId() };
     db->executeQuery(queryStr, bindValues);
 }
 
@@ -108,9 +108,9 @@ void PlayerListModel::removeById(const unsigned int &id)
     db->executeQuery(queryStr, bindValues);
 
     // Ta bort spelaren från vektorn
-    std::vector<Player>::const_iterator it = std::remove_if(container.begin(), container.end(), [&](const Player &p)
+    std::vector<Player*>::const_iterator it = std::remove_if(container.begin(), container.end(), [&](Player *p)
     {
-        return p.getFideId() == id; // Matcha på FIDE-ID
+        return p->getFideId() == id; // Matcha på FIDE-ID
     });
 
     // Om spelaren hittades i vektorn, ta bort den
@@ -122,31 +122,32 @@ void PlayerListModel::removeById(const unsigned int &id)
 
 void PlayerListModel::doSort(const QStringList &sortCriteria)
 {
-    std::sort(container.begin(), container.end(), [&](const Player &a, const Player &b) {
+    std::sort(container.begin(), container.end(), [&](const Player *a, const Player *b) {
         for (const QString &criterion : sortCriteria)
         {
             if (criterion == "Name")
             {
-                if (a.getName() != b.getName())
-                    return a.getName() < b.getName();
+                if (a->getName() != b->getName())
+                    return a->getName() < b->getName();
             }
             else if (criterion == "Rating")
             {
-                if (a.getRating() != b.getRating())
-                    return a.getRating() < b.getRating();
+                if (a->getRating() != b->getRating())
+                    return a->getRating() < b->getRating();
             }
             else if (criterion == "FideId")
             {
-                if (a.getFideId() != b.getFideId())
-                    return a.getFideId() < b.getFideId();
+                if (a->getFideId() != b->getFideId())
+                    return a->getFideId() < b->getFideId();
             }
             else
             {
-                Logger::getInstance()->logError("Ogiltigt sorteringskriterium:" + criterion);
+                Logger::getInstance()->logError("Ogiltigt sorteringskriterium: " + criterion);
             }
         }
         return false; // Behåll ordningen om alla kriterier är lika
     });
 }
+
 
 

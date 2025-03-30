@@ -30,6 +30,9 @@ ChessPairer::~ChessPairer()
     delete settingsController;
     delete tournamentListView;
     delete tournamentListModel;
+    delete tournamentPlayersModel;
+    delete tournamentPlayersView;
+    delete tournamentPlayersController;
     delete tournament;
 }
 
@@ -63,6 +66,11 @@ void ChessPairer::initMVC()
     tournamentListController = new TournamentListController(tournamentListModel, tournamentListView);
     tournamentListView->addListeners();
 
+    tournamentPlayersModel = new TournamentPlayersModel(playerListModel, tournament, settingsModel);
+    tournamentPlayersView = new TournamentPlayersView(tournamentPlayersModel);
+    tournamentPlayersController = new TournamentPlayersController(tournamentPlayersModel, tournamentPlayersView);
+    tournamentPlayersView->addListeners();
+
     logger->logInfo("MVC initierades utan problem.");
 }
 
@@ -84,6 +92,7 @@ void ChessPairer::createUI()
     stackedWidget->addWidget(settingsView);
     stackedWidget->addWidget(playerListView);
     stackedWidget->addWidget(tournamentListView);
+    stackedWidget->addWidget(tournamentPlayersView);
 
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
     layout->addWidget(stackedWidget);
@@ -153,7 +162,10 @@ void ChessPairer::showAllTournaments()
 
 void ChessPairer::showTournamentPlayers()
 {
-
+    Database::getInstance()->loadSettingsFromDatabase(settingsModel); // Hämta inställningarna från databasen
+    Database::getInstance()->loadPlayersFromDatabase(playerListModel);  // Hämta alla spelare från databasen
+    stackedWidget->setCurrentWidget(tournamentPlayersView);
+    tournamentPlayersModel->notifyAllViews();
 }
 
 void ChessPairer::showSettingsView()

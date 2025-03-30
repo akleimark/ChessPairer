@@ -216,7 +216,7 @@ public:
  */
     static unsigned int getMaximumNumberOfRounds() { return Tournament::MAXIMUM_NUMBER_OF_ROUNDS; }
 
-    void addTournamentPlayer(TournamentPlayer *player) {players.insert(player);}
+    void addTournamentPlayer(TournamentPlayer *player);
 
     TournamentPlayer* at(const unsigned int &index) const;
 

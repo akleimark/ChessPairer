@@ -13,33 +13,31 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql)
 
 set(PROJECT_SOURCES
-        main.cpp
-        ChessPairer.cpp
-        ChessPairer.h
+    main.cpp
+    ChessPairer.cpp
+    ChessPairer.h
+    MVC.h
+    MVC.cpp
+    PlayerListModel.h
+    PlayerListView.h PlayerListView.cpp
+    PlayerListController.h PlayerListController.cpp
+    Database.h Database.cpp
+    PlayerListModel.cpp
+    SettingsView.h SettingsView.cpp
+    SettingsModel.h SettingsModel.cpp
+    SettingsController.h SettingsController.cpp
+    TournamentListModel.h TournamentListModel.cpp
+    Interfaces.h
+    ListModel.h
+    TournamentListView.h TournamentListView.cpp
+    TournamentListController.h TournamentListController.cpp
+    Logger.h Logger.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(ChessPairer
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        MVC.h
-        MVC.cpp
-        PlayerListModel.h
-        PlayerListView.h PlayerListView.cpp
-        PlayerListController.h PlayerListController.cpp
-        Database.h Database.cpp
-        PlayerListModel.cpp
-        SettingsView.h SettingsView.cpp
-        SettingsModel.h SettingsModel.cpp
-        SettingsController.h SettingsController.cpp
-        TournamentListModel.h TournamentListModel.cpp
-        Interfaces.h
-        ListModel.h
-        TournamentListView.h TournamentListView.cpp
-        TournamentListController.h TournamentListController.cpp
-        Logger.h Logger.cpp
-
-
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ChessPairer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -55,6 +53,10 @@ else()
     else()
         add_executable(ChessPairer
             ${PROJECT_SOURCES}
+            TournamentPlayersView.h TournamentPlayersView.cpp
+            TournamentPlayersModel.h TournamentPlayersModel.cpp
+            TournamentPlayersController.h TournamentPlayersController.cpp
+
         )
     endif()
 endif()

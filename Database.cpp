@@ -30,6 +30,8 @@ void Database::createTables()
 {
     QSqlQuery query;
     QStringList queries;
+    queries << "PRAGMA foreign_keys = ON;";
+
     // Sql för tabellen med spelare.
     queries << "CREATE TABLE IF NOT EXISTS players ("
                "fide_id INTEGER PRIMARY KEY, "
@@ -50,6 +52,13 @@ void Database::createTables()
                 "number_of_rounds INTEGER NOT NULL, "
                 "pairing_system TEXT NOT NULL)"
         ;
+
+    // Sql för turneringsspelare
+    queries << "CREATE TABLE IF NOT EXISTS tournament_players (tournament_id INTEGER NOT NULL, "
+               "player_id INTEGER NOT NULL, player_number INTEGER NOT NULL DEFAULT 0, "
+               "PRIMARY KEY (tournament_id, player_id), FOREIGN KEY (tournament_id) "
+               "REFERENCES tournaments(id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (player_id) "
+               "REFERENCES players(id) ON DELETE CASCADE ON UPDATE CASCADE)";
 
     for (QStringList::const_iterator it = queries.cbegin(); it != queries.cend(); ++it)
     {

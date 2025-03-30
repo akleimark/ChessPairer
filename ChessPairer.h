@@ -11,6 +11,9 @@
 #include "TournamentListController.h"
 #include "TournamentListModel.h"
 #include "TournamentListView.h"
+#include "TournamentPlayersModel.h"
+#include "TournamentPlayersView.h"
+#include "TournamentPlayersController.h"
 
 /**
  * @class ChessPairer
@@ -44,17 +47,20 @@ private:
     // 'Models'
     TournamentListModel *tournamentListModel; ///< Modell för turneringar.
     PlayerListModel *playerListModel; ///< Modell för spelare.
+    TournamentPlayersModel *tournamentPlayersModel;
     SettingsModel *settingsModel; ///< Modell för inställningar.
 
     // 'Views'
     TournamentListView *tournamentListView;///< Vy för turneringar.
     PlayerListView *playerListView; ///< Vy för spelare.
+    TournamentPlayersView *tournamentPlayersView;
     SettingsView *settingsView; ///< Vy för inställningar.
 
     // 'Controllers'
     TournamentListController *tournamentListController; ///< Controller för turneringar.
     PlayerListController *playerListController; ///< Controller för spelare.
     SettingsController *settingsController; ///< Controller för inställningar.
+    TournamentPlayersController *tournamentPlayersController;
 
     // 'Misc'
     Tournament *tournament;

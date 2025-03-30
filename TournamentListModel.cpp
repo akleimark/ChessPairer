@@ -115,6 +115,30 @@ void Tournament::print() const
     out << QString("Pairing System:").leftJustified(COLUMN_WIDTH) << pairingSystem << "\n";
 }
 
+void Tournament::addTournamentPlayer(TournamentPlayer *player)
+{
+    // Lägg till spelaren i den interna containern
+    players.insert(player);
+
+    // Skapa och förbered SQL-frågan
+    QString queryStr = QString("INSERT INTO tournament_players "
+                               "(tournament_id, player_id, player_number) "
+                               "VALUES (:tournament_id, :player_id, :player_number)");
+
+    QSqlQuery query;
+    query.prepare(queryStr);
+    query.bindValue(":tournament_id", this->id);
+    query.bindValue(":player_id", player->getFideId());
+    query.bindValue(":player_number", player->getPlayerNumber());
+
+    // Kör frågan
+    if (!query.exec())
+    {
+        Logger::getInstance()->logError("Misslyckades att lägga till spelare i tournament_players: " + query.lastError().text());
+        std::exit(EXIT_FAILURE);
+    }
+}
+
 TournamentListModel::TournamentListModel(Tournament * tournament, SettingsModel *settingsModel):
     tournament(tournament), ListModel<Tournament>(settingsModel)
 {

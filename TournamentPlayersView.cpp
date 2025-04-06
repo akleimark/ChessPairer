@@ -6,8 +6,8 @@
 #include <QTableWidgetItem>
 #include <QHeaderView>
 
-TournamentPlayersView::TournamentPlayersView(TournamentPlayersModel *tournamentPlayersModel):
-    tournamentPlayersModel(tournamentPlayersModel)
+TournamentPlayersView::TournamentPlayersView(TournamentPlayersModel &tournamentPlayersModel):
+    View(tournamentPlayersModel), tournamentPlayersModel(tournamentPlayersModel), tournamentPlayersController(nullptr)
 {
     createUI();
 }
@@ -60,26 +60,43 @@ void TournamentPlayersView::createUI()
     mainLayout->addLayout(tablesLayout);
 }
 
-
-
-void TournamentPlayersView::updateView() const
+void TournamentPlayersView::updateView()
 {
-    PlayerListModel *pModel = tournamentPlayersModel->getPlayerListModel();
-    availablePlayersTable->setRowCount(pModel->size());
+    tournamentPlayersTable->clearContents();
+    availablePlayersTable->clearContents();
+
+    PlayerListModel &pModel = tournamentPlayersModel.getPlayerListModel();
+    availablePlayersTable->setRowCount(pModel.size());
     int rowIndex = 0;
-    for (std::vector<Player*>::const_iterator it = pModel->cbegin(); it != pModel->cend(); ++it)
-    {       
-        const Player* player = *it;  // Pekare till spelare i listan
+    for (std::vector<Player>::const_iterator it = pModel.cbegin(); it != pModel.cend(); ++it)
+    {
+        const Player player = *it;  // Pekare till spelare i listan
         int columnNumber = 0;
 
-        QTableWidgetItem *fideIdItem = new QTableWidgetItem(QString::number(player->getFideId()));
+        QTableWidgetItem *fideIdItem = new QTableWidgetItem(QString::number(player.getFideId()));
         fideIdItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled); // Inaktivera redigering
         availablePlayersTable->setItem(rowIndex, columnNumber++, fideIdItem);
 
-        QTableWidgetItem *nameItem = new QTableWidgetItem(player->getName());
+        QTableWidgetItem *nameItem = new QTableWidgetItem(player.getName());
         nameItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled); // Inaktivera redigering
         availablePlayersTable->setItem(rowIndex++, columnNumber++, nameItem);
+    }
 
+    Tournament &tournament = tournamentPlayersModel.getTournament();
+    tournamentPlayersTable->setRowCount(tournament.size());
+    int tournamentRowIndex = 0;
+    for (std::set<TournamentPlayer>::const_iterator it = tournament.cbegin(); it != tournament.cend(); ++it)
+    {
+        const TournamentPlayer &player = *it;
+        int columnNumber = 0;
+
+        QTableWidgetItem *fideIdItem = new QTableWidgetItem(QString::number(player.getFideId()));
+        fideIdItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        tournamentPlayersTable->setItem(tournamentRowIndex, columnNumber++, fideIdItem);
+
+        QTableWidgetItem *nameItem = new QTableWidgetItem(player.getName());
+        nameItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        tournamentPlayersTable->setItem(tournamentRowIndex++, columnNumber++, nameItem);
     }
 
     availablePlayersTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -88,5 +105,25 @@ void TournamentPlayersView::updateView() const
 void TournamentPlayersView::addListeners()
 {
     TournamentPlayersController* tournamentPlayersController = dynamic_cast<TournamentPlayersController*>(controller);
-    connect(addButton, &QPushButton::clicked, tournamentPlayersController, &TournamentPlayersController::onAddTournamentPlayerClicked);
+
+    connect(addButton, &QPushButton::clicked, this, [this, tournamentPlayersController]()
+    {
+        QTableWidgetItem *selectedItem = availablePlayersTable->currentItem();
+        if (!selectedItem)
+        {
+            return;
+        }
+
+        int selectedRow = selectedItem->row();
+        QTableWidgetItem *fideItem = availablePlayersTable->item(selectedRow, 0);
+        if (!fideItem)
+        {
+            return;
+        }
+
+        int fideId = fideItem->text().toInt();
+
+        tournamentPlayersController->onAddTournamentPlayerRequested(fideId);
+    });
 }
+

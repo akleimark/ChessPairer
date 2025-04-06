@@ -49,5 +49,4 @@ public:
     virtual bool isValid() const = 0;
 };
 
-
 #endif // INTERFACES_H

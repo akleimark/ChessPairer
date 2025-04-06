@@ -1,9 +1,10 @@
 #include "PlayerListView.h"
 #include "PlayerListController.h"
 #include "PlayerListModel.h"
+#include <iostream>
 
-PlayerListView::PlayerListView(PlayerListModel *model):
-    View(model), playerListModel(model)
+PlayerListView::PlayerListView(PlayerListModel &model):
+    View(model), playerListModel(model), playerListController(nullptr)
 {
     createUI();
 }
@@ -38,7 +39,8 @@ void PlayerListView::createUI()
 
 void PlayerListView::addListeners()
 {
-    PlayerListController* playerListController = dynamic_cast<PlayerListController*>(controller);
+    playerListController = dynamic_cast<PlayerListController*>(controller);
+
     connect(addPlayerButton, &QPushButton::clicked, playerListController, &PlayerListController::onAddPlayerClicked);
 
     // Kopplar QTableWidget:s inbyggda cellChanged till vår onCellChanged
@@ -54,13 +56,14 @@ void PlayerListView::addListeners()
     // Koppla signalen från PlayerListView till PlayerListController
     connect(this, &PlayerListView::removePlayerRequested,
             playerListController, &PlayerListController::onRemovePlayerRequested);
+
 }
 
-void PlayerListView::updateView() const
+void PlayerListView::updateView()
 {
     tableWidget->blockSignals(true); // Blockera signaler för att undvika onCellChanged-loop
-    tableWidget->setFont(QFont(playerListModel->getSettingsModel()->getSettingByType("font"), 12, 400));
-    tableWidget->setRowCount(playerListModel->size());
+    tableWidget->setFont(QFont(playerListModel.getSettingsModel().getSettingByType("font"), 12, 400));
+    tableWidget->setRowCount(playerListModel.size());
 
     // Justera tabellens kolumner som proportioner av den totala bredden
     const unsigned int TABLE_WIDTH = tableWidget->viewport()->width();
@@ -71,20 +74,20 @@ void PlayerListView::updateView() const
     tableWidget->setColumnWidth(2, TABLE_WIDTH * 0.3);  // 30% för FIDE-id
 
     // Fyll tabellen med data
-    for (std::vector<Player*>::const_iterator it = playerListModel->cbegin(); it != playerListModel->cend(); ++it)
+    for (std::vector<Player>::const_iterator it = playerListModel.cbegin(); it != playerListModel.cend(); ++it)
     {
-        Player* player = *it;  // Referens till spelaren i vektorn
+        Player player = *it;  // Referens till spelaren i vektorn
 
         // Namn (redigerbar)
-        tableWidget->setItem(std::distance(playerListModel->cbegin(), it), 0, new QTableWidgetItem(player->getName()));
+        tableWidget->setItem(std::distance(playerListModel.cbegin(), it), 0, new QTableWidgetItem(player.getName()));
 
         // Rating (redigerbar)
-        tableWidget->setItem(std::distance(playerListModel->cbegin(), it), 1, new QTableWidgetItem(QString::number(player->getRating())));
+        tableWidget->setItem(std::distance(playerListModel.cbegin(), it), 1, new QTableWidgetItem(QString::number(player.getRating())));
 
         // FIDE-ID (icke-redigerbar)
-        QTableWidgetItem *fideItem = new QTableWidgetItem(QString::number(player->getFideId()));
+        QTableWidgetItem *fideItem = new QTableWidgetItem(QString::number(player.getFideId()));
         fideItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled); // Inaktivera redigering
-        tableWidget->setItem(std::distance(playerListModel->cbegin(), it), 2, fideItem);
+        tableWidget->setItem(std::distance(playerListModel.cbegin(), it), 2, fideItem);
     }
 
     tableWidget->blockSignals(false); // Slå på signaler igen

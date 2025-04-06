@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include "TournamentListModel.h"
 
+class TournamentListController;
+
 /**
  * @class TournamentListView
  * @brief Visar och hanterar användargränssnittet för turneringslistan.
@@ -30,7 +32,7 @@ public:
      *
      * @param model Pekare till en instans av TournamentListModel som innehåller data om turneringar.
      */
-    explicit TournamentListView(TournamentListModel *model);
+    explicit TournamentListView(TournamentListModel &model);
 
     /**
      * @brief Uppdaterar vyn med aktuell data från modellen.
@@ -39,7 +41,7 @@ public:
      *
      * @override
      */
-    virtual void updateView() const override;
+    virtual void updateView() override;
 
     /**
      * @brief Lägger till lyssnare för användarinteraktioner.
@@ -65,7 +67,8 @@ private:
     QPushButton *addTournamentButton; /**< Knappar för att lägga till en turnering. */
     QPushButton *removeTournamentButton; /**< Knappar för att ta bort en turnering. */
     QPushButton *selectTournamentButton;
-    const TournamentListModel *tournamentListModel; /**< Pekare till modellen som håller turneringsdata. */
+    TournamentListModel &tournamentListModel; /**< Pekare till modellen som håller turneringsdata. */
+    TournamentListController *tournamentListController;
 
 signals:
     /**

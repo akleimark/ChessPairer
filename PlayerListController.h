@@ -24,7 +24,7 @@ public:
      * @param model Pekare till PlayerListModel som hanterar spelarlistan.
      * @param view Pekare till PlayerListView som visar spelarlistan.
      */
-    PlayerListController(PlayerListModel *model, PlayerListView *view);
+    PlayerListController(PlayerListModel &model, PlayerListView *view);
 
 public slots:
     /**
@@ -44,7 +44,7 @@ public slots:
      * @param column Kolumnen i tabellen som ändrades.
      * @param newValue Det nya värdet som användaren angav.
      */
-    void onCellChanged(int row, int column, const QString &newValue);
+    void onCellChanged(const unsigned int &row, const unsigned int &column, const QString &newValue);
 
     /**
      * @brief Begär att en spelare tas bort från listan.
@@ -57,7 +57,7 @@ public slots:
     void onRemovePlayerRequested(const unsigned int &fideId);
 
 private:
-    PlayerListModel *playerListModel;    ///< Pekare till modellen som hanterar spelarlistan.
+    PlayerListModel &playerListModel;    ///< Referens till modellen som hanterar spelarlistan.
     PlayerListView *playerListView;      ///< Pekare till vyn som visar spelarlistan.
 };
 

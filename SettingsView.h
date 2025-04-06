@@ -6,6 +6,7 @@
 #include "MVC.h"
 #include "SettingsModel.h"
 #include <QFontComboBox>
+#include "SettingsController.h"
 
 /**
  * @class SettingsView
@@ -29,7 +30,7 @@ public:
      * @param model Pekare till en `SettingsModel`-instans som representerar
      *              inställningsdatan.
      */
-    explicit SettingsView(SettingsModel *settingsModel);
+    explicit SettingsView(SettingsModel &settingsModel);
 
     /**
      * @brief Uppdaterar vyn baserat på de senaste inställningarna.
@@ -37,7 +38,7 @@ public:
      * Denna metod uppdaterar användargränssnittet med de senaste värdena från
      * inställningsmodellen, t.ex. ändring av font eller andra användarinställningar.
      */
-    virtual void updateView() const override;
+    virtual void updateView() override;
 
     /**
      * @brief Lägger till lyssnare för användarinteraktioner.
@@ -59,7 +60,8 @@ private:
      */
     void createUI();
 
-    SettingsModel *settingsModel; /**< Pekare till `SettingsModel` som lagrar och hanterar inställningarna. */
+    SettingsModel &settingsModel;
+    SettingsController *settingsController;
 };
 
 

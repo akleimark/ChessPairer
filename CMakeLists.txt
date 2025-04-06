@@ -56,6 +56,9 @@ else()
             TournamentPlayersView.h TournamentPlayersView.cpp
             TournamentPlayersModel.h TournamentPlayersModel.cpp
             TournamentPlayersController.h TournamentPlayersController.cpp
+            TournamentPlayer.h TournamentPlayer.cpp
+            Tournament.h Tournament.cpp
+            Player.h Player.cpp
 
         )
     endif()

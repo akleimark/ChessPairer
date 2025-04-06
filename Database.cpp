@@ -54,11 +54,10 @@ void Database::createTables()
         ;
 
     // Sql för turneringsspelare
-    queries << "CREATE TABLE IF NOT EXISTS tournament_players (tournament_id INTEGER NOT NULL, "
-               "player_id INTEGER NOT NULL, player_number INTEGER NOT NULL DEFAULT 0, "
-               "PRIMARY KEY (tournament_id, player_id), FOREIGN KEY (tournament_id) "
-               "REFERENCES tournaments(id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (player_id) "
-               "REFERENCES players(id) ON DELETE CASCADE ON UPDATE CASCADE)";
+    queries << "CREATE TABLE IF NOT EXISTS tournament_players (tournament_id INTEGER NOT NULL, player_id INTEGER NOT NULL, "
+               "player_number INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (tournament_id, player_id), "
+               "FOREIGN KEY (tournament_id) REFERENCES tournaments(id) ON DELETE CASCADE ON UPDATE CASCADE, "
+               "FOREIGN KEY (player_id) REFERENCES players(fide_id) ON DELETE CASCADE ON UPDATE CASCADE)";
 
     for (QStringList::const_iterator it = queries.cbegin(); it != queries.cend(); ++it)
     {
@@ -137,15 +136,9 @@ QSqlQuery Database::selectQuery(const QString& queryStr)
     return query;
 }
 
-void Database::loadTournamentsFromDatabase(TournamentListModel *model)
-{   
-    if (!model)
-    {
-        Logger::getInstance()->logError("Ett okänt fel uppstod.");
-        std::exit(EXIT_FAILURE);
-    }
-
-    model->reset(); // Rensa modellen innan vi laddar om data
+void Database::loadTournamentsFromDatabase(TournamentListModel &model)
+{
+    model.reset(); // Rensa modellen innan vi laddar om data
 
     QSqlQuery query = selectQuery(
         "SELECT id, name, start_date, end_date, number_of_rounds, pairing_system FROM tournaments ORDER BY name"
@@ -171,19 +164,13 @@ void Database::loadTournamentsFromDatabase(TournamentListModel *model)
         const QString pairingSystem = query.value(5).toString();
 
         // Lägg till turneringen i modellen
-        model->addToContainer(new Tournament(name, startDate, endDate, numberOfRounds, pairingSystem, id));
+        model.addToContainer(Tournament(name, startDate, endDate, numberOfRounds, pairingSystem, id));
     }
 }
 
-void Database::loadPlayersFromDatabase(PlayerListModel *model, const QString &orderList)
+void Database::loadPlayersFromDatabase(PlayerListModel &model, const QString &orderList)
 {
-    if(!model)
-    {
-        Logger::getInstance()->logError("Ett okänt fel uppstod.");
-        std::exit(EXIT_FAILURE);
-    }
-
-    model->reset();
+    model.reset();
 
     QSqlQuery query = selectQuery("SELECT name, rating, fide_id FROM players ORDER BY " + orderList);
 
@@ -192,25 +179,19 @@ void Database::loadPlayersFromDatabase(PlayerListModel *model, const QString &or
         QString name = query.value(0).toString();
         int rating = query.value(1).toInt();
         int fideId = query.value(2).toInt();
-        model->addToContainer(new Player(fideId, name, rating));  // Lägg till spelare i MVC
+        model.addToContainer(Player(fideId, name, rating));  // Lägg till spelare i MVC
     }
 }
 
-void Database::loadSettingsFromDatabase(SettingsModel* model)
+void Database::loadSettingsFromDatabase(SettingsModel &model)
 {    
-    if(!model)
-    {
-        Logger::getInstance()->logError("Ett okänt fel uppstod.");
-        std::exit(EXIT_FAILURE);
-    }
-
-    model->reset();
+    model.reset();
     QSqlQuery query = selectQuery("SELECT type, value FROM settings");
 
     while (query.next())
     {
         QString type = query.value(0).toString();
         QString value = query.value(1).toString();
-        model->addSettingToContainer(Setting(type, value));  // Lägg till inställning i MVC
+        model.addSettingToContainer(Setting(type, value));  // Lägg till inställning i MVC
     }
 }

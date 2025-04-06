@@ -26,10 +26,10 @@ public:
      * @param model Pekare till modellen som ska hanteras.
      * @param view Pekare till vyn som ska hanteras.
      */
-    Controller(Model *model, View *view);
+    Controller(Model &model, View *view);
 
 protected:
-    Model *model;   ///< Pekare till den associerade modellen.
+    Model &model;   ///< Pekare till den associerade modellen.
     View *view;     ///< Pekare till den associerade vyn.
 };
 
@@ -84,8 +84,8 @@ protected:
 class View : public QWidget
 {
 protected:
-    Controller *controller;  ///< Pekare till den associerade controllern.
-    Model *model;            ///< Pekare till den associerade modellen.
+    Controller *controller;
+    Model &model;
     /**
  * @brief Standardfonten som används för rubriker.
  *
@@ -122,21 +122,21 @@ public:
      *
      * Skapar en vy utan en tilldelad modell eller controller.
      */
-    View() : controller(nullptr), model(nullptr) {}
+
 
     /**
      * @brief Konstruktor som associerar en modell med vyn.
      *
      * @param model Pekare till modellen som används av vyn.
      */
-    View(Model *model) : controller(nullptr), model(model) {}
+    View(Model &model) : model(model), controller(nullptr) {}
 
     /**
      * @brief Uppdaterar vyn baserat på modellens data.
      *
      * Denna metod måste implementeras av underklasser.
      */
-    virtual void updateView() const = 0;
+    virtual void updateView() = 0;
 
     /**
      * @brief Lägger till eventlyssnare för användarinteraktioner.
@@ -150,7 +150,7 @@ public:
      *
      * @param controller Pekare till controllern som ska användas av vyn.
      */
-    void setController(Controller *controller) { this->controller = controller; }    
+    void setController(Controller *controller) { this->controller = controller; }
 };
 
 #endif // MVC_H

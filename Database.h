@@ -52,7 +52,7 @@ class Database
         return db;
     }
 
-    void loadTournamentsFromDatabase(TournamentListModel *model);
+    void loadTournamentsFromDatabase(TournamentListModel &model);
 
 
     /**
@@ -61,14 +61,14 @@ class Database
  * @param model Pekare till PlayerListModel där spelarna ska laddas in.
  * @param orderList (Valfritt) Anger hur spelarna ska sorteras, standardvärdet är "name".
  */
-    void loadPlayersFromDatabase(PlayerListModel *model, const QString &orderList = "name");
+    void loadPlayersFromDatabase(PlayerListModel &model, const QString &orderList = "name");
 
     /**
  * @brief Laddar inställningar från databasen och fyller en modell.
  *
  * @param model Pekare till SettingsModel där inställningarna ska laddas in.
  */
-    void loadSettingsFromDatabase(SettingsModel* model);
+    void loadSettingsFromDatabase(SettingsModel &model);
     private:
     /**
      * @brief Privat konstruktor för att förhindra direkt instansiering (singleton-mönster).

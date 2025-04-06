@@ -5,13 +5,16 @@
 #include <qsqlquery.h>
 #include "PlayerListController.h"
 #include "Database.h"
+#include <iostream>
+
 
 const unsigned int ChessPairer::DEFAULT_WINDOW_WIDTH = 700;
 const unsigned int ChessPairer::DEFAULT_WINDOW_HEIGHT = 500;
 ChessPairer* ChessPairer::instance = nullptr;
 
 ChessPairer::ChessPairer()
-    : QMainWindow(nullptr)
+    : QMainWindow(nullptr), playerListModel(settingsModel), tournamentListModel(selectedTournament, settingsModel),
+        tournamentPlayersModel(playerListModel, selectedTournament, settingsModel)
 {
     logger = Logger::getInstance();
     this->resize(ChessPairer::DEFAULT_WINDOW_WIDTH, ChessPairer::DEFAULT_WINDOW_HEIGHT);
@@ -22,18 +25,10 @@ ChessPairer::ChessPairer()
 
 ChessPairer::~ChessPairer()
 {
-    delete playerListController;
     delete playerListView;
-    delete playerListModel;
     delete settingsView;
-    delete settingsModel;
-    delete settingsController;
     delete tournamentListView;
-    delete tournamentListModel;
-    delete tournamentPlayersModel;
     delete tournamentPlayersView;
-    delete tournamentPlayersController;
-    delete tournament;
 }
 
 ChessPairer* ChessPairer::getInstance()
@@ -49,26 +44,24 @@ void ChessPairer::initMVC()
 {
     // Initiera MVC
 
-    tournament = nullptr;
-
-    settingsModel = new SettingsModel;
     settingsView = new SettingsView(settingsModel);
     settingsController = new SettingsController(settingsModel, settingsView);
+    settingsView->setController(settingsController);
     settingsView->addListeners();
 
-    playerListModel = new PlayerListModel(settingsModel);
     playerListView = new PlayerListView(playerListModel);
     playerListController = new PlayerListController(playerListModel, playerListView);
+    playerListView->setController(playerListController);
     playerListView->addListeners();
 
-    tournamentListModel = new TournamentListModel(tournament, settingsModel);
     tournamentListView = new TournamentListView(tournamentListModel);
     tournamentListController = new TournamentListController(tournamentListModel, tournamentListView);
+    tournamentListView->setController(tournamentListController);
     tournamentListView->addListeners();
 
-    tournamentPlayersModel = new TournamentPlayersModel(playerListModel, tournament, settingsModel);
     tournamentPlayersView = new TournamentPlayersView(tournamentPlayersModel);
     tournamentPlayersController = new TournamentPlayersController(tournamentPlayersModel, tournamentPlayersView);
+    tournamentPlayersView->setController(tournamentPlayersController);
     tournamentPlayersView->addListeners();
 
     logger->logInfo("MVC initierades utan problem.");
@@ -140,8 +133,8 @@ void ChessPairer::createMenu()
 
 void ChessPairer::populateMenu()
 {
-    tournament = tournamentListModel->getTournament();
-    tournamentPlayersAction->setEnabled(tournament != nullptr);
+    selectedTournament = tournamentListModel.getTournament();
+    tournamentPlayersAction->setEnabled(selectedTournament.getId() != 0);
 }
 
 void ChessPairer::showAllPlayers()
@@ -149,7 +142,7 @@ void ChessPairer::showAllPlayers()
     Database::getInstance()->loadSettingsFromDatabase(settingsModel); // Hämta inställningarna från databasen
     Database::getInstance()->loadPlayersFromDatabase(playerListModel);  // Hämta alla spelare från databasen
     stackedWidget->setCurrentWidget(playerListView);
-    playerListModel->notifyAllViews();
+    playerListModel.notifyAllViews();
 }
 
 void ChessPairer::showAllTournaments()
@@ -157,7 +150,7 @@ void ChessPairer::showAllTournaments()
     Database::getInstance()->loadSettingsFromDatabase(settingsModel); // Hämta inställningarna från databasen
     Database::getInstance()->loadTournamentsFromDatabase(tournamentListModel);  // Hämta alla turneringar från databasen
     stackedWidget->setCurrentWidget(tournamentListView);
-    tournamentListModel->notifyAllViews();
+    tournamentListModel.notifyAllViews();
 }
 
 void ChessPairer::showTournamentPlayers()
@@ -165,12 +158,12 @@ void ChessPairer::showTournamentPlayers()
     Database::getInstance()->loadSettingsFromDatabase(settingsModel); // Hämta inställningarna från databasen
     Database::getInstance()->loadPlayersFromDatabase(playerListModel);  // Hämta alla spelare från databasen
     stackedWidget->setCurrentWidget(tournamentPlayersView);
-    tournamentPlayersModel->notifyAllViews();
+    tournamentPlayersModel.notifyAllViews();
 }
 
 void ChessPairer::showSettingsView()
 {
     Database::getInstance()->loadSettingsFromDatabase(settingsModel); // Hämta inställningarna från databasen
     stackedWidget->setCurrentWidget(settingsView);
-    settingsModel->notifyAllViews();
+    settingsModel.notifyAllViews();
 }

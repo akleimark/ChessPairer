@@ -2,20 +2,20 @@
 #include <QLabel>
 #include "SettingsController.h"
 
-SettingsView::SettingsView(SettingsModel *settingsModel):
-    settingsModel(settingsModel)
+SettingsView::SettingsView(SettingsModel &settingsModel):
+    View(settingsModel), settingsModel(settingsModel)
 {
     createUI();
 }
 
-void SettingsView::updateView() const
+void SettingsView::updateView()
 {
-    fontComboBox->setCurrentFont(QFont(settingsModel->getSettingByType("font")));
+    fontComboBox->setCurrentFont(QFont(settingsModel.getSettingByType("font")));
 }
 
 void SettingsView::addListeners()
 {
-    SettingsController* settingsController = dynamic_cast<SettingsController*>(controller);
+    settingsController = dynamic_cast<SettingsController*>(controller);
     connect(fontComboBox, &QFontComboBox::currentFontChanged, settingsController, &SettingsController::onFontChanged);
 }
 

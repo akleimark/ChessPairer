@@ -1,7 +1,7 @@
 #include "TournamentListView.h"
 #include "TournamentListController.h"
 
-TournamentListView::TournamentListView(TournamentListModel *model):
+TournamentListView::TournamentListView(TournamentListModel &model):
     View(model), tournamentListModel(model)
 {
     createUI();
@@ -43,7 +43,7 @@ void TournamentListView::createUI()
 
 void TournamentListView::addListeners()
 {
-    TournamentListController* tournamentListController = dynamic_cast<TournamentListController*>(controller);
+    tournamentListController = dynamic_cast<TournamentListController*>(controller);
     connect(addTournamentButton, &QPushButton::clicked, tournamentListController, &TournamentListController::onAddTournamentClicked);
 
     // Kopplar QTableWidget:s inbyggda cellChanged till vår onCellChanged
@@ -69,11 +69,11 @@ void TournamentListView::addListeners()
             tournamentListController, &TournamentListController::onSelectTournamentRequested);
 }
 
-void TournamentListView::updateView() const
+void TournamentListView::updateView()
 {
     tableWidget->blockSignals(true); // Blockera signaler för att undvika onCellChanged-loop
-    tableWidget->setFont(QFont(tournamentListModel->getSettingsModel()->getSettingByType("font"), 12, 400));
-    tableWidget->setRowCount(tournamentListModel->size());
+    tableWidget->setFont(QFont(tournamentListModel.getSettingsModel().getSettingByType("font"), 12, 400));
+    tableWidget->setRowCount(tournamentListModel.size());
 
     // Justera tabellens kolumner som proportioner av den totala bredden
     const unsigned int TABLE_WIDTH = tableWidget->viewport()->width();
@@ -86,30 +86,30 @@ void TournamentListView::updateView() const
 
     // Fyll tabellen med data
     int rowIndex = 0;
-    for (std::vector<Tournament*>::const_iterator it = tournamentListModel->cbegin(); it != tournamentListModel->cend(); ++it)
+    for (std::vector<Tournament>::const_iterator it = tournamentListModel.cbegin(); it != tournamentListModel.cend(); ++it)
     {
-        const Tournament* tournament = *it;  // Referens till turneringen i vektorn
+        const Tournament &tournament = *it;  // Referens till turneringen i vektorn
         int columnNumber = 0;
 
         // Id (Icke-redigerbar)
-        QTableWidgetItem *idItem = new QTableWidgetItem(QString::number(tournament->getId()));
+        QTableWidgetItem *idItem = new QTableWidgetItem(QString::number(tournament.getId()));
         idItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled); // Inaktivera redigering
         tableWidget->setItem(rowIndex, columnNumber++, idItem);
 
         // Namn (redigerbar)
-        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament->getName()));
+        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament.getName()));
 
         // Startdatum (redigerbar, konverterat till QString)
-        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament->getStartDate().toString("yyyy-MM-dd")));
+        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament.getStartDate().toString("yyyy-MM-dd")));
 
         // Slutdatum (redigerbar, konverterat till QString)
-        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament->getEndDate().toString("yyyy-MM-dd")));
+        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(tournament.getEndDate().toString("yyyy-MM-dd")));
 
         // Antal ronder (redigerbar, konverterat till QString)
-        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(QString::number(tournament->getNumberOfRounds())));
+        tableWidget->setItem(rowIndex, columnNumber++, new QTableWidgetItem(QString::number(tournament.getNumberOfRounds())));
 
         // Lottningssystem (redigerbar)
-        tableWidget->setItem(rowIndex++, columnNumber++, new QTableWidgetItem(tournament->getPairingSystem()));
+        tableWidget->setItem(rowIndex++, columnNumber++, new QTableWidgetItem(tournament.getPairingSystem()));
     }
 
     tableWidget->blockSignals(false); // Slå på signaler igen

@@ -30,7 +30,7 @@ public:
 
     /**
          * @brief Destruktor för ChessPairer.
-         */
+    */
     ~ChessPairer();
     static ChessPairer* getInstance();
     ChessPairer(const ChessPairer&) = delete;
@@ -45,15 +45,15 @@ private:
     Logger *logger;///< Instans av 'Logger'
 
     // 'Models'
-    TournamentListModel *tournamentListModel; ///< Modell för turneringar.
-    PlayerListModel *playerListModel; ///< Modell för spelare.
-    TournamentPlayersModel *tournamentPlayersModel;
-    SettingsModel *settingsModel; ///< Modell för inställningar.
+    TournamentListModel tournamentListModel; ///< Modell för turneringar.
+    PlayerListModel playerListModel; ///< Modell för spelare.
+    TournamentPlayersModel tournamentPlayersModel; ///< Modell för turneringsspelare.
+    SettingsModel settingsModel; ///< Modell för inställningar.
 
     // 'Views'
     TournamentListView *tournamentListView;///< Vy för turneringar.
     PlayerListView *playerListView; ///< Vy för spelare.
-    TournamentPlayersView *tournamentPlayersView;
+    TournamentPlayersView *tournamentPlayersView; ///< Vy för turneringsspelare.
     SettingsView *settingsView; ///< Vy för inställningar.
 
     // 'Controllers'
@@ -63,7 +63,7 @@ private:
     TournamentPlayersController *tournamentPlayersController;
 
     // 'Misc'
-    Tournament *tournament;
+    Tournament selectedTournament; ///< Vald turnering.
 
     // 'Actions'
     QAction *exitAction;
@@ -80,37 +80,38 @@ private:
 
     /**
          * @brief Skapar programmets menyfält.
-         */
+    */
     void createMenu();
 
     /**
          * @brief Skapar användargränssnittet.
-         */
+    */
     void createUI();
 
     /**
          * @brief Initierar Model-View-Controller-strukturen.
-         */
+    */
     void initMVC();
-
-
 
 private slots:
     /**
          * @brief Visar vyn med alla spelare.
-         */
+    */
     void showAllPlayers();
 
     /**
          * @brief Visar vyn med alla turneringar.
-         */
+    */
     void showAllTournaments();
 
     /**
          * @brief Visar inställningsvyn.
-         */
+    */
     void showSettingsView();
 
+    /**
+         * @brief Visar turneringsspelarna.
+    */
     void showTournamentPlayers();
 };
 #endif // CHESSPAIRER_H

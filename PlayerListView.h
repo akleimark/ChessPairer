@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include "PlayerListModel.h"
 
+class PlayerListController;
+
 /**
  * @class PlayerListView
  * @brief Representerar GUI-komponenten som visar listan av spelare.
@@ -26,7 +28,7 @@ public:
      *
      * @param model Pekare till spelarmodellen som denna vy kommer att interagera med.
      */
-    explicit PlayerListView(PlayerListModel *model);
+    explicit PlayerListView(PlayerListModel &model);
 
     /**
      * @brief Uppdaterar vyn med data från modellen.
@@ -34,7 +36,7 @@ public:
      * Denna metod anropas när modellen notifierar att data har förändrats och uppdaterar
      * spelarlistan som visas i tabellen.
      */
-    virtual void updateView() const override;
+    virtual void updateView() override;
 
     /**
      * @brief Lägger till eventlyssnare för användarinteraktion.
@@ -60,7 +62,8 @@ private:
     QWidget *buttonWidget; ///< Widget som innehåller knappar för interaktion.
     QPushButton *addPlayerButton; ///< Knapp för att lägga till en spelare.
     QPushButton *removePlayerButton; ///< Knapp för att ta bort en spelare.
-    const PlayerListModel *playerListModel; ///< Pekare till spelarmodellen.
+    PlayerListModel &playerListModel; ///< Pekare till spelarmodellen.
+    PlayerListController *playerListController;
 
 signals:
     /**

@@ -8,14 +8,14 @@
 class TournamentPlayersController : public Controller
 {
 public:
-    TournamentPlayersController(TournamentPlayersModel *model, TournamentPlayersView *view);
+    TournamentPlayersController(TournamentPlayersModel &model, TournamentPlayersView *view);
 
 private:
-    TournamentPlayersModel *tournamentPlayersModel;
+    TournamentPlayersModel &tournamentPlayersModel;
     TournamentPlayersView *tournamentPlayersView;
 
 public slots:
-    void onAddTournamentPlayerClicked();
+    void onAddTournamentPlayerRequested(const unsigned int &fideId);
 
 };
 

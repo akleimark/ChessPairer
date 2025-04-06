@@ -3,8 +3,8 @@
 
 #include "MVC.h"
 #include "SettingsModel.h"
-#include "SettingsView.h"
 
+class SettingsView;
 /**
  * @class SettingsController
  * @brief Hanterar logiken för inställningar i applikationen.
@@ -32,10 +32,10 @@ public:
      * @param view Pekare till en `SettingsView`-instans som ansvarar för att visa
      *             inställningarna.
      */
-    SettingsController(SettingsModel *model, SettingsView *view);
+    SettingsController(SettingsModel &model, SettingsView *view);
 
 private:
-    SettingsModel *settingsModel; /**< Pekare till inställningsmodellen. */
+    SettingsModel &settingsModel; /**< Pekare till inställningsmodellen. */
     SettingsView *settingsView;   /**< Pekare till inställningsvyn. */
 
 public slots:

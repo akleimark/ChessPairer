@@ -57,10 +57,10 @@ private:
     SettingsView *settingsView; ///< Vy för inställningar.
 
     // 'Controllers'
-    TournamentListController *tournamentListController; ///< Controller för turneringar.
-    PlayerListController *playerListController; ///< Controller för spelare.
-    SettingsController *settingsController; ///< Controller för inställningar.
-    TournamentPlayersController *tournamentPlayersController;
+    TournamentListController tournamentListController; ///< Controller för turneringar.
+    PlayerListController playerListController; ///< Controller för spelare.
+    SettingsController settingsController; ///< Controller för inställningar.
+    TournamentPlayersController tournamentPlayersController;
 
     // 'Misc'
     Tournament selectedTournament; ///< Vald turnering.

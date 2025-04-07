@@ -163,9 +163,7 @@ void Tournament::getTournamentDataFromDatabase()
         "SELECT tp.player_id, tp.player_number, p.name, p.rating "
         "FROM tournament_players tp "
         "JOIN players p ON tp.player_id = p.fide_id "
-        "WHERE tp.tournament_id = ?";
-
-    QVector<QVariant> bindValues = { this->id };
+        "WHERE tp.tournament_id = ?";    
 
     QSqlQuery query;
     query.prepare(queryStr);
@@ -193,5 +191,4 @@ void Tournament::getTournamentDataFromDatabase()
 
         players.insert(player);
     }
-
 }

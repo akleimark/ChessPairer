@@ -7,14 +7,22 @@
 #include "Database.h"
 #include <iostream>
 
-
 const unsigned int ChessPairer::DEFAULT_WINDOW_WIDTH = 700;
 const unsigned int ChessPairer::DEFAULT_WINDOW_HEIGHT = 500;
 ChessPairer* ChessPairer::instance = nullptr;
 
 ChessPairer::ChessPairer()
     : QMainWindow(nullptr), playerListModel(settingsModel), tournamentListModel(selectedTournament, settingsModel),
-        tournamentPlayersModel(playerListModel, selectedTournament, settingsModel)
+        tournamentPlayersModel(playerListModel, selectedTournament, settingsModel),
+        settingsView(new SettingsView(settingsModel)),
+        settingsController(SettingsController(settingsModel, settingsView)),
+        playerListView(new PlayerListView(playerListModel)),
+        playerListController(PlayerListController(playerListModel, playerListView)),
+        tournamentListView(new TournamentListView(tournamentListModel)),
+        tournamentListController(TournamentListController(tournamentListModel, tournamentListView)),
+        tournamentPlayersView(new TournamentPlayersView(tournamentPlayersModel)),
+        tournamentPlayersController(TournamentPlayersController(tournamentPlayersModel, tournamentPlayersView))
+
 {
     logger = Logger::getInstance();
     this->resize(ChessPairer::DEFAULT_WINDOW_WIDTH, ChessPairer::DEFAULT_WINDOW_HEIGHT);
@@ -44,24 +52,16 @@ void ChessPairer::initMVC()
 {
     // Initiera MVC
 
-    settingsView = new SettingsView(settingsModel);
-    settingsController = new SettingsController(settingsModel, settingsView);
-    settingsView->setController(settingsController);
+    settingsView->setController(&settingsController);
     settingsView->addListeners();
 
-    playerListView = new PlayerListView(playerListModel);
-    playerListController = new PlayerListController(playerListModel, playerListView);
-    playerListView->setController(playerListController);
+    playerListView->setController(&playerListController);
     playerListView->addListeners();
 
-    tournamentListView = new TournamentListView(tournamentListModel);
-    tournamentListController = new TournamentListController(tournamentListModel, tournamentListView);
-    tournamentListView->setController(tournamentListController);
+    tournamentListView->setController(&tournamentListController);
     tournamentListView->addListeners();
 
-    tournamentPlayersView = new TournamentPlayersView(tournamentPlayersModel);
-    tournamentPlayersController = new TournamentPlayersController(tournamentPlayersModel, tournamentPlayersView);
-    tournamentPlayersView->setController(tournamentPlayersController);
+    tournamentPlayersView->setController(&tournamentPlayersController);
     tournamentPlayersView->addListeners();
 
     logger->logInfo("MVC initierades utan problem.");

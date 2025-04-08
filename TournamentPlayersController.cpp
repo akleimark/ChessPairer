@@ -14,3 +14,11 @@ void TournamentPlayersController::onAddTournamentPlayerRequested(const unsigned 
     tournamentPlayersModel.getTournament().addTournamentPlayer(newPlayer);
     tournamentPlayersModel.notifyAllViews();
 }
+
+void TournamentPlayersController::onRemoveTournamentPlayerRequested(const unsigned int &fideId)
+{
+    Tournament& tournament = tournamentPlayersModel.getTournament();
+    TournamentPlayer &player = *tournament.findByFideId(fideId);
+    tournament.removeTournamentPlayer(player);
+    tournamentPlayersModel.notifyAllViews();
+}

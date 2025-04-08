@@ -206,11 +206,23 @@ public:
  */
     static unsigned int getMaximumNumberOfRounds() { return Tournament::MAXIMUM_NUMBER_OF_ROUNDS; }
 
+    /** Tillägg av en turneringsspelare */
     void addTournamentPlayer(const TournamentPlayer &player);
-    TournamentPlayer &at(const unsigned int &index);
+    /** Borttagning av en turneringsspelare. */
+    void removeTournamentPlayer(const TournamentPlayer &player);
+    /** Vi hämtar turneringsspelare på index 'index'. */
+    TournamentPlayer* at(const unsigned int &index);
+    /** Samma som Tournament::at */
+    TournamentPlayer* operator[](const unsigned int &index) const;
+    /** Metod för att hitta en pekare till den spelare som har angivet FideID. */
+    TournamentPlayer* findByFideId(const unsigned int &fideId) const;
+    /** Metod för att returnera en iterator till det första objektet i containern med spelare. */
     std::set<TournamentPlayer>::const_iterator cbegin() const { return players.cbegin(); }
+    /** Metod för att returnera en iterator till det sista objektet i containern med spelare. */
     std::set<TournamentPlayer>::const_iterator cend() const { return players.cend(); }
+    /** Metod för att returnera antalet turneringsspelare i containern med spelare. */
     unsigned int size() const { return players.size(); }
+    /** Metod för att hämta data om en viss turnering från databasen och sedan lagra den i turneringsobjektet. */
     void getTournamentDataFromDatabase();
 
 private:

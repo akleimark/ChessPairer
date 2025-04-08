@@ -39,7 +39,12 @@ public:
 
 private:
 
-    explicit ChessPairer();
+    ChessPairer();
+    /**
+     * @brief
+     * Instans av ChessPairer. Vi säkerställer att det endast skapas ett objekt med hjälp av
+     * designmönstret 'Singleton'.
+     */
     static ChessPairer *instance;
 
     Logger *logger;///< Instans av 'Logger'
@@ -110,7 +115,7 @@ private slots:
     void showSettingsView();
 
     /**
-         * @brief Visar turneringsspelarna.
+         * @brief Visar turneringsspelarna för vald turnering.
     */
     void showTournamentPlayers();
 };

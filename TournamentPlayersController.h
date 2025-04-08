@@ -16,7 +16,7 @@ private:
 
 public slots:
     void onAddTournamentPlayerRequested(const unsigned int &fideId);
-
+    void onRemoveTournamentPlayerRequested(const unsigned int &fideId);
 };
 
 #endif // TOURNAMENTPLAYERLISTCONTROLLER_H

@@ -125,5 +125,24 @@ void TournamentPlayersView::addListeners()
 
         tournamentPlayersController->onAddTournamentPlayerRequested(fideId);
     });
+
+    connect(removeButton, &QPushButton::clicked, this, [this, tournamentPlayersController]()
+    {
+        QTableWidgetItem *selectedItem = tournamentPlayersTable->currentItem();
+        if (!selectedItem)
+        {
+            return;
+        }
+
+        int selectedRow = selectedItem->row();
+        QTableWidgetItem *fideItem = tournamentPlayersTable->item(selectedRow, 0);
+        if (!fideItem)
+        {
+            return;
+        }
+
+        int fideId = fideItem->text().toInt();
+        tournamentPlayersController->onRemoveTournamentPlayerRequested(fideId);
+    });
 }
 

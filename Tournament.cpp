@@ -15,21 +15,17 @@ const QDate Tournament::DEFAULT_END_DATE = QDate::currentDate();
 const unsigned int Tournament::MINIMUM_NUMBER_OF_ROUNDS = 2;
 const unsigned int Tournament::MAXIMUM_NUMBER_OF_ROUNDS = 14;
 
-TournamentPlayer& Tournament::at(const unsigned int &index)
+TournamentPlayer *Tournament::at(const unsigned int &index)
 {
-    auto it = std::find_if(players.begin(), players.end(),
-   [index](const TournamentPlayer &player)
-   {
-       return player.getPlayerNumber() == index;
-   });
-
-    if (it != players.end())
+    if (index >= players.size())
     {
-        return const_cast<TournamentPlayer&>(*it); // OBS, diskuteras nedan
+        return nullptr;
     }
 
-    Logger::getInstance()->logError("Spelare med angivet index hittades inte.");
-    std::exit(EXIT_FAILURE);
+    auto it = players.cbegin();
+    std::advance(it, index); // Hoppa fram 'index' steg
+
+    return const_cast<TournamentPlayer*>(&(*it)); // Ta bort const för att matcha returtyp
 }
 
 
@@ -152,6 +148,63 @@ void Tournament::addTournamentPlayer(const TournamentPlayer &player)
     }
 }
 
+void Tournament::removeTournamentPlayer(const TournamentPlayer &player)
+{
+    // Starta en transaktion
+    QSqlDatabase db = QSqlDatabase::database(); // Antar standardanslutning
+    if (!db.transaction())
+    {
+        Logger::getInstance()->logError("Kunde inte starta databastransaktion: " + db.lastError().text());
+        return;
+    }
+
+    // Förbered DELETE
+    QSqlQuery query(db);
+    if (!query.prepare("DELETE FROM tournament_players WHERE tournament_id = :tournament_id AND player_id = :player_id"))
+    {
+        Logger::getInstance()->logError("Kunde inte förbereda DELETE: " + query.lastError().text());
+        if (!db.rollback())
+        {
+            Logger::getInstance()->logError("Kunde inte rulla tillbaka transaktionen efter misslyckad prepare: " + db.lastError().text());
+        }
+        return;
+    }
+
+    // Bind värden
+    query.bindValue(":tournament_id", this->id);
+    query.bindValue(":player_id", player.getFideId());
+
+    Logger::getInstance()->logInfo("Försöker ta bort spelare: TournamentID = " + QString::number(this->id) +
+                                   ", FIDE-ID = " + QString::number(player.getFideId()));
+
+    // Kör DELETE
+    if (!query.exec())
+    {
+        Logger::getInstance()->logError("Kunde inte ta bort TournamentPlayer från databasen: " + query.lastError().text());
+        if (!db.rollback())
+        {
+            Logger::getInstance()->logError("Kunde inte rulla tillbaka transaktionen efter misslyckad exec: " + db.lastError().text());
+        }
+        return;
+    }
+
+    // Kontroll: Hur många rader togs bort?
+    if (query.numRowsAffected() == 0)
+    {
+        Logger::getInstance()->logWarning("Ingen TournamentPlayer togs bort från databasen. Kontrollera att TournamentID och FIDE-ID är korrekta.");
+    }
+
+    // Commit
+    if (!db.commit())
+    {
+        Logger::getInstance()->logError("Kunde inte genomföra commit av transaktionen: " + db.lastError().text());
+    }
+
+    // Försök ta bort från containern
+    players.erase(player);
+}
+
+
 void Tournament::getTournamentDataFromDatabase()
 {
     // Töm containern om den innehåller gamla spelare
@@ -191,4 +244,29 @@ void Tournament::getTournamentDataFromDatabase()
 
         players.insert(player);
     }
+}
+
+TournamentPlayer* Tournament::operator[](const unsigned int &index) const
+{
+    if (index >= players.size())
+    {
+        return nullptr;
+    }
+
+    auto it = players.cbegin();
+    std::advance(it, index); // Hoppa fram 'index' steg
+
+    return const_cast<TournamentPlayer*>(&(*it)); // Ta bort const för att matcha returtyp
+}
+
+TournamentPlayer* Tournament::findByFideId(const unsigned int &fideId) const
+{
+    for (auto it = players.cbegin(); it != players.cend(); ++it)
+    {
+        if (it->getFideId() == fideId)
+        {
+            return const_cast<TournamentPlayer*>(&(*it)); // Hittade, returnera pekare
+        }
+    }
+    return nullptr; // Hittade ingen, returnera nullptr
 }
